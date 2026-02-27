@@ -56,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, onToggle, i
         </div>
 
         {/* Navigation Items */}
-        <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent hover:scrollbar-thumb-slate-600">
+        <div className="flex-1 overflow-y-auto py-4 scrollbar-dark">
           {MENU_ITEMS.map((section, idx) => (
             <div key={idx} className="mb-6">
               {!isCollapsed && (
