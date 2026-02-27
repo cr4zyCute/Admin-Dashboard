@@ -3,7 +3,6 @@ import {
   ShoppingCart, 
   MessageSquare, 
   Briefcase, 
-  CheckSquare, 
   FileText, 
   Users, 
   DollarSign, 
@@ -17,22 +16,26 @@ import {
   Box,
   List,
   UserPlus,
-  Calendar,
-  Folder,
   ClipboardList,
   Shield,
   Layers,
   Table,
   BarChart,
   Map,
-  Settings,
   CreditCard,
   Lock,
   AlertTriangle,
   Server,
   Clock,
-  LifeBuoy,
-  Key
+  Key,
+  Layout,
+  PanelLeft,
+  PanelTop,
+  Ban,
+  Star,
+  Share2,
+  PenTool,
+  FileInput
 } from 'lucide-react';
 import { MenuSection } from '../types';
 
@@ -57,20 +60,6 @@ export const MENU_ITEMS: MenuSection[] = [
   {
     category: 'APPS',
     items: [
-      { id: 'calendar', label: 'Calendar', icon: Calendar, route: '/apps/calendar' },
-      { id: 'chat', label: 'Chat', icon: MessageSquare, route: '/apps/chat' },
-      { 
-        id: 'email', 
-        label: 'Email', 
-        icon: Mail, 
-        route: '/apps/email',
-        badge: 'New', 
-        badgeColor: 'bg-pink-500',
-        subItems: [
-          { id: 'inbox', label: 'Inbox', icon: List, route: '/apps/email/inbox' },
-          { id: 'read', label: 'Read Email', icon: FileText, route: '/apps/email/read' },
-        ]
-      },
       { 
         id: 'ecommerce', 
         label: 'Ecommerce', 
@@ -87,6 +76,7 @@ export const MENU_ITEMS: MenuSection[] = [
           { id: 'sellers', label: 'Sellers', icon: Users, route: '/apps/ecommerce/sellers' },
         ]
       },
+      { id: 'chat', label: 'Chat', icon: MessageSquare, route: '/apps/chat' },
       { 
         id: 'projects', 
         label: 'Projects', 
@@ -108,13 +98,47 @@ export const MENU_ITEMS: MenuSection[] = [
           { id: 'kanban', label: 'Kanban Board', icon: Grid, route: '/apps/tasks/kanban' },
         ]
       },
-      { id: 'file-manager', label: 'File Manager', icon: Folder, route: '/apps/file-manager' },
-      { id: 'invoice', label: 'Invoices', icon: FileText, route: '/apps/invoice' },
+      { id: 'invoice', label: 'Invoice', icon: FileText, route: '/apps/invoice' },
+      { id: 'crm', label: 'CRM', icon: Shield, route: '/apps/crm' },
+      { id: 'users', label: 'Users', icon: Users, route: '/apps/users' },
+      { id: 'finance', label: 'Finance', icon: FileText, route: '/apps/finance' },
+      { id: 'hrm', label: 'HRM', icon: Users, route: '/apps/hrm' },
+      { 
+        id: 'email', 
+        label: 'Email', 
+        icon: Mail, 
+        route: '/apps/email',
+        badge: 'New', 
+        badgeColor: 'bg-orange-400',
+        subItems: [
+          { id: 'inbox', label: 'Inbox', icon: List, route: '/apps/email/inbox' },
+          { id: 'read', label: 'Read Email', icon: FileText, route: '/apps/email/read' },
+        ]
+      },
+      { id: 'support-center', label: 'Support Center', icon: HelpCircle, route: '/apps/support-center' },
+      { id: 'promo', label: 'Promo', icon: Tag, route: '/apps/promo' },
+      { id: 'more-apps', label: 'More Apps', icon: Grid, route: '/apps/more-apps' },
     ],
   },
   {
     category: 'CUSTOM PAGES',
     items: [
+      { 
+        id: 'pages', 
+        label: 'Pages', 
+        icon: File, 
+        route: '/pages',
+        subItems: [
+          { id: 'starter', label: 'Starter Page', icon: File, route: '/pages/starter' },
+          { id: 'timeline', label: 'Timeline', icon: Clock, route: '/pages/timeline' },
+          { id: 'invoice-page', label: 'Invoice', icon: FileText, route: '/pages/invoice' },
+          { id: 'faqs', label: 'FAQs', icon: HelpCircle, route: '/pages/faqs' },
+          { id: 'pricing', label: 'Pricing', icon: DollarSign, route: '/pages/pricing' },
+          { id: 'maintenance', label: 'Maintenance', icon: Server, route: '/pages/maintenance' },
+          { id: 'coming-soon', label: 'Coming Soon', icon: Clock, route: '/pages/coming-soon' },
+        ]
+      },
+      { id: 'plugins', label: 'Plugins', icon: Plug, route: '/plugins' },
       { 
         id: 'auth', 
         label: 'Authentication', 
@@ -128,58 +152,56 @@ export const MENU_ITEMS: MenuSection[] = [
         ]
       },
       { 
-        id: 'pages', 
-        label: 'Extra Pages', 
-        icon: File, 
-        route: '/pages',
+        id: 'error-pages', 
+        label: 'Error Pages', 
+        icon: AlertTriangle, 
+        route: '/error-pages',
         subItems: [
-          { id: 'starter', label: 'Starter Page', icon: File, route: '/pages/starter' },
-          { id: 'timeline', label: 'Timeline', icon: Clock, route: '/pages/timeline' },
-          { id: 'invoice-page', label: 'Invoice', icon: FileText, route: '/pages/invoice' },
-          { id: 'faqs', label: 'FAQs', icon: HelpCircle, route: '/pages/faqs' },
-          { id: 'pricing', label: 'Pricing', icon: DollarSign, route: '/pages/pricing' },
-          { id: 'maintenance', label: 'Maintenance', icon: Server, route: '/pages/maintenance' },
-          { id: 'coming-soon', label: 'Coming Soon', icon: Clock, route: '/pages/coming-soon' },
-          { id: '404', label: 'Error 404', icon: AlertTriangle, route: '/pages/404' },
-          { id: '500', label: 'Error 500', icon: AlertTriangle, route: '/pages/500' },
+          { id: '404', label: 'Error 404', icon: AlertTriangle, route: '/error-pages/404' },
+          { id: '500', label: 'Error 500', icon: AlertTriangle, route: '/error-pages/500' },
         ]
       },
     ],
   },
   {
+    category: 'LAYOUTS',
+    items: [
+      { id: 'layout-options', label: 'Layout Options', icon: Layout, route: '/layouts/options' },
+      { id: 'sidebars', label: 'Sidebars', icon: PanelLeft, route: '/layouts/sidebars' },
+      { id: 'topbar', label: 'Topbar', icon: PanelTop, route: '/layouts/topbar' },
+    ]
+  },
+  {
     category: 'COMPONENTS',
     items: [
       { 
-        id: 'ui', 
-        label: 'UI Elements', 
+        id: 'base-ui', 
+        label: 'Base UI', 
         icon: Layers, 
-        route: '/ui',
+        route: '/ui/base',
         subItems: [
-          { id: 'alerts', label: 'Alerts', icon: AlertTriangle, route: '/ui/alerts' },
-          { id: 'buttons', label: 'Buttons', icon: Box, route: '/ui/buttons' },
-          { id: 'cards', label: 'Cards', icon: Box, route: '/ui/cards' },
-          { id: 'modals', label: 'Modals', icon: Box, route: '/ui/modals' },
-          { id: 'tabs', label: 'Tabs & Accordions', icon: Box, route: '/ui/tabs' },
-          { id: 'typography', label: 'Typography', icon: FileText, route: '/ui/typography' },
-        ]
-      },
-      { 
-        id: 'extended', 
-        label: 'Extended UI', 
-        icon: Layers, 
-        route: '/extended',
-        subItems: [
-          { id: 'dragula', label: 'Dragula', icon: Box, route: '/extended/dragula' },
-          { id: 'sweet-alert', label: 'Sweet Alert', icon: AlertTriangle, route: '/extended/sweet-alert' },
-          { id: 'ratings', label: 'Ratings', icon: Box, route: '/extended/ratings' },
+          { id: 'alerts', label: 'Alerts', icon: AlertTriangle, route: '/ui/base/alerts' },
+          { id: 'buttons', label: 'Buttons', icon: Box, route: '/ui/base/buttons' },
+          { id: 'cards', label: 'Cards', icon: Box, route: '/ui/base/cards' },
+          { id: 'modals', label: 'Modals', icon: Box, route: '/ui/base/modals' },
+          { id: 'tabs', label: 'Tabs & Accordions', icon: Box, route: '/ui/base/tabs' },
+          { id: 'typography', label: 'Typography', icon: FileText, route: '/ui/base/typography' },
         ]
       },
       { id: 'widgets', label: 'Widgets', icon: Grid, route: '/widgets' },
-      { id: 'forms', label: 'Forms', icon: CheckSquare, route: '/forms' },
-      { id: 'tables', label: 'Tables', icon: Table, route: '/tables' },
       { id: 'charts', label: 'Charts', icon: BarChart, route: '/charts' },
-      { id: 'icons', label: 'Icons', icon: Box, route: '/icons' },
+      { id: 'forms', label: 'Forms', icon: FileInput, route: '/forms' },
+      { id: 'tables', label: 'Tables', icon: Table, route: '/tables' },
+      { id: 'icons', label: 'Icons', icon: PenTool, route: '/icons' },
       { id: 'maps', label: 'Maps', icon: Map, route: '/maps' },
     ],
   },
+  {
+    category: 'MENU ITEMS',
+    items: [
+      { id: 'menu-levels', label: 'Menu Levels', icon: Share2, route: '/menu-levels' },
+      { id: 'disabled-menu', label: 'Disabled Menu', icon: Ban, route: '/disabled-menu' },
+      { id: 'special-menu', label: 'Special Menu', icon: Star, route: '/special-menu', badge: 'Hot', badgeColor: 'bg-yellow-400' },
+    ]
+  }
 ];

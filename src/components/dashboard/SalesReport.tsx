@@ -2,12 +2,6 @@ import React from 'react';
 import { Calendar, CreditCard, TrendingUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-interface SalesData {
-  revenue: string;
-  orders: number;
-  growth: string;
-}
-
 const SalesReport: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState('Monthly');
 

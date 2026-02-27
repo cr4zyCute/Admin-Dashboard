@@ -15,6 +15,7 @@ import { RefreshCw, MoreHorizontal } from 'lucide-react';
 interface AnalyticsChartProps {
   title: string;
   type: 'area' | 'bar';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   dataKey: string;
   color?: string;
@@ -27,6 +28,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
   data, 
   dataKey, 
   color = '#3b82f6',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   height = 300 
 }) => {
   return (

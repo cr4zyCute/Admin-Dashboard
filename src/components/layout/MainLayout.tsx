@@ -9,8 +9,6 @@ const MainLayout: React.FC = () => {
   const { 
     sidebarCollapsed, 
     toggleSidebar, 
-    user, 
-    notifications, 
     setActiveRoute 
   } = useAppContext();
   
@@ -36,7 +34,7 @@ const MainLayout: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-50 transition-colors duration-300">
       <Sidebar 
         isCollapsed={sidebarCollapsed} 
         activeRoute={location.pathname} 
