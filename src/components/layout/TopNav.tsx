@@ -10,10 +10,23 @@ import {
   Check,
   User,
   HelpCircle,
-  LogOut
+  LogOut,
+  Lock,
+  MessageSquare,
+  Search,
+  Sun,
+  Moon,
+  ShoppingBag,
+  ListTodo,
+  Mail,
+  Building,
+  Users,
+  Calendar,
+  LifeBuoy
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAppContext } from '../../context/AppContext';
+import { useTheme } from '../../hooks/useTheme';
 import NotificationDropdown from './NotificationDropdown';
 
 interface TopNavProps {
@@ -25,6 +38,7 @@ const TopNav: React.FC<TopNavProps> = ({
   onToggleSidebar,
   isSidebarCollapsed 
 }) => {
+  const { theme, toggleTheme } = useTheme();
   const { user, notifications } = useAppContext();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -141,23 +155,97 @@ const TopNav: React.FC<TopNavProps> = ({
             
             {/* Apps Dropdown */}
             {activeDropdown === 'apps' && (
-              <div className="absolute top-full left-0 mt-4 w-80 bg-white rounded-xl shadow-lg border border-slate-100 p-4 grid grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2 z-50">
-                {['Slack', 'Jira', 'Dropbox', 'Github', 'Bitbucket', 'Dribbble'].map((app) => (
-                  <a key={app} href="#" className="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-slate-50 transition-colors group/item">
-                    <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-2 group-hover/item:bg-white group-hover/item:shadow-sm transition-all text-slate-600">
-                      <Grid className="w-5 h-5" />
+              <div className="absolute top-full left-0 mt-4 w-[800px] bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex animate-in fade-in slide-in-from-top-2 z-50">
+                {/* Left Side: Apps Grid */}
+                <div className="flex-1 p-6 flex flex-col justify-between bg-white">
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                    {[
+                      { name: 'eCommerce', desc: 'Products, orders & etc.', icon: ShoppingBag, color: 'text-orange-500', bg: 'bg-orange-50' },
+                      { name: 'Chat', desc: 'Team conversations', icon: MessageSquare, color: 'text-green-500', bg: 'bg-green-50' },
+                      { name: 'Task', desc: 'Plan and track work', icon: ListTodo, color: 'text-red-500', bg: 'bg-red-50' },
+                      { name: 'Email', desc: 'Messages and inbox', icon: Mail, color: 'text-teal-500', bg: 'bg-teal-50' },
+                      { name: 'Companies', desc: 'Business profiles', icon: Building, color: 'text-amber-600', bg: 'bg-amber-50' },
+                      { name: 'Contacts Diary', desc: 'People and connections', icon: Users, color: 'text-slate-600', bg: 'bg-slate-100' },
+                      { name: 'Calendar', desc: 'Events and reminders', icon: Calendar, color: 'text-yellow-500', bg: 'bg-yellow-50' },
+                      { name: 'Support', desc: 'Help and assistance', icon: LifeBuoy, color: 'text-green-600', bg: 'bg-green-50' },
+                    ].map((app) => (
+                      <a key={app.name} href="#" className="flex items-start gap-3 group p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
+                        <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105", app.bg, app.color)}>
+                          <app.icon className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{app.name}</h4>
+                          <p className="text-xs text-slate-500 mt-0.5">{app.desc}</p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 uppercase tracking-wider font-medium">
+                    <div className="flex items-center gap-2">
+                      <span>-: SUPPORT :-</span>
+                      <a href="mailto:help@mydomain.com" className="text-slate-700 hover:text-blue-600 normal-case">help@mydomain.com</a>
                     </div>
-                    <span className="text-xs font-medium text-slate-600 group-hover/item:text-slate-900">{app}</span>
-                  </a>
-                ))}
+                    <div className="flex items-center gap-2">
+                      <span>-: HELP :-</span>
+                      <a href="tel:+1234567890" className="text-slate-700 hover:text-blue-600 normal-case">+(12) 3456 7890</a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Side: Promo Banner */}
+                <div className="w-72 bg-gradient-to-br from-amber-700/90 to-amber-900/90 text-white p-8 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                  {/* Background Pattern Effect */}
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800')] opacity-10 bg-cover bg-center mix-blend-overlay"></div>
+                  
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-12 h-12 border-2 border-white/30 rounded-lg flex items-center justify-center mb-6 rotate-45 group-hover:rotate-90 transition-transform duration-500">
+                      <div className="w-8 h-8 border border-white/50 rounded flex items-center justify-center -rotate-45 group-hover:-rotate-90 transition-transform duration-500">
+                         <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <p className="text-amber-200 text-xs font-bold tracking-[0.2em] uppercase mb-2">LIMITED OFFER</p>
+                    <h3 className="text-2xl font-bold mb-6 leading-tight">Unlock Exclusive Savings</h3>
+                    
+                    <div className="mb-8">
+                      <span className="text-amber-200/60 line-through text-lg mr-3">$49.00</span>
+                      <span className="text-white text-2xl font-bold">$25 USD</span>
+                    </div>
+
+                    <button className="bg-white/20 hover:bg-white text-white hover:text-amber-900 border border-white/50 hover:border-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center gap-2">
+                      <ShoppingBag className="w-4 h-4" />
+                      Buy Now
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
 
+      {/* Search Bar - Centered */}
+      <div className="hidden md:flex items-center relative flex-1 max-w-xl mx-4">
+        <Search className="absolute left-3 w-4 h-4 text-slate-400" />
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          className="w-full pl-9 pr-4 py-2 bg-slate-100 border-none rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+        />
+      </div>
+
       {/* Right Side */}
       <div className="flex items-center gap-2 md:gap-4">
+        {/* Theme Toggle */}
+        <button 
+          onClick={toggleTheme}
+          className="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors"
+          title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
+
         {/* Notifications */}
         <div className="relative">
           <button 
@@ -256,28 +344,49 @@ const TopNav: React.FC<TopNavProps> = ({
 
           {/* Profile Dropdown */}
           {activeDropdown === 'profile' && (
-            <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2 animate-in fade-in slide-in-from-top-2 z-50">
-              <div className="px-4 py-3 border-b border-slate-100 mb-2">
-                <p className="text-sm font-semibold text-slate-900">Signed in as</p>
-                <p className="text-xs text-slate-500 truncate">{user?.name?.toLowerCase().replace(' ', '.')}@paces.com</p>
+            <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-2 z-50 ring-1 ring-slate-900/5">
+              {/* Header with User Info */}
+              <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+                <div className="flex items-center gap-3">
+                  <img 
+                    src={user?.avatar || "https://ui-avatars.com/api/?name=User"} 
+                    alt={user?.name} 
+                    className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-900 truncate">{user?.name}</p>
+                    <p className="text-xs text-slate-500 truncate font-medium">{user?.role || 'Administrator'}</p>
+                  </div>
+                </div>
               </div>
               
-              <button className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span>My Profile</span>
-              </button>
-              <button className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 flex items-center gap-2">
-                <Settings className="w-4 h-4" />
-                <span>Account Settings</span>
-              </button>
-              <button className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4" />
-                <span>Support</span>
-              </button>
+              {/* Menu Items */}
+              <div className="p-2">
+                <div className="space-y-0.5">
+                  <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg flex items-center gap-3 transition-all group">
+                    <User className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    <span>My Profile</span>
+                  </button>
+                  <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg flex items-center gap-3 transition-all group">
+                    <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    <span>Inbox</span>
+                    <span className="ml-auto bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-[10px] font-bold">3</span>
+                  </button>
+                  <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg flex items-center gap-3 transition-all group">
+                    <Settings className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    <span>Settings</span>
+                  </button>
+                  <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg flex items-center gap-3 transition-all group">
+                    <HelpCircle className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    <span>Support</span>
+                  </button>
+                </div>
+              </div>
               
-              <div className="border-t border-slate-100 my-2 pt-2">
-                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
-                  <LogOut className="w-4 h-4" />
+              {/* Footer */}
+              <div className="p-2 border-t border-slate-100 bg-slate-50/30">
+                <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg flex items-center gap-3 transition-all group">
+                  <LogOut className="w-4 h-4 text-slate-400 group-hover:text-red-500 transition-colors" />
                   <span>Sign Out</span>
                 </button>
               </div>
