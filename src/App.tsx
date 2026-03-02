@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import MainLayout from './components/layout/MainLayout';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/dashboard/Overview';
 
 // Dashboard pages
 import Analytics from './pages/dashboard/Analytics';
@@ -54,8 +54,8 @@ import RecoverPassword from './pages/auth/RecoverPassword';
 import LockScreen from './pages/auth/LockScreen';
 
 // Error Pages
-import Error404 from './pages/error/Error404';
-import Error500 from './pages/error/Error500';
+import Error404 from './pages/errors/Error404';
+import Error500 from './pages/errors/Error500';
 
 // Layouts
 import LayoutOptions from './pages/layouts/LayoutOptions';
@@ -71,16 +71,16 @@ import Tabs from './pages/ui/Tabs';
 import Typography from './pages/ui/Typography';
 
 // Other Components
-import Widgets from './pages/Widgets';
-import Charts from './pages/Charts';
-import Forms from './pages/Forms';
-import Tables from './pages/Tables';
-import Icons from './pages/Icons';
-import Maps from './pages/Maps';
-import Plugins from './pages/Plugins';
-import MenuLevels from './pages/MenuLevels';
-import DisabledMenu from './pages/DisabledMenu';
-import SpecialMenu from './pages/SpecialMenu';
+import Widgets from './pages/examples/Widgets';
+import Charts from './pages/examples/Charts';
+import Forms from './pages/examples/Forms';
+import Tables from './pages/examples/Tables';
+import Icons from './pages/examples/Icons';
+import Maps from './pages/examples/Maps';
+import Plugins from './pages/examples/Plugins';
+import MenuLevels from './pages/examples/MenuLevels';
+import DisabledMenu from './pages/examples/DisabledMenu';
+import SpecialMenu from './pages/examples/SpecialMenu';
 
 function App() {
   return (

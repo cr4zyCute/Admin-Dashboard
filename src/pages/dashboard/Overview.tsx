@@ -1,9 +1,9 @@
 import React from 'react';
 import { ShoppingCart, DollarSign, TrendingUp } from 'lucide-react';
-import MetricCard from '../components/dashboard/MetricCard';
-import AnalyticsChart from '../components/dashboard/AnalyticsChart';
-import SalesReport from '../components/dashboard/SalesReport';
-import { useAppContext } from '../context/AppContext';
+import MetricCard from '../../components/dashboard/MetricCard';
+import AnalyticsChart from '../../components/dashboard/AnalyticsChart';
+import SalesReport from '../../components/dashboard/SalesReport';
+import { useAppContext } from '../../context/AppContext';
 
 const Dashboard: React.FC = () => {
   const { user } = useAppContext();
