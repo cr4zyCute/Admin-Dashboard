@@ -140,23 +140,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
 
                       {/* Submenu Items */}
                       {!isCollapsed && hasSubItems && isExpanded && (
-                        <div className="mt-1 ml-3 pl-3 border-l border-slate-200 dark:border-slate-800 space-y-0.5 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div className="mt-1 ml-2 pl-5 space-y-1 transition-all duration-200 ease-in-out">
                           {item.subItems?.map((subItem) => (
                             <NavLink
                               key={subItem.id}
                               to={subItem.route}
+                              title={subItem.label}
                               className={({ isActive }) => cn(
-                                "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 group/sub relative text-sm",
+                                "block rounded-md px-2.5 py-2 text-sm transition-colors",
                                 isActive 
-                                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-400/10 font-medium" 
-                                  : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/30"
+                                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 font-medium" 
+                                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
                               )}
                             >
-                              <span className={cn(
-                                "w-1.5 h-1.5 rounded-full transition-all duration-200",
-                                isActive ? "bg-blue-600 dark:bg-blue-400 scale-110" : "bg-slate-400 dark:bg-slate-600 group-hover/sub:bg-slate-600 dark:group-hover/sub:bg-slate-400"
-                              )}></span>
-                              <span className="truncate">{subItem.label}</span>
+                              <span className="whitespace-nowrap">{subItem.label}</span>
                             </NavLink>
                           ))}
                         </div>
