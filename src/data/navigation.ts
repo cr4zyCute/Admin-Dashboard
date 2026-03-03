@@ -35,7 +35,8 @@ import {
   Star,
   Share2,
   PenTool,
-  FileInput
+  FileInput,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import { MenuSection } from '../types';
 
@@ -162,6 +163,12 @@ export const MENU_ITEMS: MenuSection[] = [
         ]
       },
     ],
+  },
+  {
+    category: 'SETTINGS',
+    items: [
+      { id: 'theme-settings', label: 'Theme Settings', icon: SettingsIcon, route: '/settings/theme' },
+    ]
   },
   {
     category: 'LAYOUTS',

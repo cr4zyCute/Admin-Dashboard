@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { AppContextType, Notification, User } from '../types';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme } from '../types';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -7,6 +7,52 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeRoute, setActiveRoute] = useState('/dashboard');
   const [dataState, setDataState] = useState<'default' | 'alternate' | 'empty'>('default');
+  const [isThemeSettingsOpen, setIsThemeSettingsOpen] = useState(false);
+  
+  // Theme State
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem('themeMode');
+    return (saved as ThemeMode) || 'system';
+  });
+  
+  const [colorTheme, setColorTheme] = useState<ColorTheme>(() => {
+    const saved = localStorage.getItem('colorTheme');
+    return (saved as ColorTheme) || 'blue';
+  });
+
+  const [layoutTheme, setLayoutTheme] = useState<LayoutTheme>(() => {
+    const saved = localStorage.getItem('layoutTheme');
+    return (saved as LayoutTheme) || 'Default';
+  });
+
+  // Apply Theme Mode
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+
+    if (themeMode === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.classList.add(systemTheme);
+    } else {
+      root.classList.add(themeMode);
+    }
+    localStorage.setItem('themeMode', themeMode);
+  }, [themeMode]);
+
+  // Apply Color Theme
+  useEffect(() => {
+    const root = window.document.documentElement;
+    // Remove all theme classes
+    const themes: ColorTheme[] = ['blue', 'green', 'purple', 'orange', 'red', 'teal'];
+    themes.forEach(t => root.classList.remove(`theme-${t}`));
+    
+    // Add current theme class (unless it's blue/default)
+    if (colorTheme !== 'blue') {
+      root.classList.add(`theme-${colorTheme}`);
+    }
+    localStorage.setItem('colorTheme', colorTheme);
+  }, [colorTheme]);
+
   const [user] = useState<User | null>({
     name: 'David Dev',
     role: 'Admin Head',
@@ -66,6 +112,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
   };
 
+  const toggleThemeSettings = () => {
+    setIsThemeSettingsOpen(prev => !prev);
+  };
+
   const markNotificationRead = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   };
@@ -87,6 +137,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         markAllNotificationsRead,
         dataState,
         toggleData,
+        themeMode,
+        setThemeMode,
+        colorTheme,
+        setColorTheme,
+        layoutTheme,
+        setLayoutTheme,
+        isThemeSettingsOpen,
+        toggleThemeSettings,
       }}
     >
       {children}

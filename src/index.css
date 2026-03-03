@@ -2,6 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Default Blue (Sky-500 equivalent) */
+    --color-primary-50: 240 249 255;
+    --color-primary-100: 224 242 254;
+    --color-primary-200: 186 230 253;
+    --color-primary-300: 125 211 252;
+    --color-primary-400: 56 189 248;
+    --color-primary-500: 14 165 233;
+    --color-primary-600: 2 132 199;
+    --color-primary-700: 3 105 161;
+    --color-primary-800: 7 89 133;
+    --color-primary-900: 12 74 110;
+    --color-primary-950: 8 47 73;
+  }
+
+  /* Purple Theme */
+  .theme-purple {
+    --color-primary-50: 250 245 255;
+    --color-primary-100: 243 232 255;
+    --color-primary-200: 233 213 255;
+    --color-primary-300: 216 180 254;
+    --color-primary-400: 192 132 252;
+    --color-primary-500: 168 85 247;
+    --color-primary-600: 147 51 234;
+    --color-primary-700: 126 34 206;
+    --color-primary-800: 107 33 168;
+    --color-primary-900: 88 28 135;
+    --color-primary-950: 59 7 100;
+  }
+
+  /* Green Theme */
+  .theme-green {
+    --color-primary-50: 240 253 244;
+    --color-primary-100: 220 252 231;
+    --color-primary-200: 187 247 208;
+    --color-primary-300: 134 239 172;
+    --color-primary-400: 74 222 128;
+    --color-primary-500: 34 197 94;
+    --color-primary-600: 22 163 74;
+    --color-primary-700: 21 128 61;
+    --color-primary-800: 22 101 52;
+    --color-primary-900: 20 83 45;
+    --color-primary-950: 5 46 22;
+  }
+
+  /* Orange Theme */
+  .theme-orange {
+    --color-primary-50: 255 247 237;
+    --color-primary-100: 255 237 213;
+    --color-primary-200: 254 215 170;
+    --color-primary-300: 253 186 116;
+    --color-primary-400: 251 146 60;
+    --color-primary-500: 249 115 22;
+    --color-primary-600: 234 88 12;
+    --color-primary-700: 194 65 12;
+    --color-primary-800: 154 52 18;
+    --color-primary-900: 124 45 18;
+    --color-primary-950: 67 20 7;
+  }
+  
+  /* Red Theme */
+  .theme-red {
+    --color-primary-50: 254 242 242;
+    --color-primary-100: 254 226 226;
+    --color-primary-200: 254 202 202;
+    --color-primary-300: 252 165 165;
+    --color-primary-400: 248 113 113;
+    --color-primary-500: 239 68 68;
+    --color-primary-600: 220 38 38;
+    --color-primary-700: 185 28 28;
+    --color-primary-800: 153 27 27;
+    --color-primary-900: 127 29 29;
+    --color-primary-950: 69 10 10;
+  }
+
+  /* Teal Theme */
+  .theme-teal {
+    --color-primary-50: 240 253 250;
+    --color-primary-100: 204 251 241;
+    --color-primary-200: 153 246 228;
+    --color-primary-300: 94 234 212;
+    --color-primary-400: 45 212 191;
+    --color-primary-500: 20 184 166;
+    --color-primary-600: 13 148 136;
+    --color-primary-700: 15 118 110;
+    --color-primary-800: 17 94 89;
+    --color-primary-900: 19 78 74;
+    --color-primary-950: 4 47 46;
+  }
+}
+
 :root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.5;

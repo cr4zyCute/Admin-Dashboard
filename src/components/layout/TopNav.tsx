@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { 
   Bell, 
   Maximize, 
@@ -39,7 +40,14 @@ const TopNav: React.FC<TopNavProps> = ({
   isSidebarCollapsed 
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { user, notifications, dataState, toggleData } = useAppContext();
+  const navigate = useNavigate();
+  const { 
+    user,  
+    notifications, 
+    dataState, 
+    toggleData,
+    toggleThemeSettings 
+  } = useAppContext();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -268,6 +276,14 @@ const TopNav: React.FC<TopNavProps> = ({
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
 
+        {/* Theme Settings Button */}
+        <button
+          onClick={toggleThemeSettings}
+          className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors relative"
+        >
+          <Settings className="w-5 h-5 animate-spin-slow hover:text-primary-600 dark:hover:text-primary-400" />
+        </button>
+
         {/* Notifications */}
         <div className="relative">
           <button 
@@ -354,9 +370,15 @@ const TopNav: React.FC<TopNavProps> = ({
                     <span>Inbox</span>
                     <span className="ml-auto bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 py-0.5 px-2 rounded-lg text-[10px] font-bold shadow-sm">3</span>
                   </button>
-                  <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
+                  <button 
+                    onClick={() => {
+                      window.open('/settings/theme', '_blank');
+                      setActiveDropdown(null);
+                    }}
+                    className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group"
+                  >
                     <Settings className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                    <span>Settings</span>
+                    <span>Theme Settings</span>
                   </button>
                   <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
                     <HelpCircle className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />

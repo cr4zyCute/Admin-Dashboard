@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
+import ThemeSettingsDrawer from '../settings/ThemeSettingsDrawer';
 import { useAppContext } from '../../context/AppContext';
 import { cn } from '../../lib/utils';
 
@@ -58,6 +59,8 @@ const MainLayout: React.FC = () => {
       >
         <Outlet />
       </main>
+
+      <ThemeSettingsDrawer />
     </div>
   );
 };

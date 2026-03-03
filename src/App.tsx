@@ -38,6 +38,9 @@ import SupportCenter from './pages/apps/SupportCenter';
 import Promo from './pages/apps/Promo';
 import MoreApps from './pages/apps/MoreApps';
 
+// Settings
+import ThemeCustomizer from './pages/settings/ThemeCustomizer';
+
 // Custom Pages
 import Starter from './pages/custom/Starter';
 import Timeline from './pages/custom/Timeline';
@@ -125,6 +128,9 @@ function App() {
             <Route path="/apps/promo" element={<Promo />} />
             <Route path="/apps/more-apps" element={<MoreApps />} />
             
+            {/* Settings */}
+            <Route path="/settings/theme" element={<ThemeCustomizer />} />
+
             {/* Custom Pages */}
             <Route path="/pages/starter" element={<Starter />} />
             <Route path="/pages/timeline" element={<Timeline />} />

@@ -19,6 +19,17 @@ export interface Notification {
   avatar?: string;
 }
 
+// Theme Types
+export type ThemeMode = 'light' | 'dark' | 'system';
+export type ColorTheme = 'blue' | 'green' | 'purple' | 'orange' | 'red' | 'teal';
+
+export type LayoutTheme = 
+  | 'Default' | 'Minimal' | 'Modern' | 'Material' | 'SaaS' 
+  | 'Flat' | 'Galaxy' | 'Luxe' | 'Retro' | 'Neon' 
+  | 'Pixel' | 'Soft' | 'Mono' | 'Prism' | 'Nova' 
+  | 'Zen' | 'Elegant' | 'Vivid' | 'Aurora' | 'Crystal' 
+  | 'Matrix' | 'Orbit' | 'Neo' | 'Silver' | 'Xenon';
+
 // Menu Interface
 export interface MenuItem {
   id: string;
@@ -47,4 +58,12 @@ export interface AppContextType {
   markAllNotificationsRead: () => void;
   dataState: 'default' | 'alternate' | 'empty';
   toggleData: () => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  colorTheme: ColorTheme;
+  setColorTheme: (theme: ColorTheme) => void;
+  layoutTheme: LayoutTheme;
+  setLayoutTheme: (theme: LayoutTheme) => void;
+  isThemeSettingsOpen: boolean;
+  toggleThemeSettings: () => void;
 }
