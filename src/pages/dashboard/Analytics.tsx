@@ -151,6 +151,19 @@ const Analytics: React.FC = () => {
               <TrendingUp className="w-3 h-3 mr-1" /> {visitors.change}%
             </span>
           </div>
+          <div className="h-10 w-full mb-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={sparklineData2}>
+                <defs>
+                  <linearGradient id="colorSpark2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark2)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
           <p className="text-xs text-slate-400">vs. 5,732 last period</p>
         </div>
 
@@ -168,6 +181,19 @@ const Analytics: React.FC = () => {
               <TrendingUp className="w-3 h-3 mr-1 rotate-180" /> {clicks.change}%
             </span>
           </div>
+          <div className="h-10 w-full mb-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={sparklineData3}>
+                <defs>
+                  <linearGradient id="colorSpark3" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark3)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
           <p className="text-xs text-slate-400">vs. 3,294 last period</p>
         </div>
 
@@ -184,6 +210,19 @@ const Analytics: React.FC = () => {
             <span className="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded">
               <TrendingUp className="w-3 h-3 mr-1" /> {orders.change}%
             </span>
+          </div>
+          <div className="h-10 w-full mb-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={sparklineData4}>
+                <defs>
+                  <linearGradient id="colorSpark4" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark4)" />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
           <p className="text-xs text-slate-400">vs. 1,186 last period</p>
         </div>
