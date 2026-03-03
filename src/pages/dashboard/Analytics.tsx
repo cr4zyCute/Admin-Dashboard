@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   ShoppingCart, 
   TrendingUp, 
@@ -34,6 +34,8 @@ import {
 } from 'recharts';
 import { cn } from '../../lib/utils';
 
+const ITEMS_PER_PAGE = 5;
+
 import { 
   pageViews as mockPageViews, 
   visitors as mockVisitors, 
@@ -54,6 +56,7 @@ import {
   customerBreakdown as mockCustomerBreakdown,
   recentOrdersHeader as mockRecentOrdersHeader,
   revenueLocationCard as mockRevenueLocationCard,
+  profitLegend as mockProfitLegend,
 
   // Alternate Data
   pageViewsAlt,
@@ -74,10 +77,17 @@ import {
   locationsAlt,
   customerBreakdownAlt,
   recentOrdersHeaderAlt,
-  revenueLocationCardAlt
+  revenueLocationCardAlt,
+  profitLegendAlt,
+  
+  // Empty Data
+  profitDataEmpty,
+  customerBreakdownEmpty,
+  weeklyDataEmpty,
+  locationsEmpty
 } from '../../data/mockData';
 
-const NoData = ({ message = "No Data Available", size = "normal" }: { message?: string, size?: "small" | "normal" }) => {
+const NoData = ({ size = "normal" }: { message?: string, size?: "small" | "normal" }) => {
   if (size === "small") {
     return (
       <div className="flex items-center justify-center h-full w-full opacity-50">
@@ -93,13 +103,14 @@ const NoData = ({ message = "No Data Available", size = "normal" }: { message?: 
       <div className="w-24 h-24 md:w-32 md:h-32 opacity-80">
         <Lottie animationData={noDataAnimation} loop={true} />
       </div>
-      <p className="text-xs md:text-sm font-medium text-slate-400 mt-2 text-center">{message}</p>
     </div>
   );
 };
 
 const Analytics: React.FC = () => {
   const { dataState } = useAppContext();
+  const [productsPage, setProductsPage] = useState(1);
+  const [ordersPage, setOrdersPage] = useState(1);
 
   // Helper to select data based on state
   const selectData = <T,>(defaultData: T, altData: T, emptyData: T): T => {
@@ -117,8 +128,8 @@ const Analytics: React.FC = () => {
   const totalProfit = selectData(mockTotalProfit, totalProfitAlt, "$0");
   const totalProfitChange = selectData(mockTotalProfitChange, totalProfitChangeAlt, 0);
   
-  const weeklyData = selectData(mockWeeklyData, weeklyDataAlt, []);
-  const profitData = selectData(mockProfitData, profitDataAlt, []);
+  const weeklyData = selectData(mockWeeklyData, weeklyDataAlt, weeklyDataEmpty);
+  const profitData = selectData(mockProfitData, profitDataAlt, profitDataEmpty);
   const repeatCustomerRate = selectData(mockRepeatCustomerRate, repeatCustomerRateAlt, []);
   const products = selectData(mockProducts, productsAlt, []);
   
@@ -128,11 +139,40 @@ const Analytics: React.FC = () => {
   const sparklineData4 = selectData(mockSparklineData4, sparklineData4Alt, []);
   
   const recentOrders = selectData(mockRecentOrders, recentOrdersAlt, []);
-  const locations = selectData(mockLocations, locationsAlt, []);
+  const locations = selectData(mockLocations, locationsAlt, locationsEmpty);
   
-  const customerBreakdown = selectData(mockCustomerBreakdown, customerBreakdownAlt, []);
+  const customerBreakdown = selectData(mockCustomerBreakdown, customerBreakdownAlt, customerBreakdownEmpty);
   const recentOrdersHeader = selectData(mockRecentOrdersHeader, recentOrdersHeaderAlt, { totalTransactions: '0' });
   const revenueLocationCard = selectData(mockRevenueLocationCard, revenueLocationCardAlt, { title: 'No Data', subtitle: 'No records found', value: '0', label: 'ORDER' });
+  const profitLegend = selectData(mockProfitLegend, profitLegendAlt, null);
+
+  // Pagination Logic
+  const totalProducts = products.length;
+  const totalOrders = recentOrders.length;
+  
+  const totalProductPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+  const totalOrderPages = Math.ceil(totalOrders / ITEMS_PER_PAGE);
+
+  const currentProducts = products.slice((productsPage - 1) * ITEMS_PER_PAGE, productsPage * ITEMS_PER_PAGE);
+  const currentOrders = recentOrders.slice((ordersPage - 1) * ITEMS_PER_PAGE, ordersPage * ITEMS_PER_PAGE);
+
+  const handleProductPageChange = (page: number) => {
+    if (page >= 1 && page <= totalProductPages) {
+      setProductsPage(page);
+    }
+  };
+
+  const handleOrderPageChange = (page: number) => {
+    if (page >= 1 && page <= totalOrderPages) {
+      setOrdersPage(page);
+    }
+  };
+
+  // Reset pagination when data source changes
+  React.useEffect(() => {
+    setProductsPage(1);
+    setOrdersPage(1);
+  }, [dataState]);
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -294,41 +334,47 @@ const Analytics: React.FC = () => {
             </div>
             
             {/* Custom Legend/Tooltip Style Placeholder */}
-            <div className="hidden sm:block bg-white dark:bg-slate-700 shadow-lg rounded-xl p-3 border border-slate-100 dark:border-slate-600">
-              <div className="text-xs text-slate-400 mb-1">Jan 18, 2025</div>
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
-                <div className="w-2 h-2 rounded-full bg-blue-600"></div> $12,324 <span className="text-xs font-normal text-slate-400">this month</span>
+            {profitLegend && (
+              <div className="hidden sm:block bg-white dark:bg-slate-700 shadow-lg rounded-xl p-3 border border-slate-100 dark:border-slate-600">
+                <div className="text-xs text-slate-400 mb-1">{profitLegend.date}</div>
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
+                  <div className="w-2 h-2 rounded-full bg-blue-600"></div> {profitLegend.thisMonth} <span className="text-xs font-normal text-slate-400">this month</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
+                  <div className="w-2 h-2 rounded-full bg-slate-300"></div> {profitLegend.lastMonth} <span className="text-xs font-normal text-slate-400">last month</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
-                <div className="w-2 h-2 rounded-full bg-slate-300"></div> $5,563 <span className="text-xs font-normal text-slate-400">last month</span>
-              </div>
-            </div>
+            )}
           </div>
 
-          <div className="h-[250px] w-full">
-            {profitData && profitData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={profitData}>
-                  <defs>
-                    <linearGradient id="colorStock" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} minTickGap={30} />
-                  <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fill: '#ef4444', fontSize: 12 }} domain={[0, 100]} />
-                  <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} domain={[0, 2500]} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                    cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
-                  />
-                  <Area yAxisId="left" type="monotone" dataKey="stock" name="Stock Level (%)" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorStock)" />
-                  <Line yAxisId="right" type="monotone" dataKey="sales" name="Total Sales ($)" stroke="#94a3b8" strokeWidth={3} dot={false} />
-                </ComposedChart>
-              </ResponsiveContainer>
-            ) : (
-              <NoData message="No profit data available" />
+          <div className="h-[250px] w-full relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={profitData}>
+                <defs>
+                  <linearGradient id="colorStock" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} minTickGap={30} />
+                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fill: '#ef4444', fontSize: 12 }} domain={[0, 100]} />
+                <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} domain={[0, 2500]} />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                  cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
+                />
+                <Area yAxisId="left" type="monotone" dataKey="stock" name="Stock Level (%)" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorStock)" />
+                <Line yAxisId="right" type="monotone" dataKey="sales" name="Total Sales ($)" stroke="#94a3b8" strokeWidth={3} dot={false} />
+              </ComposedChart>
+            </ResponsiveContainer>
+            
+            {dataState === 'empty' && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                 <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl">
+                   <NoData message="No profit data available" />
+                 </div>
+              </div>
             )}
           </div>
 
@@ -363,33 +409,37 @@ const Analytics: React.FC = () => {
             <button className="text-slate-400 hover:text-slate-600"><MoreVertical className="w-4 h-4" /></button>
           </div>
           
-          <div className="flex-1 flex flex-col items-center justify-center">
-            {weeklyData && weeklyData.length > 0 ? (
-              <>
-                <div className="w-full h-[200px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={weeklyData}>
-                      <Bar dataKey="active" radius={[4, 4, 4, 4]}>
-                        {weeklyData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.name === 'Tue' ? '#3b82f6' : '#e2e8f0'} />
-                        ))}
-                      </Bar>
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} dy={10} interval={0} />
-                      <Tooltip 
-                        cursor={{fill: 'transparent'}}
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+          <div className="flex-1 flex flex-col items-center justify-center relative">
+            <div className="w-full h-[200px] relative">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={weeklyData}>
+                  <Bar dataKey="active" radius={[4, 4, 4, 4]}>
+                    {weeklyData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.name === 'Tue' && dataState !== 'empty' ? '#3b82f6' : '#e2e8f0'} />
+                    ))}
+                  </Bar>
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} dy={10} interval={0} />
+                  <Tooltip 
+                    cursor={{fill: 'transparent'}}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+              
+              {dataState === 'empty' && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                   <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl">
+                     <NoData message="No activity data" />
+                   </div>
                 </div>
-                <div className="mt-4 text-center">
-                   <h4 className="text-2xl font-bold text-slate-800 dark:text-white">8,162</h4>
-                   <p className="text-xs text-slate-400">Total active users on Tuesday</p>
-                </div>
-              </>
-            ) : (
-              <NoData message="No activity data" />
-            )}
+              )}
+            </div>
+            <div className="mt-4 text-center">
+               <h4 className="text-2xl font-bold text-slate-800 dark:text-white">
+                 {dataState === 'empty' ? '0' : '8,162'}
+               </h4>
+               <p className="text-xs text-slate-400">Total active users on Tuesday</p>
+            </div>
           </div>
         </div>
       </div>
@@ -410,7 +460,7 @@ const Analytics: React.FC = () => {
           </div>
           
           <div className="flex-1 overflow-x-auto">
-            {products && products.length > 0 ? (
+            {currentProducts && currentProducts.length > 0 ? (
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
@@ -422,7 +472,7 @@ const Analytics: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="text-sm">
-                  {products.map((product) => (
+                  {currentProducts.map((product) => (
                     <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
                       <td className="py-4 pr-4 pl-2">
                         <div className="flex items-center gap-4">
@@ -457,11 +507,38 @@ const Analytics: React.FC = () => {
           </div>
 
           <div className="flex justify-between items-center mt-6 pt-2">
-            <span className="text-xs text-slate-400">Showing 5 products</span>
+            <span className="text-xs text-slate-400">
+              Showing {currentProducts.length > 0 ? (productsPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(productsPage * ITEMS_PER_PAGE, totalProducts)} of {totalProducts} products
+            </span>
             <div className="flex gap-1">
-              <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors">Prev</button>
-              <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-xs shadow-sm shadow-blue-500/30">1</button>
-              <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors">Next</button>
+              <button 
+                onClick={() => handleProductPageChange(productsPage - 1)}
+                disabled={productsPage === 1 || totalProducts === 0}
+                className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+              {[...Array(totalProductPages)].map((_, i) => (
+                <button 
+                  key={i}
+                  onClick={() => handleProductPageChange(i + 1)}
+                  className={cn(
+                    "w-8 h-8 flex items-center justify-center rounded-lg text-xs transition-colors shadow-sm",
+                    productsPage === i + 1 
+                      ? "bg-blue-600 text-white shadow-blue-500/30" 
+                      : "border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500"
+                  )}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button 
+                onClick={() => handleProductPageChange(productsPage + 1)}
+                disabled={productsPage === totalProductPages || totalProducts === 0}
+                className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
@@ -574,7 +651,7 @@ const Analytics: React.FC = () => {
           </div>
 
           <div className="flex-1 overflow-x-auto">
-             {recentOrders && recentOrders.length > 0 ? (
+             {currentOrders && currentOrders.length > 0 ? (
                <table className="w-full text-left border-collapse min-w-[500px]">
                  <thead>
                    <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
@@ -587,7 +664,7 @@ const Analytics: React.FC = () => {
                    </tr>
                  </thead>
                  <tbody className="text-sm">
-                   {recentOrders.map((order) => (
+                   {currentOrders.map((order) => (
                      <tr key={order.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
                        <td className="py-3 pr-2 font-medium text-slate-500">{order.id}</td>
                        <td className="py-3 px-2">
@@ -619,12 +696,38 @@ const Analytics: React.FC = () => {
           </div>
           
           <div className="flex justify-between items-center mt-4 pt-2">
-            <span className="text-xs text-slate-400">Showing 1 to 5 of 10 orders</span>
+            <span className="text-xs text-slate-400">
+              Showing {currentOrders.length > 0 ? (ordersPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(ordersPage * ITEMS_PER_PAGE, totalOrders)} of {totalOrders} orders
+            </span>
             <div className="flex gap-1">
-              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">{'<'}</button>
-              <button className="w-6 h-6 flex items-center justify-center rounded bg-blue-600 text-white text-xs">1</button>
-              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">2</button>
-              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">{'>'}</button>
+              <button 
+                onClick={() => handleOrderPageChange(ordersPage - 1)}
+                disabled={ordersPage === 1 || totalOrders === 0}
+                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {'<'}
+              </button>
+              {[...Array(totalOrderPages)].map((_, i) => (
+                <button 
+                  key={i}
+                  onClick={() => handleOrderPageChange(i + 1)}
+                  className={cn(
+                    "w-6 h-6 flex items-center justify-center rounded text-xs transition-colors",
+                    ordersPage === i + 1 
+                      ? "bg-blue-600 text-white" 
+                      : "border border-slate-200 dark:border-slate-700 hover:bg-slate-50"
+                  )}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button 
+                onClick={() => handleOrderPageChange(ordersPage + 1)}
+                disabled={ordersPage === totalOrderPages || totalOrders === 0}
+                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {'>'}
+              </button>
             </div>
           </div>
         </div>
@@ -673,22 +776,18 @@ const Analytics: React.FC = () => {
 
             {/* Location List */}
             <div className="space-y-4">
-              {locations && locations.length > 0 ? (
-                locations.map((loc, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-800`} style={{ backgroundColor: loc.color }}></div>
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{loc.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-slate-700 dark:text-white">{loc.revenue}</span>
-                      <span className="text-xs text-slate-400">Revenue</span>
-                    </div>
+              {locations.map((loc, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-800`} style={{ backgroundColor: loc.color }}></div>
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{loc.name}</span>
                   </div>
-                ))
-              ) : (
-                <NoData message="No location data" />
-              )}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-slate-700 dark:text-white">{loc.revenue}</span>
+                    <span className="text-xs text-slate-400">Revenue</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

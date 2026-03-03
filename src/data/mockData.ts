@@ -92,7 +92,14 @@ export const products = [
   { id: '#83001', name: 'Casio G-Shock Shock Resi...', sold: '1,230', revenue: '$92,662', rating: 4.8, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop' },
   { id: '#83004', name: 'SAMSUNG Galaxy S25 Ultra...', sold: '812', revenue: '$74,048', rating: 4.7, image: 'https://images.unsplash.com/photo-1610945265078-386f3b58d86f?w=100&h=100&fit=crop' },
   { id: '#83002', name: 'Xbox Wireless Gaming Co...', sold: '645', revenue: '$62,820', rating: 4.5, image: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=100&h=100&fit=crop' },
-  { id: '#83002', name: 'Timex Men\'s Easy Reader...', sold: '572', revenue: '$48,724', rating: 4.5, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop' },
+  { id: '#83003', name: 'Timex Men\'s Easy Reader...', sold: '572', revenue: '$48,724', rating: 4.5, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop' },
+  { id: '#83005', name: 'Nike Air Force 1 \'07...', sold: '450', revenue: '$42,500', rating: 4.6, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop' },
+  { id: '#83006', name: 'Sony PlayStation 5...', sold: '390', revenue: '$194,500', rating: 4.9, image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=100&h=100&fit=crop' },
+  { id: '#83007', name: 'Instant Pot Duo 7-in-1...', sold: '320', revenue: '$28,800', rating: 4.7, image: 'https://images.unsplash.com/photo-1588645404987-2798e27339d1?w=100&h=100&fit=crop' },
+  { id: '#83008', name: 'Bose QuietComfort 45...', sold: '280', revenue: '$92,120', rating: 4.8, image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=100&h=100&fit=crop' },
+  { id: '#83010', name: 'Fitbit Charge 6...', sold: '210', revenue: '$31,290', rating: 4.4, image: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=100&h=100&fit=crop' },
+  { id: '#83011', name: 'Canon EOS R6 Mark II...', sold: '150', revenue: '$374,850', rating: 4.9, image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=100&h=100&fit=crop' },
+  { id: '#83012', name: 'Dyson V15 Detect...', sold: '120', revenue: '$89,880', rating: 4.8, image: 'https://images.unsplash.com/photo-1558317374-a3594743e427?w=100&h=100&fit=crop' }
 ];
 
 // Small Sparkline Data
@@ -116,6 +123,13 @@ export const recentOrders = [
   { id: '#ORD-1021', customer: 'Michael Harris', email: 'michael@example.com', date: '11 Nov 2025', amount: '$329.00', payment: 'PayPal', status: 'Failed' },
   { id: '#ORD-1020', customer: 'Sophia Turner', email: 'sophia@example.com', date: '11 Nov 2025', amount: '$125.00', payment: 'Debit', status: 'Success' },
   { id: '#ORD-1019', customer: 'Chris Evans', email: 'chris@example.com', date: '10 Nov 2025', amount: '$560.00', payment: 'Credit', status: 'Pending' },
+  { id: '#ORD-1018', customer: 'Olivia Brown', email: 'olivia@example.com', date: '10 Nov 2025', amount: '$89.00', payment: 'Credit', status: 'Success' },
+  { id: '#ORD-1017', customer: 'James Miller', email: 'james@example.com', date: '09 Nov 2025', amount: '$450.00', payment: 'PayPal', status: 'Success' },
+  { id: '#ORD-1016', customer: 'Isabella Davis', email: 'isabella@example.com', date: '09 Nov 2025', amount: '$120.00', payment: 'UPI', status: 'Failed' },
+  { id: '#ORD-1015', customer: 'William Garcia', email: 'william@example.com', date: '08 Nov 2025', amount: '$299.00', payment: 'Debit', status: 'Success' },
+  { id: '#ORD-1014', customer: 'Mia Rodriguez', email: 'mia@example.com', date: '08 Nov 2025', amount: '$75.00', payment: 'Credit', status: 'Pending' },
+  { id: '#ORD-1013', customer: 'Benjamin Martinez', email: 'benjamin@example.com', date: '07 Nov 2025', amount: '$150.00', payment: 'PayPal', status: 'Success' },
+  { id: '#ORD-1012', customer: 'Charlotte Hernandez', email: 'charlotte@example.com', date: '07 Nov 2025', amount: '$500.00', payment: 'UPI', status: 'Failed' },
 ];
 
 export const locations = [
@@ -163,6 +177,12 @@ export const revenueLocationCard = {
   subtitle: "You've just hit a new record..",
   value: '25.9k',
   label: 'ORDER'
+};
+
+export const profitLegend = {
+  date: "Jan 18, 2025",
+  thisMonth: "$12,324",
+  lastMonth: "$5,563"
 };
 
 // --- Alternate Data for Testing ---
@@ -217,6 +237,11 @@ export const productsAlt = [
   { id: '#92003', name: 'Kindle Paperwhite...', sold: '850', revenue: '$42,100', rating: 4.7, image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100&h=100&fit=crop' },
   { id: '#92004', name: 'Logitech MX Master 3S...', sold: '720', revenue: '$35,500', rating: 4.8, image: 'https://images.unsplash.com/photo-1631281928516-77263c762566?w=100&h=100&fit=crop' },
   { id: '#92005', name: 'GoPro HERO12 Black...', sold: '610', revenue: '$28,900', rating: 4.6, image: 'https://images.unsplash.com/photo-1564466136-20a4ab8fa7d4?w=100&h=100&fit=crop' },
+  { id: '#92006', name: 'DJI Mini 4 Pro...', sold: '550', revenue: '$102,850', rating: 4.9, image: 'https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=100&h=100&fit=crop' },
+  { id: '#92007', name: 'Sonos Roam SL...', sold: '480', revenue: '$76,320', rating: 4.7, image: 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?w=100&h=100&fit=crop' },
+  { id: '#92008', name: 'Nespresso Vertuo...', sold: '420', revenue: '$67,200', rating: 4.8, image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=100&h=100&fit=crop' },
+  { id: '#92009', name: 'Razer DeathAdder V3...', sold: '380', revenue: '$26,600', rating: 4.6, image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=100&h=100&fit=crop' },
+  { id: '#92010', name: 'Samsung T7 Shield...', sold: '310', revenue: '$46,500', rating: 4.8, image: 'https://images.unsplash.com/photo-1628557044797-f21a17b96c89?w=100&h=100&fit=crop' }
 ];
 
 export const sparklineDataAlt = [
@@ -238,6 +263,11 @@ export const recentOrdersAlt = [
   { id: '#ORD-2053', customer: 'Charlie Brown', email: 'charlie@example.com', date: '12 Nov 2025', amount: '$890.00', payment: 'Debit', status: 'Success' },
   { id: '#ORD-2052', customer: 'Diana Prince', email: 'diana@example.com', date: '12 Nov 2025', amount: '$210.00', payment: 'UPI', status: 'Failed' },
   { id: '#ORD-2051', customer: 'Evan Wright', email: 'evan@example.com', date: '11 Nov 2025', amount: '$340.00', payment: 'Credit', status: 'Success' },
+  { id: '#ORD-2050', customer: 'Fiona Clark', email: 'fiona@example.com', date: '10 Nov 2025', amount: '$120.00', payment: 'PayPal', status: 'Success' },
+  { id: '#ORD-2049', customer: 'George Hall', email: 'george@example.com', date: '10 Nov 2025', amount: '$560.00', payment: 'Credit', status: 'Pending' },
+  { id: '#ORD-2048', customer: 'Hannah Lewis', email: 'hannah@example.com', date: '09 Nov 2025', amount: '$89.00', payment: 'Credit', status: 'Success' },
+  { id: '#ORD-2047', customer: 'Ian Young', email: 'ian@example.com', date: '09 Nov 2025', amount: '$450.00', payment: 'PayPal', status: 'Success' },
+  { id: '#ORD-2046', customer: 'Julia Walker', email: 'julia@example.com', date: '08 Nov 2025', amount: '$120.00', payment: 'UPI', status: 'Failed' },
 ];
 
 export const locationsAlt = [
@@ -262,3 +292,27 @@ export const revenueLocationCardAlt = {
   value: '18.2k',
   label: 'SALES'
 };
+
+export const profitLegendAlt = {
+  date: "Feb 15, 2025",
+  thisMonth: "$18,450",
+  lastMonth: "$6,210"
+};
+
+// --- Empty Data for Testing ---
+
+export const profitDataEmpty = profitData.map(item => ({ name: item.name, stock: 0, sales: 0 }));
+
+export const customerBreakdownEmpty = [
+  { label: 'Retailers', value: '0', color: 'bg-blue-600', bgColor: 'bg-blue-100 dark:bg-blue-900/30', percentage: 0 },
+  { label: 'Distributors', value: '0', color: 'bg-emerald-500', bgColor: 'bg-emerald-100 dark:bg-emerald-900/30', percentage: 0 },
+  { label: 'Wholesalers', value: '0', color: 'bg-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30', percentage: 0 },
+];
+
+export const weeklyDataEmpty = weeklyData.map(item => ({ name: item.name, value: 0, active: 0 }));
+
+export const locationsEmpty = [
+  { name: 'United States', revenue: '$0', percentage: 0, color: '#3b82f6' },
+  { name: 'United Kingdom', revenue: '$0', percentage: 0, color: '#8b5cf6' },
+  { name: 'Australia', revenue: '$0', percentage: 0, color: '#10b981' },
+];
