@@ -44,12 +44,6 @@ const ThemeCustomizer: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
       
-      {/* Header */}
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Theme Customizer</h1>
-        <p className="text-slate-500 dark:text-slate-400">Customize the look and feel of your admin dashboard.</p>
-      </div>
-
       {/* 1. Layout Theme Selection */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}

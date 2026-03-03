@@ -88,6 +88,7 @@ import SpecialMenu from './pages/examples/SpecialMenu';
 // Customization Pages (Aliased)
 import CustomAnalytics from './customization/dashboard/Analytics';
 import CustomDashboard from './customization/dashboard/Overview';
+import CustomHome from './customization/Home';
 
 function App() {
   return (
@@ -99,7 +100,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             
             {/* Customization Routes */}
-            <Route path="/customization" element={<Navigate to="/customization/dashboard/analytics" replace />} />
+            <Route path="/customization" element={<CustomHome />} />
             <Route path="/customization/dashboard" element={<CustomDashboard />} />
             <Route path="/customization/dashboard/analytics" element={<CustomAnalytics />} />
 

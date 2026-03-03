@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
 
   const getRoute = (route: string) => {
     if (activeRoute.startsWith('/customization')) {
+      if (route.startsWith('/customization')) return route;
       return `/customization${route}`;
     }
     return route;

@@ -45,6 +45,12 @@ export const MENU_ITEMS: MenuSection[] = [
     category: 'MAIN',
     items: [
       { 
+        id: 'home', 
+        label: 'Home', 
+        icon: LayoutDashboard, 
+        route: '/customization' 
+      },
+      { 
         id: 'dashboard', 
         label: 'Dashboards', 
         icon: LayoutDashboard, 
