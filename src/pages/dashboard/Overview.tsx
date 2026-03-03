@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold text-slate-800">eCommerce</h1>
         <div className="flex items-center text-sm text-slate-500">
-          <span>Paces</span>
+          <span>eCommerce</span>
           <span className="mx-2">&gt;</span>
           <span>Dashboard</span>
           <span className="mx-2">&gt;</span>

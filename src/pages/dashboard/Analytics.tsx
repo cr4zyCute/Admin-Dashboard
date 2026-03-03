@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Lottie from 'lottie-react';
 import noDataAnimation from '../../assets/No Data.json';
+import CountUp from '../../components/common/CountUp';
 import { useAppContext } from '../../context/AppContext';
 import { 
   ComposedChart,
@@ -188,7 +189,7 @@ const Analytics: React.FC = () => {
             </div>
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-slate-800 dark:text-white">{pageViews.value}</span>
+            <CountUp end={pageViews.value} className="text-3xl font-bold text-slate-800 dark:text-white" />
             <span className="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded">
               <TrendingUp className="w-3 h-3 mr-1" /> {pageViews.change}%
             </span>
@@ -222,7 +223,7 @@ const Analytics: React.FC = () => {
             </div>
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-slate-800 dark:text-white">{visitors.value}</span>
+            <CountUp end={visitors.value} className="text-3xl font-bold text-slate-800 dark:text-white" />
             <span className="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded">
               <TrendingUp className="w-3 h-3 mr-1" /> {visitors.change}%
             </span>
@@ -256,7 +257,7 @@ const Analytics: React.FC = () => {
             </div>
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-slate-800 dark:text-white">{clicks.value}</span>
+            <CountUp end={clicks.value} className="text-3xl font-bold text-slate-800 dark:text-white" />
             <span className="flex items-center text-xs font-bold text-red-500 bg-red-50 dark:bg-red-500/10 px-1.5 py-0.5 rounded">
               <TrendingUp className="w-3 h-3 mr-1 rotate-180" /> {clicks.change}%
             </span>
@@ -290,7 +291,7 @@ const Analytics: React.FC = () => {
             </div>
           </div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-slate-800 dark:text-white">{orders.value}</span>
+            <CountUp end={orders.value} className="text-3xl font-bold text-slate-800 dark:text-white" />
             <span className="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded">
               <TrendingUp className="w-3 h-3 mr-1" /> {orders.change}%
             </span>
@@ -325,7 +326,12 @@ const Analytics: React.FC = () => {
             <div>
               <h3 className="font-bold text-slate-800 dark:text-white mb-4">Total Profit</h3>
               <div className="flex items-baseline gap-3">
-                <span className="text-4xl font-bold text-slate-900 dark:text-white">{totalProfit}</span>
+                <CountUp 
+                  end={totalProfit} 
+                  prefix={totalProfit.includes('$') ? '$' : ''} 
+                  suffix={totalProfit.includes('K') ? 'K' : ''} 
+                  className="text-4xl font-bold text-slate-900 dark:text-white" 
+                />
                 <span className="flex items-center text-sm font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full">
                   <TrendingUp className="w-3 h-3 mr-1" /> {totalProfitChange}%
                 </span>
@@ -436,7 +442,7 @@ const Analytics: React.FC = () => {
             </div>
             <div className="mt-4 text-center">
                <h4 className="text-2xl font-bold text-slate-800 dark:text-white">
-                 {dataState === 'empty' ? '0' : '8,162'}
+                 <CountUp end={dataState === 'empty' ? 0 : 8162} />
                </h4>
                <p className="text-xs text-slate-400">Total active users on Tuesday</p>
             </div>
@@ -743,20 +749,24 @@ const Analytics: React.FC = () => {
             {/* Map Placeholder */}
             <div className="flex-1 min-h-[180px] bg-slate-50 dark:bg-slate-900 rounded-xl relative overflow-hidden mb-6 group">
               <div className="absolute inset-0 opacity-30 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-cover bg-center grayscale contrast-50"></div>
-              {/* Animated Dots */}
-              <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full animate-ping"></div>
-              <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
-              
-              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full animate-ping delay-300"></div>
-              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full border-2 border-white"></div>
-              
-              <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full animate-ping delay-700"></div>
-              <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div>
-              
-              {/* Connecting Lines (SVG overlay) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                <path d="M100,60 Q180,100 250,140" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" className="dark:stroke-slate-700" />
-              </svg>
+              {/* Animated Dots - Hide when empty */}
+              {dataState !== 'empty' && (
+                <>
+                  <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full animate-ping"></div>
+                  <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
+                  
+                  <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full animate-ping delay-300"></div>
+                  <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full border-2 border-white"></div>
+                  
+                  <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full animate-ping delay-700"></div>
+                  <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div>
+                  
+                  {/* Connecting Lines (SVG overlay) */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    <path d="M100,60 Q180,100 250,140" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" className="dark:stroke-slate-700" />
+                  </svg>
+                </>
+              )}
             </div>
 
             {/* Stats Card */}
@@ -767,7 +777,13 @@ const Analytics: React.FC = () => {
                  <p className="text-xs text-slate-400">{revenueLocationCard.subtitle}</p>
                </div>
                <div className="ml-auto text-right">
-                 <p className="font-bold text-slate-800 dark:text-white">{revenueLocationCard.value}</p>
+                 <div className="font-bold text-slate-800 dark:text-white">
+                    <CountUp 
+                      end={revenueLocationCard.value} 
+                      suffix={revenueLocationCard.value.toLowerCase().includes('k') ? 'k' : ''}
+                      prefix={revenueLocationCard.value.includes('$') ? '$' : ''}
+                    />
+                 </div>
                  <p className="text-[10px] text-slate-400 uppercase">{revenueLocationCard.label}</p>
                </div>
                {/* Decorative bg shape */}

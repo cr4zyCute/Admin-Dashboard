@@ -154,7 +154,7 @@ const CRM: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-xl font-bold text-slate-800 dark:text-white">CRM</h1>
         <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
-          <span className="hover:text-blue-600 cursor-pointer">Paces</span>
+          <span className="hover:text-blue-600 cursor-pointer">eCommerce</span>
           <span className="mx-2 text-slate-300 dark:text-slate-600">&gt;</span>
           <span className="hover:text-blue-600 cursor-pointer">Dashboard</span>
           <span className="mx-2 text-slate-300 dark:text-slate-600">&gt;</span>

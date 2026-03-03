@@ -26,7 +26,7 @@ The admin dashboard consists of the following main pages:
 | Dashboard | Metrics Cards | Display revenue, growth, orders with percentage changes and trend indicators |
 | Dashboard | Analytics Charts | Show store performance and weekly insights with interactive charts |
 | Dashboard | Sales Report | Present sales data with time-based filters (Today/Monthly/Annual) |
-| Sidebar | Brand Area | Show logo and "Paces" brand name with consistent dark theme |
+| Sidebar | Brand Area | Show logo and "eCommerce" brand name with consistent dark theme |
 | Sidebar | Menu Sections | Organize menu items into MAIN, APPS, and CUSTOM PAGES categories |
 | Sidebar | Navigation Items | Provide access to Dashboards, Ecommerce, Chat, Projects, Tasks, Invoice, CRM, Users, Finance, HRM, Email, Support Center, and Promo |
 | Top Navigation | Left Menu | Display Mega Menu and Apps dropdown for quick navigation |

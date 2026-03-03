@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
               "transition-opacity duration-300 delay-100 font-display tracking-tight",
               isCollapsed && !isMobile ? "opacity-0 w-0" : "opacity-100"
             )}>
-              Paces
+              eCommerce
             </span>
           </div>
         </div>
