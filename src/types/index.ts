@@ -30,6 +30,10 @@ export type LayoutTheme =
   | 'Zen' | 'Elegant' | 'Vivid' | 'Aurora' | 'Crystal' 
   | 'Matrix' | 'Orbit' | 'Neo' | 'Silver' | 'Xenon';
 
+export type CardStyle = 'default' | 'flat' | 'bordered' | 'glass' | 'neo';
+
+export type ChartType = 'area' | 'bar' | 'line';
+
 // Menu Interface
 export interface MenuItem {
   id: string;
@@ -64,6 +68,10 @@ export interface AppContextType {
   setColorTheme: (theme: ColorTheme) => void;
   layoutTheme: LayoutTheme;
   setLayoutTheme: (theme: LayoutTheme) => void;
+  cardStyle: CardStyle;
+  setCardStyle: (style: CardStyle) => void;
+  chartType: ChartType;
+  setChartType: (type: ChartType) => void;
   isThemeSettingsOpen: boolean;
   toggleThemeSettings: () => void;
 }

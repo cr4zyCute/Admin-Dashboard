@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { Settings } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import ThemeSettingsDrawer from '../settings/ThemeSettingsDrawer';
@@ -10,7 +11,8 @@ const MainLayout: React.FC = () => {
   const { 
     sidebarCollapsed, 
     toggleSidebar, 
-    setActiveRoute 
+    setActiveRoute,
+    toggleThemeSettings
   } = useAppContext();
   
   const location = useLocation();
@@ -59,6 +61,16 @@ const MainLayout: React.FC = () => {
       >
         <Outlet />
       </main>
+
+      {/* Floating Theme Customizer Button */}
+      <button
+        onClick={toggleThemeSettings}
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-l-xl shadow-lg transition-all duration-300 group"
+        title="Customize Theme"
+      >
+        <Settings className="w-6 h-6 animate-spin-slow group-hover:animate-spin" />
+        <span className="sr-only">Customize Theme</span>
+      </button>
 
       <ThemeSettingsDrawer />
     </div>

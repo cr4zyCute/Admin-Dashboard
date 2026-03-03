@@ -7,10 +7,14 @@ import {
   Monitor, 
   Check, 
   Palette, 
-  RefreshCw 
+  LayoutDashboard,
+  RefreshCw,
+  ExternalLink,
+  Box
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
-import { ColorTheme } from '../../types';
+import { ColorTheme, LayoutTheme, CardStyle } from '../../types';
 
 const ThemeSettingsDrawer: React.FC = () => {
   const { 
@@ -19,8 +23,14 @@ const ThemeSettingsDrawer: React.FC = () => {
     themeMode, 
     setThemeMode, 
     colorTheme, 
-    setColorTheme 
+    setColorTheme,
+    layoutTheme,
+    setLayoutTheme,
+    cardStyle,
+    setCardStyle
   } = useAppContext();
+  
+  const navigate = useNavigate();
 
   const themes: { id: ColorTheme; name: string; color: string }[] = [
     { id: 'blue', name: 'Blue', color: 'bg-blue-500' },
@@ -34,7 +44,18 @@ const ThemeSettingsDrawer: React.FC = () => {
   const resetSettings = () => {
     setThemeMode('system');
     setColorTheme('blue');
+    setLayoutTheme('Default');
+    setCardStyle('default');
   };
+
+  const featuredLayouts: LayoutTheme[] = ['Default', 'Minimal', 'Modern', 'Material', 'SaaS', 'Flat'];
+  const cardStyles: { id: CardStyle; name: string }[] = [
+    { id: 'default', name: 'Default' },
+    { id: 'flat', name: 'Flat' },
+    { id: 'bordered', name: 'Bordered' },
+    { id: 'glass', name: 'Glass' },
+    { id: 'neo', name: 'Neo' }
+  ];
 
   return (
     <AnimatePresence>
@@ -74,6 +95,79 @@ const ThemeSettingsDrawer: React.FC = () => {
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-8">
               
+              {/* Layout Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                    <LayoutDashboard className="w-4 h-4" /> Layout
+                  </h3>
+                  <button 
+                    onClick={() => {
+                      toggleThemeSettings();
+                      navigate('/settings/theme');
+                    }}
+                    className="text-xs text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                  >
+                    View All <ExternalLink className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {featuredLayouts.map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => setLayoutTheme(theme)}
+                      className={`relative flex flex-col items-center gap-2 p-2 rounded-xl border-2 transition-all ${
+                        layoutTheme === theme
+                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10' 
+                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                      }`}
+                    >
+                      {/* Mini Layout Preview */}
+                      <div className="w-full aspect-[4/3] bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden relative border border-slate-200 dark:border-slate-700">
+                        <div className="absolute top-0 w-full h-1.5 bg-slate-300 dark:bg-slate-600"></div>
+                        <div className="absolute left-0 top-1.5 bottom-0 w-3 bg-slate-200 dark:bg-slate-700"></div>
+                      </div>
+                      
+                      <span className={`text-xs font-medium ${layoutTheme === theme ? 'text-primary-600' : 'text-slate-500'}`}>
+                        {theme}
+                      </span>
+                      {layoutTheme === theme && (
+                        <div className="absolute top-1 right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
+                          <Check className="w-2.5 h-2.5 text-white" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Card Style Section */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                  <Box className="w-4 h-4" /> Card Style
+                </h3>
+                <div className="grid grid-cols-3 gap-3">
+                  {cardStyles.map((style) => (
+                    <button
+                      key={style.id}
+                      onClick={() => setCardStyle(style.id)}
+                      className={`relative flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
+                        cardStyle === style.id
+                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10 text-primary-600' 
+                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500'
+                      }`}
+                    >
+                      <span className="text-xs font-medium">{style.name}</span>
+                      {cardStyle === style.id && (
+                        <div className="absolute top-1 right-1 w-3 h-3 bg-primary-500 rounded-full flex items-center justify-center">
+                          <Check className="w-2 h-2 text-white" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Mode Section */}
               <div className="space-y-4">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Mode</h3>

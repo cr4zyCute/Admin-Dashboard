@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
         {/* Brand Area */}
         <div className="h-16 flex items-center px-6 border-b border-slate-200/50 dark:border-slate-800/50 flex-shrink-0 bg-white/50 dark:bg-slate-900/50">
           <div className="flex items-center gap-3 font-bold text-xl text-slate-900 dark:text-white w-full overflow-hidden">
-            <div className="w-8 h-8 min-w-[32px] rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 ring-1 ring-white/10">
+            <div className="w-8 h-8 min-w-[32px] rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/20 ring-1 ring-white/10">
               <span className="font-bold text-lg">P</span>
             </div>
             <span className={cn(
@@ -80,11 +80,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                           className={cn(
                             "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative select-none",
                             isActive 
-                              ? "bg-blue-600/10 text-blue-600 dark:text-blue-400" 
+                              ? "bg-primary-50 text-primary-600 dark:bg-primary-500/10 dark:text-primary-400" 
                               : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
                           )}
                         >
-                          <Icon className={cn("w-5 h-5 min-w-[20px] transition-colors", isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300")} />
+                          <Icon className={cn("w-5 h-5 min-w-[20px] transition-colors", isActive ? "text-primary-600 dark:text-primary-400" : "text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300")} />
                           
                           {!isCollapsed && (
                             <>
@@ -93,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                                 {item.badge && (
                                   <span className={cn(
                                     "text-[10px] font-bold px-1.5 py-0.5 rounded text-white ml-2 shadow-sm",
-                                    item.badgeColor || "bg-blue-500"
+                                    item.badgeColor || "bg-primary-500"
                                   )}>
                                     {item.badge}
                                   </span>
@@ -109,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                           className={({ isActive }) => cn(
                             "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative",
                             isActive 
-                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20" 
+                              ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md shadow-primary-500/20" 
                               : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200"
                           )}
                         >
@@ -120,11 +120,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                               <span className="truncate text-sm font-medium">{item.label}</span>
                               {item.badge && (
                                 <span className={cn(
-                                  "text-[10px] font-bold px-1.5 py-0.5 rounded text-white ml-2 shadow-sm",
-                                  item.badgeColor || "bg-blue-500"
-                                )}>
-                                  {item.badge}
-                                </span>
+                                    "text-[10px] font-bold px-1.5 py-0.5 rounded text-white ml-2 shadow-sm",
+                                    item.badgeColor || "bg-primary-500"
+                                  )}>
+                                    {item.badge}
+                                  </span>
                               )}
                             </div>
                           )}
@@ -151,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                                 className={({ isActive }) => cn(
                                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 group/sub relative overflow-hidden",
                                   isActive 
-                                    ? "text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-500/10 font-medium shadow-sm ring-1 ring-blue-100 dark:ring-blue-900/30" 
+                                    ? "text-primary-600 dark:text-primary-400 bg-primary-50/80 dark:bg-primary-500/10 font-medium shadow-sm ring-1 ring-primary-100 dark:ring-primary-900/30" 
                                     : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                                 )}
                               >
@@ -159,13 +159,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                                 {({ isActive }) => (
                                   <>
                                     {isActive && (
-                                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-3/5 bg-blue-600 dark:bg-blue-400 rounded-r-full" />
+                                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-3/5 bg-primary-600 dark:bg-primary-400 rounded-r-full" />
                                     )}
                                     
                                     {SubIcon && (
                                       <SubIcon className={cn(
                                         "w-4 h-4 transition-colors duration-200", 
-                                        isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-400 group-hover/sub:text-slate-600 dark:text-slate-500 dark:group-hover/sub:text-slate-300"
+                                        isActive ? "text-primary-600 dark:text-primary-400" : "text-slate-400 group-hover/sub:text-slate-600 dark:text-slate-500 dark:group-hover/sub:text-slate-300"
                                       )} />
                                     )}
                                     

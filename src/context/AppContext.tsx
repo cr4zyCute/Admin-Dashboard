@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme } from '../types';
+import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme, CardStyle, ChartType } from '../types';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -23,6 +23,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [layoutTheme, setLayoutTheme] = useState<LayoutTheme>(() => {
     const saved = localStorage.getItem('layoutTheme');
     return (saved as LayoutTheme) || 'Default';
+  });
+
+  const [cardStyle, setCardStyle] = useState<CardStyle>(() => {
+    const saved = localStorage.getItem('cardStyle');
+    return (saved as CardStyle) || 'default';
+  });
+
+  const [chartType, setChartType] = useState<ChartType>(() => {
+    const saved = localStorage.getItem('chartType');
+    return (saved as ChartType) || 'area';
   });
 
   // Apply Theme Mode
@@ -52,6 +62,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
     localStorage.setItem('colorTheme', colorTheme);
   }, [colorTheme]);
+
+  // Persist Layout Theme
+  useEffect(() => {
+    localStorage.setItem('layoutTheme', layoutTheme);
+  }, [layoutTheme]);
+
+  // Persist Card Style
+  useEffect(() => {
+    localStorage.setItem('cardStyle', cardStyle);
+  }, [cardStyle]);
+
+  // Persist Chart Type
+  useEffect(() => {
+    localStorage.setItem('chartType', chartType);
+  }, [chartType]);
 
   const [user] = useState<User | null>({
     name: 'David Dev',
@@ -143,6 +168,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setColorTheme,
         layoutTheme,
         setLayoutTheme,
+        cardStyle,
+        setCardStyle,
+        chartType,
+        setChartType,
         isThemeSettingsOpen,
         toggleThemeSettings,
       }}

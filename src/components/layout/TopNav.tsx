@@ -121,31 +121,31 @@ const TopNav: React.FC<TopNavProps> = ({
                 <div>
                   <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-widest">UI Components</h3>
                   <ul className="space-y-1">
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Buttons</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Cards</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Dropdowns</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Modals</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Tabs</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Buttons</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Cards</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Dropdowns</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Modals</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Tabs</a></li>
                   </ul>
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-widest">Applications</h3>
                   <ul className="space-y-1">
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Ecommerce</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Chat</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Email</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Invoices</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Projects</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Ecommerce</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Chat</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Email</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Invoices</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Projects</a></li>
                   </ul>
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-widest">Extra Pages</h3>
                   <ul className="space-y-1">
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Authentication</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Pricing</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Maintenance</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Coming Soon</a></li>
-                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg block transition-colors">Error Pages</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Authentication</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Pricing</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Maintenance</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Coming Soon</a></li>
+                    <li><a href="#" className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 rounded-lg block transition-colors">Error Pages</a></li>
                   </ul>
                 </div>
               </div>
@@ -182,11 +182,11 @@ const TopNav: React.FC<TopNavProps> = ({
                       { name: 'Support', desc: 'Help and assistance', icon: LifeBuoy, color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-500/10' },
                     ].map((app) => (
                       <a key={app.name} href="#" className="flex items-start gap-3 group p-3 rounded-xl hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all hover:scale-[1.02]">
-                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform shadow-sm", app.bg, app.color)}>
+                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform shadow-sm", app.bg, app.color.replace('blue', 'primary'))}>
                           <app.icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{app.name}</h4>
+                          <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{app.name}</h4>
                           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">{app.desc}</p>
                         </div>
                       </a>
@@ -196,11 +196,11 @@ const TopNav: React.FC<TopNavProps> = ({
                   <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-widest font-bold">
                     <div className="flex items-center gap-2">
                       <span>Support</span>
-                      <a href="mailto:help@mydomain.com" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 normal-case font-medium transition-colors">help@mydomain.com</a>
+                      <a href="mailto:help@mydomain.com" className="text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 normal-case font-medium transition-colors">help@mydomain.com</a>
                     </div>
                     <div className="flex items-center gap-2">
                       <span>Help</span>
-                      <a href="tel:+1234567890" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 normal-case font-medium transition-colors">+(12) 3456 7890</a>
+                      <a href="tel:+1234567890" className="text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 normal-case font-medium transition-colors">+(12) 3456 7890</a>
                     </div>
                   </div>
                 </div>
@@ -215,7 +215,7 @@ const TopNav: React.FC<TopNavProps> = ({
                        <ShoppingBag className="w-6 h-6 text-white" />
                     </div>
 
-                    <p className="text-blue-400 text-[10px] font-bold tracking-[0.25em] uppercase mb-3">Limited Offer</p>
+                    <p className="text-primary-400 text-[10px] font-bold tracking-[0.25em] uppercase mb-3">Limited Offer</p>
                     <h3 className="text-2xl font-bold mb-4 leading-tight">Unlock Pro Features</h3>
                     
                     <div className="mb-8 flex items-baseline gap-2 justify-center">
@@ -223,7 +223,7 @@ const TopNav: React.FC<TopNavProps> = ({
                       <span className="text-white text-3xl font-bold">$25</span>
                     </div>
 
-                    <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-blue-600/25 flex items-center gap-2 hover:translate-y-[-2px]">
+                    <button className="bg-primary-600 hover:bg-primary-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-primary-600/25 flex items-center gap-2 hover:translate-y-[-2px]">
                       Upgrade Now
                     </button>
                   </div>
@@ -240,7 +240,7 @@ const TopNav: React.FC<TopNavProps> = ({
         <input 
           type="text" 
           placeholder="Search for anything..." 
-          className="w-full pl-11 pr-4 py-2.5 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 border border-transparent focus:border-blue-500/30 dark:focus:border-blue-500/30 rounded-2xl text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
+          className="w-full pl-11 pr-4 py-2.5 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 border border-transparent focus:border-primary-500/30 dark:focus:border-primary-500/30 rounded-2xl text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm"
         />
         <div className="absolute right-3 flex items-center gap-1.5">
            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">⌘ K</span>
@@ -257,7 +257,7 @@ const TopNav: React.FC<TopNavProps> = ({
             dataState === 'default' 
               ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
               : dataState === 'alternate'
-                ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                ? "bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400"
                 : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
           )}
           title={`Data Mode: ${dataState.charAt(0).toUpperCase() + dataState.slice(1)}`}
@@ -291,7 +291,7 @@ const TopNav: React.FC<TopNavProps> = ({
             className={cn(
               "relative p-2.5 rounded-xl transition-all active:scale-95",
               activeDropdown === 'notifications' 
-                ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400" 
+                ? "bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400" 
                 : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
             )}
           >
@@ -362,13 +362,13 @@ const TopNav: React.FC<TopNavProps> = ({
               <div className="p-2">
                 <div className="space-y-0.5">
                   <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
-                    <User className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    <User className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
                     <span>My Profile</span>
                   </button>
                   <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
-                    <MessageSquare className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    <MessageSquare className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
                     <span>Inbox</span>
-                    <span className="ml-auto bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 py-0.5 px-2 rounded-lg text-[10px] font-bold shadow-sm">3</span>
+                    <span className="ml-auto bg-primary-100 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 py-0.5 px-2 rounded-lg text-[10px] font-bold shadow-sm">3</span>
                   </button>
                   <button 
                     onClick={() => {
@@ -377,11 +377,11 @@ const TopNav: React.FC<TopNavProps> = ({
                     }}
                     className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group"
                   >
-                    <Settings className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    <Settings className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
                     <span>Theme Settings</span>
                   </button>
                   <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
-                    <HelpCircle className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    <HelpCircle className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
                     <span>Support</span>
                   </button>
                 </div>
