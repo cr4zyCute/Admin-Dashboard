@@ -51,9 +51,8 @@ import {
   sparklineData3, 
   sparklineData4,
   recentOrders,
-  locations,
-  recentActivities
-} from '../../MockData/data';
+  locations
+} from '../../data/mockData';
 
 const Analytics: React.FC = () => {
   const { user } = useAppContext();
@@ -310,46 +309,67 @@ const Analytics: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Best Selling Products Table (2/3 width) */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-slate-800 dark:text-white">Best Selling Products</h3>
-            <button className="text-slate-400 hover:text-slate-600"><MoreHorizontal className="w-4 h-4" /></button>
+            <div>
+              <h3 className="font-bold text-slate-800 dark:text-white">Best Selling Products</h3>
+              <p className="text-xs text-slate-400 mt-1">Top performance by revenue</p>
+            </div>
+            <button className="text-slate-400 hover:text-slate-600 bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg transition-colors">
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
           </div>
           
-          <div className="overflow-x-auto">
+          <div className="flex-1 overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
-                  <th className="py-3 pr-4">ID</th>
-                  <th className="py-3 px-4">Name</th>
-                  <th className="py-3 px-4 text-right">Sold</th>
-                  <th className="py-3 px-4 text-right">Revenue</th>
-                  <th className="py-3 pl-4 text-right">Rating</th>
+                  <th className="py-4 pr-4 pl-2">Product</th>
+                  <th className="py-4 px-4 text-right">ID</th>
+                  <th className="py-4 px-4 text-right">Sold</th>
+                  <th className="py-4 px-4 text-right">Revenue</th>
+                  <th className="py-4 pl-4 pr-2 text-right">Rating</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {products.map((product) => (
-                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                    <td className="py-4 pr-4 font-medium text-slate-400">{product.id}</td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-                          <img src={product.image} alt="" className="w-full h-full object-cover" />
+                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
+                    <td className="py-4 pr-4 pl-2">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600 shadow-sm">
+                          <img src={product.image} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         </div>
-                        <span className="font-bold text-slate-700 dark:text-slate-200">{product.name}</span>
+                        <div>
+                          <p className="font-bold text-slate-800 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{product.name}</p>
+                          <p className="text-xs text-slate-400 mt-0.5">Electronics</p>
+                        </div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-right text-slate-500 dark:text-slate-400">{product.sold} sold</td>
-                    <td className="py-4 px-4 text-right font-medium text-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10 rounded-lg">{product.revenue}</td>
-                    <td className="py-4 pl-4 text-right">
-                      <span className="inline-flex items-center gap-1 font-bold text-slate-700 dark:text-slate-200">
-                        <span className="text-amber-400">★</span> ({product.rating})
-                      </span>
+                    <td className="py-4 px-4 text-right font-mono text-xs text-slate-400">{product.id}</td>
+                    <td className="py-4 px-4 text-right">
+                       <span className="font-bold text-slate-700 dark:text-slate-200">{product.sold}</span>
+                       <span className="text-xs text-slate-400 ml-1">pcs</span>
+                    </td>
+                    <td className="py-4 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">{product.revenue}</td>
+                    <td className="py-4 pl-4 pr-2 text-right">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20">
+                        <span className="text-amber-500 text-xs fill-amber-500">★</span> 
+                        <span className="font-bold text-amber-700 dark:text-amber-400 text-xs">{product.rating}</span>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="flex justify-between items-center mt-6 pt-2">
+            <span className="text-xs text-slate-400">Showing 5 products</span>
+            <div className="flex gap-1">
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors">Prev</button>
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-xs shadow-sm shadow-blue-500/30">1</button>
+              <button className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors">Next</button>
+            </div>
           </div>
         </div>
 
@@ -434,15 +454,11 @@ const Analytics: React.FC = () => {
 
         </div>
       </div>
-      {/* 4. New Bottom Section Grid (Orders, Location, Activity) */}
+      {/* 4. New Bottom Section Grid (Orders, Location) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Recent Orders Table (1 col - but wider in design, let's span 1.5 or adjust grid) */}
-        {/* Actually the image shows 3 columns: Orders (Wide), Location (Narrow), Activity (Narrow) */}
-        {/* Let's make it a 3-column grid where Orders takes 1.2, others take rest. Or just simple 3 cols for now as per "in the bottom" request */}
-        
-        {/* Column 1: Recent Orders */}
-        <div className="lg:col-span-1 xl:col-span-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
+        {/* Recent Orders Table (2 cols) */}
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
               <h3 className="font-bold text-slate-800 dark:text-white">Recent Orders</h3>
@@ -486,9 +502,9 @@ const Analytics: React.FC = () => {
                      <td className="py-3 pl-2 text-right">
                        <span className={cn(
                          "px-2 py-0.5 rounded text-xs font-medium",
-                         order.status === 'Success' ? "bg-emerald-50 text-emerald-600" :
-                         order.status === 'Pending' ? "bg-amber-50 text-amber-600" :
-                         "bg-red-50 text-red-600"
+                         order.status === 'Success' ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" :
+                         order.status === 'Pending' ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400" :
+                         "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
                        )}>
                          {order.status}
                        </span>
@@ -567,39 +583,6 @@ const Analytics: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Column 3: Recent Activity */}
-        <div className="lg:col-span-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-slate-800 dark:text-white">Recent Activity</h3>
-            <button className="text-slate-400 hover:text-slate-600"><MoreVertical className="w-4 h-4" /></button>
-          </div>
-          
-          <div className="space-y-8 relative">
-            {/* Vertical Line */}
-            <div className="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-100 dark:bg-slate-700 border-l border-dashed border-slate-300 dark:border-slate-600"></div>
-
-            {recentActivities.map((item, i) => {
-              // Dynamic Icon Component
-              const Icon = item.icon === 'ShoppingCart' ? ShoppingCart : item.icon === 'CreditCard' ? CreditCard : Package;
-              
-              return (
-                <div key={i} className="flex gap-4 relative">
-                  <div className={cn("w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 ring-4 ring-white dark:ring-slate-800", item.color)}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-800 dark:text-white">{item.title}</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{item.desc}</p>
-                    <div className="mt-2 text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
-                      {item.time}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
 
