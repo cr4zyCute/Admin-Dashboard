@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
       {/* Sidebar Container */}
       <aside 
         className={cn(
-          "bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl h-screen fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col border-r border-slate-200 dark:border-slate-800 shadow-2xl",
+          "bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl h-screen fixed left-0 top-0 z-50 transition-all duration-300 flex flex-col border-r border-slate-200 dark:border-slate-800",
           isMobile 
             ? (isCollapsed ? "-translate-x-full" : "w-64 translate-x-0") 
             : (isCollapsed ? "w-20" : "w-64")

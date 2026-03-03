@@ -9,13 +9,18 @@ import {
   Eye,
   MoreVertical,
   Mic,
-  Send
+  Send,
+  Download,
+  Upload,
+  CreditCard,
+  Package
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { 
   ComposedChart,
   Line,
   Area, 
+  AreaChart,
   XAxis, 
   YAxis, 
   CartesianGrid, 
@@ -30,77 +35,28 @@ import {
 } from 'recharts';
 import { cn } from '../../lib/utils';
 
+import { 
+  pageViews, 
+  visitors, 
+  clicks, 
+  orders, 
+  totalProfit, 
+  totalProfitChange, 
+  weeklyData, 
+  profitData, 
+  repeatCustomerRate, 
+  products, 
+  sparklineData, 
+  sparklineData2, 
+  sparklineData3, 
+  sparklineData4,
+  recentOrders,
+  locations,
+  recentActivities
+} from '../../MockData/data';
+
 const Analytics: React.FC = () => {
   const { user } = useAppContext();
-
-  // --- Data Mapping ---
-  // Using existing data to map to new design slots
-  const pageViews = { value: "16,431", change: 15.5, trend: 'up' as const }; // Mapped from Growth/Revenue
-  const visitors = { value: "9,754", change: 8.4, trend: 'up' as const }; // Mapped from Orders
-  const clicks = { value: "2,832", change: 10.5, trend: 'down' as const }; // New/Mock
-  const orders = { value: "1,224", change: 4.4, trend: 'up' as const }; // New/Mock
-
-  const totalProfit = "$446.7K"; // Main large metric
-  const totalProfitChange = 24.4;
-
-  const weeklyData = [
-    { name: 'Sun', value: 4000, active: 2400 },
-    { name: 'Mon', value: 3000, active: 1398 },
-    { name: 'Tue', value: 2000, active: 8162 }, // Highlighted in design
-    { name: 'Wed', value: 2780, active: 3908 },
-    { name: 'Thu', value: 1890, active: 4800 },
-    { name: 'Fri', value: 2390, active: 3800 },
-    { name: 'Sat', value: 3490, active: 4300 },
-  ];
-
-  // Data for the main Chart (Inventory vs Sales)
-  const profitData = [
-    { name: 'Jan 1', stock: 100, sales: 200 },
-    { name: 'Jan 5', stock: 90, sales: 400 },
-    { name: 'Jan 10', stock: 85, sales: 800 },
-    { name: 'Jan 15', stock: 60, sales: 1100 },
-    { name: 'Jan 20', stock: 80, sales: 900 },
-    { name: 'Jan 25', stock: 75, sales: 1200 },
-    { name: 'Jan 30', stock: 90, sales: 1100 },
-    { name: 'Feb 5', stock: 65, sales: 1300 },
-    { name: 'Feb 10', stock: 70, sales: 1500 },
-    { name: 'Feb 15', stock: 50, sales: 1700 },
-    { name: 'Feb 20', stock: 45, sales: 1800 },
-    { name: 'Feb 25', stock: 35, sales: 1750 },
-    { name: 'Mar 1', stock: 50, sales: 1900 },
-    { name: 'Mar 5', stock: 45, sales: 1850 },
-    { name: 'Mar 10', stock: 60, sales: 1950 },
-    { name: 'Mar 15', stock: 35, sales: 2000 },
-    { name: 'Mar 20', stock: 25, sales: 1800 },
-    { name: 'Mar 25', stock: 15, sales: 1900 },
-    { name: 'Mar 30', stock: 5, sales: 2100 },
-  ];
-
-  const repeatCustomerRate = [
-    { name: 'Rate', value: 68, fill: '#10b981' }
-  ];
-
-  const products = [
-    { id: '#83009', name: 'Hybrid Active Noise Cancell...', sold: '2,310', revenue: '$124,839', rating: 5.0, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop' },
-    { id: '#83001', name: 'Casio G-Shock Shock Resi...', sold: '1,230', revenue: '$92,662', rating: 4.8, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=100&h=100&fit=crop' },
-    { id: '#83004', name: 'SAMSUNG Galaxy S25 Ultra...', sold: '812', revenue: '$74,048', rating: 4.7, image: 'https://images.unsplash.com/photo-1610945265078-386f3b58d86f?w=100&h=100&fit=crop' },
-    { id: '#83002', name: 'Xbox Wireless Gaming Co...', sold: '645', revenue: '$62,820', rating: 4.5, image: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?w=100&h=100&fit=crop' },
-    { id: '#83002', name: 'Timex Men\'s Easy Reader...', sold: '572', revenue: '$48,724', rating: 4.5, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop' },
-  ];
-
-  // Small Sparkline Data
-  const sparklineData = [
-    { value: 10 }, { value: 15 }, { value: 12 }, { value: 20 }, { value: 18 }, { value: 25 }, { value: 22 }
-  ];
-  const sparklineData2 = [
-    { value: 20 }, { value: 10 }, { value: 15 }, { value: 10 }, { value: 25 }, { value: 15 }, { value: 20 }
-  ];
-  const sparklineData3 = [
-    { value: 10 }, { value: 25 }, { value: 15 }, { value: 30 }, { value: 12 }, { value: 15 }, { value: 20 }
-  ];
-  const sparklineData4 = [
-    { value: 15 }, { value: 10 }, { value: 20 }, { value: 15 }, { value: 25 }, { value: 20 }, { value: 30 }
-  ];
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -477,6 +433,176 @@ const Analytics: React.FC = () => {
           </div>
 
         </div>
+      </div>
+      {/* 4. New Bottom Section Grid (Orders, Location, Activity) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Recent Orders Table (1 col - but wider in design, let's span 1.5 or adjust grid) */}
+        {/* Actually the image shows 3 columns: Orders (Wide), Location (Narrow), Activity (Narrow) */}
+        {/* Let's make it a 3-column grid where Orders takes 1.2, others take rest. Or just simple 3 cols for now as per "in the bottom" request */}
+        
+        {/* Column 1: Recent Orders */}
+        <div className="lg:col-span-1 xl:col-span-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+              <h3 className="font-bold text-slate-800 dark:text-white">Recent Orders</h3>
+              <p className="text-xs text-slate-400 mt-1">(186.25k Transactions)</p>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                <Upload className="w-3 h-3" /> Export
+              </button>
+              <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                <Download className="w-3 h-3" /> Import
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-x-auto">
+             <table className="w-full text-left border-collapse min-w-[500px]">
+               <thead>
+                 <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                   <th className="py-3 pr-2">#ID</th>
+                   <th className="py-3 px-2">Customer</th>
+                   <th className="py-3 px-2">Date</th>
+                   <th className="py-3 px-2">Amount</th>
+                   <th className="py-3 px-2">Payment</th>
+                   <th className="py-3 pl-2 text-right">Status</th>
+                 </tr>
+               </thead>
+               <tbody className="text-sm">
+                 {recentOrders.map((order) => (
+                   <tr key={order.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
+                     <td className="py-3 pr-2 font-medium text-slate-500">{order.id}</td>
+                     <td className="py-3 px-2">
+                       <div>
+                         <p className="font-bold text-slate-700 dark:text-slate-200">{order.customer}</p>
+                         <p className="text-xs text-slate-400">{order.email}</p>
+                       </div>
+                     </td>
+                     <td className="py-3 px-2 text-slate-500">{order.date}</td>
+                     <td className="py-3 px-2 font-medium text-slate-700 dark:text-slate-200">{order.amount}</td>
+                     <td className="py-3 px-2 text-slate-500">{order.payment}</td>
+                     <td className="py-3 pl-2 text-right">
+                       <span className={cn(
+                         "px-2 py-0.5 rounded text-xs font-medium",
+                         order.status === 'Success' ? "bg-emerald-50 text-emerald-600" :
+                         order.status === 'Pending' ? "bg-amber-50 text-amber-600" :
+                         "bg-red-50 text-red-600"
+                       )}>
+                         {order.status}
+                       </span>
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+          </div>
+          
+          <div className="flex justify-between items-center mt-4 pt-2">
+            <span className="text-xs text-slate-400">Showing 1 to 5 of 10 orders</span>
+            <div className="flex gap-1">
+              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">{'<'}</button>
+              <button className="w-6 h-6 flex items-center justify-center rounded bg-blue-600 text-white text-xs">1</button>
+              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">2</button>
+              <button className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs">{'>'}</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Column 2: Revenue By Locations */}
+        <div className="lg:col-span-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-bold text-slate-800 dark:text-white">Revenue By Locations</h3>
+            <button className="text-slate-400 hover:text-slate-600"><MoreVertical className="w-4 h-4" /></button>
+          </div>
+          
+          <div className="flex-1 flex flex-col">
+            {/* Map Placeholder */}
+            <div className="flex-1 min-h-[180px] bg-slate-50 dark:bg-slate-900 rounded-xl relative overflow-hidden mb-6 group">
+              <div className="absolute inset-0 opacity-30 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-cover bg-center grayscale contrast-50"></div>
+              {/* Animated Dots */}
+              <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full animate-ping"></div>
+              <div className="absolute top-1/3 left-1/4 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
+              
+              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full animate-ping delay-300"></div>
+              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-indigo-500 rounded-full border-2 border-white"></div>
+              
+              <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full animate-ping delay-700"></div>
+              <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div>
+              
+              {/* Connecting Lines (SVG overlay) */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                <path d="M100,60 Q180,100 250,140" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" className="dark:stroke-slate-700" />
+              </svg>
+            </div>
+
+            {/* Stats Card */}
+            <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 shadow-sm mb-6 flex items-center gap-4 relative overflow-hidden">
+               <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 text-lg">🏆</div>
+               <div>
+                 <p className="font-bold text-slate-800 dark:text-white text-sm">Congratulations !...</p>
+                 <p className="text-xs text-slate-400">You've just hit a new record..</p>
+               </div>
+               <div className="ml-auto text-right">
+                 <p className="font-bold text-slate-800 dark:text-white">25.9k</p>
+                 <p className="text-[10px] text-slate-400 uppercase">ORDER</p>
+               </div>
+               {/* Decorative bg shape */}
+               <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-amber-500/5 rounded-full blur-2xl"></div>
+            </div>
+
+            {/* Location List */}
+            <div className="space-y-4">
+              {locations.map((loc, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-800`} style={{ backgroundColor: loc.color }}></div>
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{loc.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-slate-700 dark:text-white">{loc.revenue}</span>
+                    <span className="text-xs text-slate-400">Revenue</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Column 3: Recent Activity */}
+        <div className="lg:col-span-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-bold text-slate-800 dark:text-white">Recent Activity</h3>
+            <button className="text-slate-400 hover:text-slate-600"><MoreVertical className="w-4 h-4" /></button>
+          </div>
+          
+          <div className="space-y-8 relative">
+            {/* Vertical Line */}
+            <div className="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-100 dark:bg-slate-700 border-l border-dashed border-slate-300 dark:border-slate-600"></div>
+
+            {recentActivities.map((item, i) => {
+              // Dynamic Icon Component
+              const Icon = item.icon === 'ShoppingCart' ? ShoppingCart : item.icon === 'CreditCard' ? CreditCard : Package;
+              
+              return (
+                <div key={i} className="flex gap-4 relative">
+                  <div className={cn("w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 ring-4 ring-white dark:ring-slate-800", item.color)}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-white">{item.title}</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{item.desc}</p>
+                    <div className="mt-2 text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                      {item.time}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </div>
   );
