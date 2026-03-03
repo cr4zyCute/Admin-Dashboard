@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   ShoppingCart, 
   TrendingUp, 
@@ -14,8 +15,9 @@ import {
   Upload,
 } from 'lucide-react';
 import Lottie from 'lottie-react';
-import noDataAnimation from '../../assets/No Data.json';
+import noDataAnimation from '../../assets/NoData.json';
 import CountUp from '../../components/common/CountUp';
+import Pagination from '../../components/common/Pagination';
 import { useAppContext } from '../../context/AppContext';
 import { 
   ComposedChart,
@@ -101,9 +103,9 @@ const NoData = ({ size = "normal" }: { message?: string, size?: "small" | "norma
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full min-h-[150px] p-4 animate-in fade-in zoom-in duration-500">
-      <div className="w-24 h-24 md:w-32 md:h-32 opacity-80">
+      <motion.div className="w-24 h-24 md:w-32 md:h-32 opacity-80">
         <Lottie animationData={noDataAnimation} loop={true} />
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -179,7 +181,13 @@ const Analytics: React.FC = () => {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       
       {/* 1. Top Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {/* Card 1: Page Views */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-4">
@@ -315,10 +323,16 @@ const Analytics: React.FC = () => {
           </div>
           <p className="text-xs text-slate-400">vs. 1,186 last period</p>
         </div>
-      </div>
+      </motion.div>
 
       {/* 2. Middle Section Grid (Charts) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
         
         {/* Total Profit Chart (2/3 width) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col justify-between">
@@ -400,8 +414,14 @@ const Analytics: React.FC = () => {
                      <span className="text-slate-400">{item.label}</span>
                    </div>
                    <div className={`h-1.5 w-full ${item.bgColor} rounded-full overflow-hidden`}>
-                     <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.percentage}%` }}></div>
-                   </div>
+                    <motion.div 
+                      className={`h-full ${item.color} rounded-full`} 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${item.percentage}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, ease: "easeOut", delay: 0.2 + (index * 0.1) }}
+                    />
+                  </div>
                  </div>
                ))}
              </div>
@@ -448,10 +468,16 @@ const Analytics: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* 3. Bottom Section Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
         
         {/* Best Selling Products Table (2/3 width) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
@@ -516,36 +542,11 @@ const Analytics: React.FC = () => {
             <span className="text-xs text-slate-400">
               Showing {currentProducts.length > 0 ? (productsPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(productsPage * ITEMS_PER_PAGE, totalProducts)} of {totalProducts} products
             </span>
-            <div className="flex gap-1">
-              <button 
-                onClick={() => handleProductPageChange(productsPage - 1)}
-                disabled={productsPage === 1 || totalProducts === 0}
-                className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Prev
-              </button>
-              {[...Array(totalProductPages)].map((_, i) => (
-                <button 
-                  key={i}
-                  onClick={() => handleProductPageChange(i + 1)}
-                  className={cn(
-                    "w-8 h-8 flex items-center justify-center rounded-lg text-xs transition-colors shadow-sm",
-                    productsPage === i + 1 
-                      ? "bg-blue-600 text-white shadow-blue-500/30" 
-                      : "border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500"
-                  )}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <button 
-                onClick={() => handleProductPageChange(productsPage + 1)}
-                disabled={productsPage === totalProductPages || totalProducts === 0}
-                className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
+            <Pagination 
+              currentPage={productsPage}
+              totalPages={totalProductPages}
+              onPageChange={handleProductPageChange}
+            />
           </div>
         </div>
 
@@ -635,9 +636,15 @@ const Analytics: React.FC = () => {
           </div>
 
         </div>
-      </div>
+      </motion.div>
       {/* 4. New Bottom Section Grid (Orders, Location) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
         
         {/* Recent Orders Table (2 cols) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 flex flex-col">
@@ -705,36 +712,11 @@ const Analytics: React.FC = () => {
             <span className="text-xs text-slate-400">
               Showing {currentOrders.length > 0 ? (ordersPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(ordersPage * ITEMS_PER_PAGE, totalOrders)} of {totalOrders} orders
             </span>
-            <div className="flex gap-1">
-              <button 
-                onClick={() => handleOrderPageChange(ordersPage - 1)}
-                disabled={ordersPage === 1 || totalOrders === 0}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {'<'}
-              </button>
-              {[...Array(totalOrderPages)].map((_, i) => (
-                <button 
-                  key={i}
-                  onClick={() => handleOrderPageChange(i + 1)}
-                  className={cn(
-                    "w-6 h-6 flex items-center justify-center rounded text-xs transition-colors",
-                    ordersPage === i + 1 
-                      ? "bg-blue-600 text-white" 
-                      : "border border-slate-200 dark:border-slate-700 hover:bg-slate-50"
-                  )}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <button 
-                onClick={() => handleOrderPageChange(ordersPage + 1)}
-                disabled={ordersPage === totalOrderPages || totalOrders === 0}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {'>'}
-              </button>
-            </div>
+            <Pagination 
+              currentPage={ordersPage}
+              totalPages={totalOrderPages}
+              onPageChange={handleOrderPageChange}
+            />
           </div>
         </div>
 
@@ -808,7 +790,7 @@ const Analytics: React.FC = () => {
           </div>
         </div>
 
-      </div>
+      </motion.div>
     </div>
   );
 };
