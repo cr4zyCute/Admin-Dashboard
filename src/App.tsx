@@ -85,6 +85,10 @@ import MenuLevels from './pages/examples/MenuLevels';
 import DisabledMenu from './pages/examples/DisabledMenu';
 import SpecialMenu from './pages/examples/SpecialMenu';
 
+// Customization Pages (Aliased)
+import CustomAnalytics from './customization/dashboard/Analytics';
+import CustomDashboard from './customization/dashboard/Overview';
+
 function App() {
   return (
     <AppProvider>
@@ -94,6 +98,11 @@ function App() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             
+            {/* Customization Routes */}
+            <Route path="/customization" element={<Navigate to="/customization/dashboard/analytics" replace />} />
+            <Route path="/customization/dashboard" element={<CustomDashboard />} />
+            <Route path="/customization/dashboard/analytics" element={<CustomAnalytics />} />
+
             {/* Dashboard Routes */}
             <Route path="/dashboard/analytics" element={<Analytics />} />
             <Route path="/dashboard/ecommerce" element={<Ecommerce />} />

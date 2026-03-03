@@ -372,13 +372,13 @@ const TopNav: React.FC<TopNavProps> = ({
                   </button>
                   <button 
                     onClick={() => {
-                      window.open('/settings/theme', '_blank');
+                      window.open('/customization', '_blank');
                       setActiveDropdown(null);
                     }}
                     className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group"
                   >
                     <Settings className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
-                    <span>Theme Settings</span>
+                    <span>Customize Theme</span>
                   </button>
                   <button className="w-full text-left px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-xl flex items-center gap-3 transition-all group">
                     <HelpCircle className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />

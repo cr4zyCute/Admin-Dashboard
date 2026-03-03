@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { MENU_ITEMS } from '../../data/navigation';
+import Lottie from 'lottie-react';
+import customizerAnimation from '../../assets/Microsoft Designer.json';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -20,6 +22,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
+
+  const getRoute = (route: string) => {
+    if (activeRoute.startsWith('/customization')) {
+      return `/customization${route}`;
+    }
+    return route;
+  };
+
+  const isCustomizationMode = activeRoute.startsWith('/customization');
 
   return (
     <>
@@ -41,17 +52,43 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
         )}
       >
         {/* Brand Area */}
-        <div className="h-16 flex items-center px-6 border-b border-slate-200/50 dark:border-slate-800/50 flex-shrink-0 bg-white/50 dark:bg-slate-900/50">
-          <div className="flex items-center gap-3 font-bold text-xl text-slate-900 dark:text-white w-full overflow-hidden">
-            <div className="w-8 h-8 min-w-[32px] rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 flex items-center justify-center text-white shadow-lg shadow-primary-500/20 ring-1 ring-white/10">
-              <span className="font-bold text-lg">P</span>
-            </div>
-            <span className={cn(
-              "transition-opacity duration-300 delay-100 font-display tracking-tight",
-              isCollapsed && !isMobile ? "opacity-0 w-0" : "opacity-100"
+        <div className={cn(
+          "h-16 flex items-center px-6 border-b flex-shrink-0 transition-colors duration-300",
+          isCustomizationMode 
+            ? "bg-primary-600 border-primary-500" 
+            : "border-slate-200/50 dark:border-slate-800/50 bg-white/50 dark:bg-slate-900/50"
+        )}>
+          <div className={cn(
+            "flex items-center gap-3 font-bold text-xl w-full overflow-hidden",
+            isCustomizationMode ? "text-white" : "text-slate-900 dark:text-white"
+          )}>
+            <div className={cn(
+              "w-8 h-8 min-w-[32px] rounded-xl flex items-center justify-center shadow-lg ring-1 transition-all duration-300 overflow-hidden",
+              isCustomizationMode
+                ? "bg-white text-primary-600 ring-white/20 shadow-black/10 p-0"
+                : "bg-gradient-to-br from-primary-600 to-primary-400 text-white shadow-primary-500/20 ring-white/10"
             )}>
-              eCommerce
-            </span>
+              {isCustomizationMode ? (
+                 <div className="w-16 h-16 flex items-center justify-center">
+                   <Lottie animationData={customizerAnimation} loop={true} />
+                 </div>
+              ) : (
+                <span className="font-bold text-lg">P</span>
+              )}
+            </div>
+            <div className={cn(
+              "transition-all duration-300 delay-100 flex flex-col",
+              isCollapsed && !isMobile ? "opacity-0 w-0" : "opacity-100 w-auto"
+            )}>
+              <span className="font-display tracking-tight leading-none">
+                {isCustomizationMode ? 'Customizer' : 'eCommerce'}
+              </span>
+              {isCustomizationMode && (
+                <span className="text-[10px] font-medium text-primary-100 leading-none mt-1 uppercase tracking-wider">
+                  Editing Mode
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -105,7 +142,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                         </button>
                       ) : (
                         <NavLink
-                          to={item.route}
+                          to={getRoute(item.route)}
                           className={({ isActive }) => cn(
                             "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative",
                             isActive 
@@ -146,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
                             return (
                               <NavLink
                                 key={subItem.id}
-                                to={subItem.route}
+                                to={getRoute(subItem.route)}
                                 title={subItem.label}
                                 className={({ isActive }) => cn(
                                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 group/sub relative overflow-hidden",
