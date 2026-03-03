@@ -140,22 +140,47 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
 
                       {/* Submenu Items */}
                       {!isCollapsed && hasSubItems && isExpanded && (
-                        <div className="mt-1 ml-2 pl-5 space-y-1 transition-all duration-200 ease-in-out">
-                          {item.subItems?.map((subItem) => (
-                            <NavLink
-                              key={subItem.id}
-                              to={subItem.route}
-                              title={subItem.label}
-                              className={({ isActive }) => cn(
-                                "block rounded-md px-2.5 py-2 text-sm transition-colors",
-                                isActive 
-                                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 font-medium" 
-                                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40"
-                              )}
-                            >
-                              <span className="whitespace-nowrap">{subItem.label}</span>
-                            </NavLink>
-                          ))}
+                        <div className="mt-2 ml-4 pl-3 border-l border-slate-200 dark:border-slate-800 space-y-1 transition-all duration-300 ease-in-out">
+                          {item.subItems?.map((subItem) => {
+                            const SubIcon = subItem.icon;
+                            return (
+                              <NavLink
+                                key={subItem.id}
+                                to={subItem.route}
+                                title={subItem.label}
+                                className={({ isActive }) => cn(
+                                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200 group/sub relative overflow-hidden",
+                                  isActive 
+                                    ? "text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-500/10 font-medium shadow-sm ring-1 ring-blue-100 dark:ring-blue-900/30" 
+                                    : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                                )}
+                              >
+                                {/* Active Indicator Dot */}
+                                {({ isActive }) => (
+                                  <>
+                                    {isActive && (
+                                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-3/5 bg-blue-600 dark:bg-blue-400 rounded-r-full" />
+                                    )}
+                                    
+                                    {SubIcon && (
+                                      <SubIcon className={cn(
+                                        "w-4 h-4 transition-colors duration-200", 
+                                        isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-400 group-hover/sub:text-slate-600 dark:text-slate-500 dark:group-hover/sub:text-slate-300"
+                                      )} />
+                                    )}
+                                    
+                                    <span className="truncate">{subItem.label}</span>
+                                    
+                                    {/* Hover Chevron */}
+                                    <ChevronRight className={cn(
+                                      "w-3 h-3 ml-auto opacity-0 -translate-x-2 transition-all duration-200 text-slate-400",
+                                      isActive ? "opacity-100 translate-x-0" : "group-hover/sub:opacity-100 group-hover/sub:translate-x-0"
+                                    )} />
+                                  </>
+                                )}
+                              </NavLink>
+                            );
+                          })}
                         </div>
                       )}
                     </div>

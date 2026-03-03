@@ -1,9 +1,7 @@
 import React from 'react';
 import { 
   ShoppingCart, 
-  DollarSign, 
   TrendingUp, 
-  Users, 
   Activity, 
   Clock,
   Calendar,
@@ -14,11 +12,9 @@ import {
   ArrowDownRight
 } from 'lucide-react';
 import MetricCard from '../../components/dashboard/MetricCard';
-import AnalyticsChart from '../../components/dashboard/AnalyticsChart';
 import SalesReport from '../../components/dashboard/SalesReport';
 import { useAppContext } from '../../context/AppContext';
-import { cn } from '../../lib/utils';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const Analytics: React.FC = () => {
   const { user } = useAppContext();
