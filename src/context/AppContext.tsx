@@ -6,6 +6,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeRoute, setActiveRoute] = useState('/dashboard');
+  const [dataState, setDataState] = useState<'default' | 'alternate' | 'empty'>('default');
   const [user] = useState<User | null>({
     name: 'David Dev',
     role: 'Admin Head',
@@ -57,6 +58,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setSidebarCollapsed(prev => !prev);
   };
 
+  const toggleData = () => {
+    setDataState(prev => {
+      if (prev === 'default') return 'empty';
+      if (prev === 'empty') return 'alternate';
+      return 'default';
+    });
+  };
+
   const markNotificationRead = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   };
@@ -76,6 +85,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setActiveRoute,
         markNotificationRead,
         markAllNotificationsRead,
+        dataState,
+        toggleData,
       }}
     >
       {children}

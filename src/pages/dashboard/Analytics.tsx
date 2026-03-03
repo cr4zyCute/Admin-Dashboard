@@ -12,9 +12,9 @@ import {
   Send,
   Download,
   Upload,
-  CreditCard,
-  Package
 } from 'lucide-react';
+import Lottie from 'lottie-react';
+import noDataAnimation from '../../assets/No Data.json';
 import { useAppContext } from '../../context/AppContext';
 import { 
   ComposedChart,
@@ -30,32 +30,109 @@ import {
   Bar, 
   Cell,
   RadialBarChart, 
-  RadialBar, 
-  PolarAngleAxis 
+  RadialBar
 } from 'recharts';
 import { cn } from '../../lib/utils';
 
 import { 
-  pageViews, 
-  visitors, 
-  clicks, 
-  orders, 
-  totalProfit, 
-  totalProfitChange, 
-  weeklyData, 
-  profitData, 
-  repeatCustomerRate, 
-  products, 
-  sparklineData, 
-  sparklineData2, 
-  sparklineData3, 
-  sparklineData4,
-  recentOrders,
-  locations
+  pageViews as mockPageViews, 
+  visitors as mockVisitors, 
+  clicks as mockClicks, 
+  orders as mockOrders, 
+  totalProfit as mockTotalProfit, 
+  totalProfitChange as mockTotalProfitChange, 
+  weeklyData as mockWeeklyData, 
+  profitData as mockProfitData, 
+  repeatCustomerRate as mockRepeatCustomerRate, 
+  products as mockProducts, 
+  sparklineData as mockSparklineData, 
+  sparklineData2 as mockSparklineData2, 
+  sparklineData3 as mockSparklineData3, 
+  sparklineData4 as mockSparklineData4,
+  recentOrders as mockRecentOrders,
+  locations as mockLocations,
+  customerBreakdown as mockCustomerBreakdown,
+  recentOrdersHeader as mockRecentOrdersHeader,
+  revenueLocationCard as mockRevenueLocationCard,
+
+  // Alternate Data
+  pageViewsAlt,
+  visitorsAlt,
+  clicksAlt,
+  ordersAlt,
+  totalProfitAlt,
+  totalProfitChangeAlt,
+  weeklyDataAlt,
+  profitDataAlt,
+  repeatCustomerRateAlt,
+  productsAlt,
+  sparklineDataAlt,
+  sparklineData2Alt,
+  sparklineData3Alt,
+  sparklineData4Alt,
+  recentOrdersAlt,
+  locationsAlt,
+  customerBreakdownAlt,
+  recentOrdersHeaderAlt,
+  revenueLocationCardAlt
 } from '../../data/mockData';
 
+const NoData = ({ message = "No Data Available", size = "normal" }: { message?: string, size?: "small" | "normal" }) => {
+  if (size === "small") {
+    return (
+      <div className="flex items-center justify-center h-full w-full opacity-50">
+         <div className="w-8 h-8">
+           <Lottie animationData={noDataAnimation} loop={true} />
+         </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center h-full w-full min-h-[150px] p-4 animate-in fade-in zoom-in duration-500">
+      <div className="w-24 h-24 md:w-32 md:h-32 opacity-80">
+        <Lottie animationData={noDataAnimation} loop={true} />
+      </div>
+      <p className="text-xs md:text-sm font-medium text-slate-400 mt-2 text-center">{message}</p>
+    </div>
+  );
+};
+
 const Analytics: React.FC = () => {
-  const { user } = useAppContext();
+  const { dataState } = useAppContext();
+
+  // Helper to select data based on state
+  const selectData = <T,>(defaultData: T, altData: T, emptyData: T): T => {
+    if (dataState === 'default') return defaultData;
+    if (dataState === 'alternate') return altData;
+    return emptyData;
+  };
+
+  // Conditional Data
+  const pageViews = selectData(mockPageViews, pageViewsAlt, { value: "0", change: 0, trend: 'up' });
+  const visitors = selectData(mockVisitors, visitorsAlt, { value: "0", change: 0, trend: 'up' });
+  const clicks = selectData(mockClicks, clicksAlt, { value: "0", change: 0, trend: 'down' });
+  const orders = selectData(mockOrders, ordersAlt, { value: "0", change: 0, trend: 'up' });
+  
+  const totalProfit = selectData(mockTotalProfit, totalProfitAlt, "$0");
+  const totalProfitChange = selectData(mockTotalProfitChange, totalProfitChangeAlt, 0);
+  
+  const weeklyData = selectData(mockWeeklyData, weeklyDataAlt, []);
+  const profitData = selectData(mockProfitData, profitDataAlt, []);
+  const repeatCustomerRate = selectData(mockRepeatCustomerRate, repeatCustomerRateAlt, []);
+  const products = selectData(mockProducts, productsAlt, []);
+  
+  const sparklineData = selectData(mockSparklineData, sparklineDataAlt, []);
+  const sparklineData2 = selectData(mockSparklineData2, sparklineData2Alt, []);
+  const sparklineData3 = selectData(mockSparklineData3, sparklineData3Alt, []);
+  const sparklineData4 = selectData(mockSparklineData4, sparklineData4Alt, []);
+  
+  const recentOrders = selectData(mockRecentOrders, recentOrdersAlt, []);
+  const locations = selectData(mockLocations, locationsAlt, []);
+  
+  const customerBreakdown = selectData(mockCustomerBreakdown, customerBreakdownAlt, []);
+  const recentOrdersHeader = selectData(mockRecentOrdersHeader, recentOrdersHeaderAlt, { totalTransactions: '0' });
+  const revenueLocationCard = selectData(mockRevenueLocationCard, revenueLocationCardAlt, { title: 'No Data', subtitle: 'No records found', value: '0', label: 'ORDER' });
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -77,17 +154,21 @@ const Analytics: React.FC = () => {
             </span>
           </div>
           <div className="h-10 w-full mb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={sparklineData}>
-                <defs>
-                  <linearGradient id="colorSpark1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark1)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {sparklineData && sparklineData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sparklineData}>
+                  <defs>
+                    <linearGradient id="colorSpark1" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark1)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <NoData size="small" />
+            )}
           </div>
           <p className="text-xs text-slate-400">vs. 14,653 last period</p>
         </div>
@@ -107,17 +188,21 @@ const Analytics: React.FC = () => {
             </span>
           </div>
           <div className="h-10 w-full mb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={sparklineData2}>
-                <defs>
-                  <linearGradient id="colorSpark2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark2)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {sparklineData2 && sparklineData2.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sparklineData2}>
+                  <defs>
+                    <linearGradient id="colorSpark2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark2)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <NoData size="small" />
+            )}
           </div>
           <p className="text-xs text-slate-400">vs. 5,732 last period</p>
         </div>
@@ -137,17 +222,21 @@ const Analytics: React.FC = () => {
             </span>
           </div>
           <div className="h-10 w-full mb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={sparklineData3}>
-                <defs>
-                  <linearGradient id="colorSpark3" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <Area type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark3)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {sparklineData3 && sparklineData3.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sparklineData3}>
+                  <defs>
+                    <linearGradient id="colorSpark3" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark3)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <NoData size="small" />
+            )}
           </div>
           <p className="text-xs text-slate-400">vs. 3,294 last period</p>
         </div>
@@ -167,17 +256,21 @@ const Analytics: React.FC = () => {
             </span>
           </div>
           <div className="h-10 w-full mb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={sparklineData4}>
-                <defs>
-                  <linearGradient id="colorSpark4" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark4)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {sparklineData4 && sparklineData4.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sparklineData4}>
+                  <defs>
+                    <linearGradient id="colorSpark4" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorSpark4)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <NoData size="small" />
+            )}
           </div>
           <p className="text-xs text-slate-400">vs. 1,186 last period</p>
         </div>
@@ -213,26 +306,30 @@ const Analytics: React.FC = () => {
           </div>
 
           <div className="h-[250px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={profitData}>
-                <defs>
-                  <linearGradient id="colorStock" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} minTickGap={30} />
-                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fill: '#ef4444', fontSize: 12 }} domain={[0, 100]} />
-                <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} domain={[0, 2500]} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                  cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
-                />
-                <Area yAxisId="left" type="monotone" dataKey="stock" name="Stock Level (%)" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorStock)" />
-                <Line yAxisId="right" type="monotone" dataKey="sales" name="Total Sales ($)" stroke="#94a3b8" strokeWidth={3} dot={false} />
-              </ComposedChart>
-            </ResponsiveContainer>
+            {profitData && profitData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={profitData}>
+                  <defs>
+                    <linearGradient id="colorStock" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} minTickGap={30} />
+                  <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fill: '#ef4444', fontSize: 12 }} domain={[0, 100]} />
+                  <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} domain={[0, 2500]} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                    cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
+                  />
+                  <Area yAxisId="left" type="monotone" dataKey="stock" name="Stock Level (%)" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorStock)" />
+                  <Line yAxisId="right" type="monotone" dataKey="sales" name="Total Sales ($)" stroke="#94a3b8" strokeWidth={3} dot={false} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            ) : (
+              <NoData message="No profit data available" />
+            )}
           </div>
 
           <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700">
@@ -242,33 +339,19 @@ const Analytics: React.FC = () => {
              </div>
              <div className="flex gap-4">
                {/* Progress Bars Breakdown */}
-               <div className="flex-1">
-                 <div className="flex justify-between text-xs mb-1">
-                   <span className="font-bold text-slate-700 dark:text-white flex items-center gap-1"><span className="w-2 h-2 bg-blue-600 rounded-full"></span> 2,884</span>
-                   <span className="text-slate-400">Retailers</span>
+               {customerBreakdown.map((item, index) => (
+                 <div key={index} className="flex-1">
+                   <div className="flex justify-between text-xs mb-1">
+                     <span className="font-bold text-slate-700 dark:text-white flex items-center gap-1">
+                       <span className={`w-2 h-2 ${item.color.replace('bg-', 'bg-')} rounded-full`}></span> {item.value}
+                     </span>
+                     <span className="text-slate-400">{item.label}</span>
+                   </div>
+                   <div className={`h-1.5 w-full ${item.bgColor} rounded-full overflow-hidden`}>
+                     <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.percentage}%` }}></div>
+                   </div>
                  </div>
-                 <div className="h-1.5 w-full bg-blue-100 dark:bg-blue-900/30 rounded-full overflow-hidden">
-                   <div className="h-full bg-blue-600 w-[70%] rounded-full"></div>
-                 </div>
-               </div>
-               <div className="flex-1">
-                 <div className="flex justify-between text-xs mb-1">
-                   <span className="font-bold text-slate-700 dark:text-white flex items-center gap-1"><span className="w-2 h-2 bg-emerald-500 rounded-full"></span> 1,432</span>
-                   <span className="text-slate-400">Distributors</span>
-                 </div>
-                 <div className="h-1.5 w-full bg-emerald-100 dark:bg-emerald-900/30 rounded-full overflow-hidden">
-                   <div className="h-full bg-emerald-500 w-[45%] rounded-full"></div>
-                 </div>
-               </div>
-               <div className="flex-1">
-                 <div className="flex justify-between text-xs mb-1">
-                   <span className="font-bold text-slate-700 dark:text-white flex items-center gap-1"><span className="w-2 h-2 bg-orange-500 rounded-full"></span> 562</span>
-                   <span className="text-slate-400">Wholesalers</span>
-                 </div>
-                 <div className="h-1.5 w-full bg-orange-100 dark:bg-orange-900/30 rounded-full overflow-hidden">
-                   <div className="h-full bg-orange-500 w-[30%] rounded-full"></div>
-                 </div>
-               </div>
+               ))}
              </div>
           </div>
         </div>
@@ -281,26 +364,32 @@ const Analytics: React.FC = () => {
           </div>
           
           <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-full h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyData}>
-                  <Bar dataKey="active" radius={[4, 4, 4, 4]}>
-                    {weeklyData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.name === 'Tue' ? '#3b82f6' : '#e2e8f0'} />
-                    ))}
-                  </Bar>
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} dy={10} interval={0} />
-                  <Tooltip 
-                    cursor={{fill: 'transparent'}}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="mt-4 text-center">
-               <h4 className="text-2xl font-bold text-slate-800 dark:text-white">8,162</h4>
-               <p className="text-xs text-slate-400">Total active users on Tuesday</p>
-            </div>
+            {weeklyData && weeklyData.length > 0 ? (
+              <>
+                <div className="w-full h-[200px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weeklyData}>
+                      <Bar dataKey="active" radius={[4, 4, 4, 4]}>
+                        {weeklyData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.name === 'Tue' ? '#3b82f6' : '#e2e8f0'} />
+                        ))}
+                      </Bar>
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} dy={10} interval={0} />
+                      <Tooltip 
+                        cursor={{fill: 'transparent'}}
+                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-4 text-center">
+                   <h4 className="text-2xl font-bold text-slate-800 dark:text-white">8,162</h4>
+                   <p className="text-xs text-slate-400">Total active users on Tuesday</p>
+                </div>
+              </>
+            ) : (
+              <NoData message="No activity data" />
+            )}
           </div>
         </div>
       </div>
@@ -321,46 +410,50 @@ const Analytics: React.FC = () => {
           </div>
           
           <div className="flex-1 overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
-                  <th className="py-4 pr-4 pl-2">Product</th>
-                  <th className="py-4 px-4 text-right">ID</th>
-                  <th className="py-4 px-4 text-right">Sold</th>
-                  <th className="py-4 px-4 text-right">Revenue</th>
-                  <th className="py-4 pl-4 pr-2 text-right">Rating</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                {products.map((product) => (
-                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
-                    <td className="py-4 pr-4 pl-2">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600 shadow-sm">
-                          <img src={product.image} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-slate-800 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{product.name}</p>
-                          <p className="text-xs text-slate-400 mt-0.5">Electronics</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-right font-mono text-xs text-slate-400">{product.id}</td>
-                    <td className="py-4 px-4 text-right">
-                       <span className="font-bold text-slate-700 dark:text-slate-200">{product.sold}</span>
-                       <span className="text-xs text-slate-400 ml-1">pcs</span>
-                    </td>
-                    <td className="py-4 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">{product.revenue}</td>
-                    <td className="py-4 pl-4 pr-2 text-right">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20">
-                        <span className="text-amber-500 text-xs fill-amber-500">★</span> 
-                        <span className="font-bold text-amber-700 dark:text-amber-400 text-xs">{product.rating}</span>
-                      </div>
-                    </td>
+            {products && products.length > 0 ? (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                    <th className="py-4 pr-4 pl-2">Product</th>
+                    <th className="py-4 px-4 text-right">ID</th>
+                    <th className="py-4 px-4 text-right">Sold</th>
+                    <th className="py-4 px-4 text-right">Revenue</th>
+                    <th className="py-4 pl-4 pr-2 text-right">Rating</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="text-sm">
+                  {products.map((product) => (
+                    <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
+                      <td className="py-4 pr-4 pl-2">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600 shadow-sm">
+                            <img src={product.image} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-800 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{product.name}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">Electronics</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 text-right font-mono text-xs text-slate-400">{product.id}</td>
+                      <td className="py-4 px-4 text-right">
+                         <span className="font-bold text-slate-700 dark:text-slate-200">{product.sold}</span>
+                         <span className="text-xs text-slate-400 ml-1">pcs</span>
+                      </td>
+                      <td className="py-4 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">{product.revenue}</td>
+                      <td className="py-4 pl-4 pr-2 text-right">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20">
+                          <span className="text-amber-500 text-xs fill-amber-500">★</span> 
+                          <span className="font-bold text-amber-700 dark:text-amber-400 text-xs">{product.rating}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <NoData message="No products found" />
+            )}
           </div>
 
           <div className="flex justify-between items-center mt-6 pt-2">
@@ -384,32 +477,38 @@ const Analytics: React.FC = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center relative">
-               <div className="w-[200px] h-[160px] relative flex justify-center">
-                 <ResponsiveContainer width="100%" height="100%">
-                   <RadialBarChart 
-                      innerRadius="80%" 
-                      outerRadius="100%" 
-                      data={repeatCustomerRate} 
-                      startAngle={180} 
-                      endAngle={0}
-                   >
-                     <RadialBar
-                       background
-                       dataKey="value"
-                       cornerRadius={30}
-                       fill="#10b981"
-                     />
-                   </RadialBarChart>
-                 </ResponsiveContainer>
-                 {/* Center Text */}
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-2 text-center">
-                   <div className="text-3xl font-bold text-slate-800 dark:text-white">68%</div>
-                   <div className="text-xs text-slate-400 mt-1">On track for 80% target</div>
-                 </div>
-               </div>
-               <button className="mt-2 px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors">
-                 Show details
-               </button>
+               {repeatCustomerRate && repeatCustomerRate.length > 0 ? (
+                 <>
+                   <div className="w-[200px] h-[160px] relative flex justify-center">
+                     <ResponsiveContainer width="100%" height="100%">
+                       <RadialBarChart 
+                          innerRadius="80%" 
+                          outerRadius="100%" 
+                          data={repeatCustomerRate} 
+                          startAngle={180} 
+                          endAngle={0}
+                       >
+                         <RadialBar
+                           background
+                           dataKey="value"
+                           cornerRadius={30}
+                           fill="#10b981"
+                         />
+                       </RadialBarChart>
+                     </ResponsiveContainer>
+                     {/* Center Text */}
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-2 text-center">
+                       <div className="text-3xl font-bold text-slate-800 dark:text-white">68%</div>
+                       <div className="text-xs text-slate-400 mt-1">On track for 80% target</div>
+                     </div>
+                   </div>
+                   <button className="mt-2 px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors">
+                     Show details
+                   </button>
+                 </>
+               ) : (
+                 <NoData message="No customer data" />
+               )}
             </div>
           </div>
 
@@ -462,7 +561,7 @@ const Analytics: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
               <h3 className="font-bold text-slate-800 dark:text-white">Recent Orders</h3>
-              <p className="text-xs text-slate-400 mt-1">(186.25k Transactions)</p>
+              <p className="text-xs text-slate-400 mt-1">({recentOrdersHeader.totalTransactions} Transactions)</p>
             </div>
             <div className="flex gap-2">
               <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
@@ -475,44 +574,48 @@ const Analytics: React.FC = () => {
           </div>
 
           <div className="flex-1 overflow-x-auto">
-             <table className="w-full text-left border-collapse min-w-[500px]">
-               <thead>
-                 <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
-                   <th className="py-3 pr-2">#ID</th>
-                   <th className="py-3 px-2">Customer</th>
-                   <th className="py-3 px-2">Date</th>
-                   <th className="py-3 px-2">Amount</th>
-                   <th className="py-3 px-2">Payment</th>
-                   <th className="py-3 pl-2 text-right">Status</th>
-                 </tr>
-               </thead>
-               <tbody className="text-sm">
-                 {recentOrders.map((order) => (
-                   <tr key={order.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
-                     <td className="py-3 pr-2 font-medium text-slate-500">{order.id}</td>
-                     <td className="py-3 px-2">
-                       <div>
-                         <p className="font-bold text-slate-700 dark:text-slate-200">{order.customer}</p>
-                         <p className="text-xs text-slate-400">{order.email}</p>
-                       </div>
-                     </td>
-                     <td className="py-3 px-2 text-slate-500">{order.date}</td>
-                     <td className="py-3 px-2 font-medium text-slate-700 dark:text-slate-200">{order.amount}</td>
-                     <td className="py-3 px-2 text-slate-500">{order.payment}</td>
-                     <td className="py-3 pl-2 text-right">
-                       <span className={cn(
-                         "px-2 py-0.5 rounded text-xs font-medium",
-                         order.status === 'Success' ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" :
-                         order.status === 'Pending' ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400" :
-                         "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
-                       )}>
-                         {order.status}
-                       </span>
-                     </td>
+             {recentOrders && recentOrders.length > 0 ? (
+               <table className="w-full text-left border-collapse min-w-[500px]">
+                 <thead>
+                   <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                     <th className="py-3 pr-2">#ID</th>
+                     <th className="py-3 px-2">Customer</th>
+                     <th className="py-3 px-2">Date</th>
+                     <th className="py-3 px-2">Amount</th>
+                     <th className="py-3 px-2">Payment</th>
+                     <th className="py-3 pl-2 text-right">Status</th>
                    </tr>
-                 ))}
-               </tbody>
-             </table>
+                 </thead>
+                 <tbody className="text-sm">
+                   {recentOrders.map((order) => (
+                     <tr key={order.id} className="group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0">
+                       <td className="py-3 pr-2 font-medium text-slate-500">{order.id}</td>
+                       <td className="py-3 px-2">
+                         <div>
+                           <p className="font-bold text-slate-700 dark:text-slate-200">{order.customer}</p>
+                           <p className="text-xs text-slate-400">{order.email}</p>
+                         </div>
+                       </td>
+                       <td className="py-3 px-2 text-slate-500">{order.date}</td>
+                       <td className="py-3 px-2 font-medium text-slate-700 dark:text-slate-200">{order.amount}</td>
+                       <td className="py-3 px-2 text-slate-500">{order.payment}</td>
+                       <td className="py-3 pl-2 text-right">
+                         <span className={cn(
+                           "px-2 py-0.5 rounded text-xs font-medium",
+                           order.status === 'Success' ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" :
+                           order.status === 'Pending' ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400" :
+                           "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
+                         )}>
+                           {order.status}
+                         </span>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             ) : (
+               <NoData message="No recent orders" />
+             )}
           </div>
           
           <div className="flex justify-between items-center mt-4 pt-2">
@@ -557,12 +660,12 @@ const Analytics: React.FC = () => {
             <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 shadow-sm mb-6 flex items-center gap-4 relative overflow-hidden">
                <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 text-lg">🏆</div>
                <div>
-                 <p className="font-bold text-slate-800 dark:text-white text-sm">Congratulations !...</p>
-                 <p className="text-xs text-slate-400">You've just hit a new record..</p>
+                 <p className="font-bold text-slate-800 dark:text-white text-sm">{revenueLocationCard.title}</p>
+                 <p className="text-xs text-slate-400">{revenueLocationCard.subtitle}</p>
                </div>
                <div className="ml-auto text-right">
-                 <p className="font-bold text-slate-800 dark:text-white">25.9k</p>
-                 <p className="text-[10px] text-slate-400 uppercase">ORDER</p>
+                 <p className="font-bold text-slate-800 dark:text-white">{revenueLocationCard.value}</p>
+                 <p className="text-[10px] text-slate-400 uppercase">{revenueLocationCard.label}</p>
                </div>
                {/* Decorative bg shape */}
                <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-amber-500/5 rounded-full blur-2xl"></div>
@@ -570,18 +673,22 @@ const Analytics: React.FC = () => {
 
             {/* Location List */}
             <div className="space-y-4">
-              {locations.map((loc, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-800`} style={{ backgroundColor: loc.color }}></div>
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{loc.name}</span>
+              {locations && locations.length > 0 ? (
+                locations.map((loc, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ring-2 ring-white dark:ring-slate-800`} style={{ backgroundColor: loc.color }}></div>
+                      <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{loc.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-700 dark:text-white">{loc.revenue}</span>
+                      <span className="text-xs text-slate-400">Revenue</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-slate-700 dark:text-white">{loc.revenue}</span>
-                    <span className="text-xs text-slate-400">Revenue</span>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <NoData message="No location data" />
+              )}
             </div>
           </div>
         </div>

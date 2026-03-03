@@ -45,4 +45,6 @@ export interface AppContextType {
   setActiveRoute: (route: string) => void;
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
+  dataState: 'default' | 'alternate' | 'empty';
+  toggleData: () => void;
 }

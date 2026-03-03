@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
+  Users, 
+  DollarSign, 
+  TrendingUp, 
   MoreHorizontal, 
-  Search, 
-  Filter, 
-  Download, 
-  Upload, 
-  Plus, 
-  MapPin, 
-  MoreVertical,
   Calendar,
-  RefreshCw,
-  AlertCircle,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-  Users,
-  Briefcase,
-  Activity,
+  Search,
+  MoreVertical,
   User,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  PauseCircle
+  TrendingDown,
+  Briefcase,
+  AlertCircle,
+  Upload,
+  Download,
+  MapPin
 } from 'lucide-react';
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, ComposedChart 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  PieChart, 
+  Pie, 
+  Cell, 
+  BarChart, 
+  Bar,
+  LineChart,
+  Line,
+  ComposedChart
 } from 'recharts';
 import { cn } from '../../lib/utils';
 

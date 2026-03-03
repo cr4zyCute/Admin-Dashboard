@@ -147,3 +147,118 @@ export const recentActivities = [
     color: 'bg-amber-100 text-amber-600' 
   },
 ];
+
+export const customerBreakdown = [
+  { label: 'Retailers', value: '2,884', color: 'bg-blue-600', bgColor: 'bg-blue-100 dark:bg-blue-900/30', percentage: 70 },
+  { label: 'Distributors', value: '1,432', color: 'bg-emerald-500', bgColor: 'bg-emerald-100 dark:bg-emerald-900/30', percentage: 45 },
+  { label: 'Wholesalers', value: '562', color: 'bg-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-900/30', percentage: 30 },
+];
+
+export const recentOrdersHeader = {
+  totalTransactions: '186.25k',
+};
+
+export const revenueLocationCard = {
+  title: 'Congratulations !...',
+  subtitle: "You've just hit a new record..",
+  value: '25.9k',
+  label: 'ORDER'
+};
+
+// --- Alternate Data for Testing ---
+
+export const pageViewsAlt = { value: "8,245", change: -5.2, trend: 'down' as const };
+export const visitorsAlt = { value: "4,120", change: 2.1, trend: 'up' as const };
+export const clicksAlt = { value: "5,670", change: 12.8, trend: 'up' as const };
+export const ordersAlt = { value: "890", change: -1.5, trend: 'down' as const };
+
+export const totalProfitAlt = "$215.4K";
+export const totalProfitChangeAlt = 12.5;
+
+export const weeklyDataAlt = [
+  { name: 'Sun', value: 2000, active: 1500 },
+  { name: 'Mon', value: 4500, active: 3200 },
+  { name: 'Tue', value: 3800, active: 2900 },
+  { name: 'Wed', value: 5200, active: 4100 },
+  { name: 'Thu', value: 2900, active: 1800 },
+  { name: 'Fri', value: 4100, active: 3600 },
+  { name: 'Sat', value: 5800, active: 4900 },
+];
+
+export const profitDataAlt = [
+  { name: 'Jan 1', stock: 40, sales: 1200 },
+  { name: 'Jan 5', stock: 55, sales: 900 },
+  { name: 'Jan 10', stock: 35, sales: 1500 },
+  { name: 'Jan 15', stock: 70, sales: 800 },
+  { name: 'Jan 20', stock: 45, sales: 1100 },
+  { name: 'Jan 25', stock: 60, sales: 1300 },
+  { name: 'Jan 30', stock: 50, sales: 1600 },
+  { name: 'Feb 5', stock: 80, sales: 1400 },
+  { name: 'Feb 10', stock: 65, sales: 1900 },
+  { name: 'Feb 15', stock: 40, sales: 2100 },
+  { name: 'Feb 20', stock: 30, sales: 1700 },
+  { name: 'Feb 25', stock: 55, sales: 1500 },
+  { name: 'Mar 1', stock: 75, sales: 1800 },
+  { name: 'Mar 5', stock: 60, sales: 2200 },
+  { name: 'Mar 10', stock: 45, sales: 2000 },
+  { name: 'Mar 15', stock: 30, sales: 2400 },
+  { name: 'Mar 20', stock: 50, sales: 2100 },
+  { name: 'Mar 25', stock: 65, sales: 2300 },
+  { name: 'Mar 30', stock: 80, sales: 2500 },
+];
+
+export const repeatCustomerRateAlt = [
+  { name: 'Rate', value: 42, fill: '#f59e0b' }
+];
+
+export const productsAlt = [
+  { id: '#92001', name: 'Sony WH-1000XM5...', sold: '1,540', revenue: '$85,200', rating: 4.9, image: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=100&h=100&fit=crop' },
+  { id: '#92002', name: 'Apple Watch Series 9...', sold: '980', revenue: '$68,400', rating: 4.8, image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=100&h=100&fit=crop' },
+  { id: '#92003', name: 'Kindle Paperwhite...', sold: '850', revenue: '$42,100', rating: 4.7, image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100&h=100&fit=crop' },
+  { id: '#92004', name: 'Logitech MX Master 3S...', sold: '720', revenue: '$35,500', rating: 4.8, image: 'https://images.unsplash.com/photo-1631281928516-77263c762566?w=100&h=100&fit=crop' },
+  { id: '#92005', name: 'GoPro HERO12 Black...', sold: '610', revenue: '$28,900', rating: 4.6, image: 'https://images.unsplash.com/photo-1564466136-20a4ab8fa7d4?w=100&h=100&fit=crop' },
+];
+
+export const sparklineDataAlt = [
+  { value: 22 }, { value: 15 }, { value: 25 }, { value: 18 }, { value: 20 }, { value: 12 }, { value: 10 }
+];
+export const sparklineData2Alt = [
+  { value: 15 }, { value: 20 }, { value: 10 }, { value: 25 }, { value: 15 }, { value: 10 }, { value: 20 }
+];
+export const sparklineData3Alt = [
+  { value: 20 }, { value: 15 }, { value: 12 }, { value: 30 }, { value: 15 }, { value: 25 }, { value: 10 }
+];
+export const sparklineData4Alt = [
+  { value: 30 }, { value: 20 }, { value: 25 }, { value: 15 }, { value: 20 }, { value: 10 }, { value: 15 }
+];
+
+export const recentOrdersAlt = [
+  { id: '#ORD-2055', customer: 'Alice Smith', email: 'alice@example.com', date: '13 Nov 2025', amount: '$420.00', payment: 'PayPal', status: 'Success' },
+  { id: '#ORD-2054', customer: 'Bob Johnson', email: 'bob@example.com', date: '13 Nov 2025', amount: '$150.00', payment: 'Credit', status: 'Processing' },
+  { id: '#ORD-2053', customer: 'Charlie Brown', email: 'charlie@example.com', date: '12 Nov 2025', amount: '$890.00', payment: 'Debit', status: 'Success' },
+  { id: '#ORD-2052', customer: 'Diana Prince', email: 'diana@example.com', date: '12 Nov 2025', amount: '$210.00', payment: 'UPI', status: 'Failed' },
+  { id: '#ORD-2051', customer: 'Evan Wright', email: 'evan@example.com', date: '11 Nov 2025', amount: '$340.00', payment: 'Credit', status: 'Success' },
+];
+
+export const locationsAlt = [
+  { name: 'Canada', revenue: '$32.5k', percentage: 35, color: '#ef4444' },
+  { name: 'Germany', revenue: '$28.1k', percentage: 30, color: '#f59e0b' },
+  { name: 'Japan', revenue: '$15.4k', percentage: 20, color: '#3b82f6' },
+];
+
+export const customerBreakdownAlt = [
+  { label: 'Retailers', value: '1,540', color: 'bg-indigo-600', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', percentage: 55 },
+  { label: 'Distributors', value: '980', color: 'bg-pink-500', bgColor: 'bg-pink-100 dark:bg-pink-900/30', percentage: 35 },
+  { label: 'Wholesalers', value: '420', color: 'bg-cyan-500', bgColor: 'bg-cyan-100 dark:bg-cyan-900/30', percentage: 25 },
+];
+
+export const recentOrdersHeaderAlt = {
+  totalTransactions: '92.45k',
+};
+
+export const revenueLocationCardAlt = {
+  title: 'Target Reached!',
+  subtitle: "Quarterly goal achieved.",
+  value: '18.2k',
+  label: 'SALES'
+};

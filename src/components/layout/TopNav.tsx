@@ -19,7 +19,10 @@ import {
   Building,
   Users,
   Calendar,
-  LifeBuoy
+  LifeBuoy,
+  RefreshCcw,
+  Trash2,
+  Database,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAppContext } from '../../context/AppContext';
@@ -36,7 +39,7 @@ const TopNav: React.FC<TopNavProps> = ({
   isSidebarCollapsed 
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { user, notifications } = useAppContext();
+  const { user, notifications, dataState, toggleData } = useAppContext();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -238,6 +241,24 @@ const TopNav: React.FC<TopNavProps> = ({
 
       {/* Right Side */}
       <div className="flex items-center gap-1.5 md:gap-3">
+        {/* Test Data Toggle */}
+        <button 
+          onClick={toggleData}
+          className={cn(
+            "p-2.5 rounded-xl transition-all active:scale-95",
+            dataState === 'default' 
+              ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+              : dataState === 'alternate'
+                ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+          )}
+          title={`Data Mode: ${dataState.charAt(0).toUpperCase() + dataState.slice(1)}`}
+        >
+          {dataState === 'default' && <Database className="w-5 h-5" />}
+          {dataState === 'alternate' && <RefreshCcw className="w-5 h-5" />}
+          {dataState === 'empty' && <Trash2 className="w-5 h-5" />}
+        </button>
+
         {/* Theme Toggle */}
         <button 
           onClick={toggleTheme}
