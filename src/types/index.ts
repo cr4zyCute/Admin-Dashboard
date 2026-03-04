@@ -98,4 +98,8 @@ export interface AppContextType {
   setLocationViewMode: (mode: LocationViewMode) => void;
   locationVisual: CardStyle;
   setLocationVisual: (style: CardStyle) => void;
+  repeatCustomerChart: 'radial' | 'pie' | 'gauge';
+  setRepeatCustomerChart: (type: 'radial' | 'pie' | 'gauge') => void;
+  repeatCustomerColor: string;
+  setRepeatCustomerColor: (color: string) => void;
 }

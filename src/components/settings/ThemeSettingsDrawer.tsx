@@ -27,7 +27,11 @@ const ThemeSettingsDrawer: React.FC = () => {
     layoutTheme,
     setLayoutTheme,
     cardStyle,
-    setCardStyle
+    setCardStyle,
+    repeatCustomerChart,
+    setRepeatCustomerChart,
+    repeatCustomerColor,
+    setRepeatCustomerColor
   } = useAppContext();
   
   const navigate = useNavigate();
@@ -46,6 +50,8 @@ const ThemeSettingsDrawer: React.FC = () => {
     setColorTheme('blue');
     setLayoutTheme('Default');
     setCardStyle('default');
+    setRepeatCustomerChart('radial');
+    setRepeatCustomerColor('#10b981');
   };
 
   const featuredLayouts: LayoutTheme[] = ['Default', 'Minimal', 'Modern', 'Material', 'SaaS', 'Flat'];
@@ -165,6 +171,62 @@ const ThemeSettingsDrawer: React.FC = () => {
                       )}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Repeat Customer Rate Section */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                  <Box className="w-4 h-4" /> Repeat Customer Rate
+                </h3>
+                <div className="space-y-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                  {/* Chart Type */}
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase mb-2 block">Chart Type</label>
+                    <div className="flex gap-2">
+                      {['radial', 'pie', 'gauge'].map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => setRepeatCustomerChart(type as any)}
+                          className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border transition-all capitalize ${
+                            repeatCustomerChart === type
+                              ? 'bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 border-primary-200 dark:border-primary-800 shadow-sm'
+                              : 'bg-transparent text-slate-500 border-transparent hover:bg-slate-200 dark:hover:bg-slate-700'
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Graph Color */}
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase mb-2 block">Graph Color</label>
+                    <div className="flex gap-2">
+                      {[
+                        { color: '#10b981', label: 'Emerald' },
+                        { color: '#3b82f6', label: 'Blue' },
+                        { color: '#8b5cf6', label: 'Violet' },
+                        { color: '#f59e0b', label: 'Amber' },
+                        { color: '#ef4444', label: 'Rose' },
+                      ].map((item) => (
+                        <button
+                          key={item.color}
+                          onClick={() => setRepeatCustomerColor(item.color)}
+                          className={`w-8 h-8 rounded-full transition-all border-2 flex items-center justify-center ${
+                            repeatCustomerColor === item.color 
+                              ? 'border-slate-400 scale-110 shadow-sm' 
+                              : 'border-transparent hover:scale-110'
+                          }`}
+                          style={{ backgroundColor: item.color }}
+                          title={item.label}
+                        >
+                          {repeatCustomerColor === item.color && <Check className="w-4 h-4 text-white drop-shadow-md" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 

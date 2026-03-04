@@ -66,6 +66,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return (saved as CardStyle) || 'default';
   });
 
+  const [repeatCustomerChart, setRepeatCustomerChart] = useState<'radial' | 'pie' | 'gauge'>(() => {
+    const saved = localStorage.getItem('repeatCustomerChart');
+    return (saved as 'radial' | 'pie' | 'gauge') || 'radial';
+  });
+
+  const [repeatCustomerColor, setRepeatCustomerColor] = useState(() => {
+    const saved = localStorage.getItem('repeatCustomerColor');
+    return saved || '#10b981';
+  });
+
   // Card Configs
   const [cardConfigs, setCardConfigs] = useState<Record<string, { chartType?: ChartType; chartColor?: string }>>(() => {
     const saved = localStorage.getItem('cardConfigs');
@@ -149,6 +159,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.setItem('locationVisual', locationVisual);
   }, [locationVisual]);
 
+  useEffect(() => {
+    localStorage.setItem('repeatCustomerChart', repeatCustomerChart);
+  }, [repeatCustomerChart]);
+
+  useEffect(() => {
+    localStorage.setItem('repeatCustomerColor', repeatCustomerColor);
+  }, [repeatCustomerColor]);
+
   // Cross-Tab Synchronization
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -164,6 +182,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       if (e.key === 'ordersPerPage' && e.newValue) setOrdersPerPage(parseInt(e.newValue, 10));
       if (e.key === 'locationViewMode' && e.newValue) setLocationViewMode(e.newValue as LocationViewMode);
       if (e.key === 'locationVisual' && e.newValue) setLocationVisual(e.newValue as CardStyle);
+      if (e.key === 'repeatCustomerChart' && e.newValue) setRepeatCustomerChart(e.newValue as any);
+      if (e.key === 'repeatCustomerColor' && e.newValue) setRepeatCustomerColor(e.newValue);
       if (e.key === 'cardConfigs' && e.newValue) setCardConfigs(JSON.parse(e.newValue));
     };
 
@@ -285,6 +305,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setLocationViewMode,
         locationVisual,
         setLocationVisual,
+        repeatCustomerChart,
+        setRepeatCustomerChart,
+        repeatCustomerColor,
+        setRepeatCustomerColor,
       }}
     >
       {children}

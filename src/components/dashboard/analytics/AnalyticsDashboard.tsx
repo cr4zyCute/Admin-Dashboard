@@ -43,8 +43,7 @@ import MetricCard from './MetricCard';
 
 // Shared Components
 import { 
-  CustomizationOverlay,
-  RepeatCustomerSettingsOverlay 
+  CustomizationOverlay
 } from './Overlays';
 import { useState } from 'react';
 import TotalProfitCard from './TotalProfitCard';
@@ -52,7 +51,7 @@ import MostActiveCard from './MostActiveCard';
 import ProductsTable from './ProductsTable';
 import OrdersTable from './OrdersTable';
 import RevenueLocationCard from './RevenueLocationCard';
-import { RadialBarChart, RadialBar, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { RadialBarChart, RadialBar, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 // NoData Component
 const NoData = ({ message }: { message?: string }) => (
@@ -71,7 +70,11 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
     cardStyle, 
     chartType, 
     randomSeed,
-    productTableStyle
+    productTableStyle,
+    repeatCustomerChart,
+    setRepeatCustomerChart,
+    repeatCustomerColor,
+    setRepeatCustomerColor
   } = useAppContext();
   
   // Random Data Generation
@@ -111,10 +114,44 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
     };
   }, [dataState, randomSeed]);
 
-  const [repeatCustomerChart, setRepeatCustomerChart] = useState<'radial' | 'pie' | 'gauge'>('radial');
-  const [repeatCustomerColor, setRepeatCustomerColor] = useState('#10b981'); // Default Emerald
-  const [showRepeatSettings, setShowRepeatSettings] = useState(false);
+  // Custom Tooltip for Pie/Gauge
+  const CustomPieTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white dark:bg-slate-800 p-2 border border-slate-100 dark:border-slate-700 rounded-lg shadow-lg text-xs">
+          <p className="font-semibold text-slate-800 dark:text-white mb-1">{data.name || 'Value'}</p>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.fill }} />
+            <span className="text-slate-600 dark:text-slate-300 font-medium">{data.value}%</span>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+  // Helper for Needle
+  const renderNeedle = (value: number, cx: number, cy: number, iR: number, oR: number, color: string) => {
+    let total = 0;
+    const ang = 180.0 * (1 - value / 100);
+    const length = (iR + 2 * oR) / 3;
+    const sin = Math.sin(-ang * Math.PI / 180);
+    const cos = Math.cos(-ang * Math.PI / 180);
+    const r = 5;
+    const x0 = cx;
+    const y0 = cy;
+    const xba = x0 + r * sin;
+    const yba = y0 - r * cos;
+    const xbb = x0 - r * sin;
+    const ybb = y0 + r * cos;
+    const xp = x0 + length * cos;
+    const yp = y0 + length * sin;
 
+    return [
+      <circle key="circle" cx={x0} cy={y0} r={r} fill={color} stroke="none" />,
+      <path key="path" d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} fill={color} stroke="none" />,
+    ];
+  };
   // Card Style Helper
   const getCardClass = (additionalClasses = "", style = cardStyle) => {
     const base = "p-6 transition-all duration-300";
@@ -310,22 +347,9 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
         <div className="lg:col-span-1 flex flex-col gap-6 h-fit">
           
           {/* Repeat Customer Rate */}
-          <div 
-            className={getCardClass("relative group")}
-            onMouseEnter={() => enableCustomization && setShowRepeatSettings(true)}
-            onMouseLeave={() => setShowRepeatSettings(false)}
-          >
-            {showRepeatSettings && enableCustomization && (
-              <RepeatCustomerSettingsOverlay 
-                chartType={repeatCustomerChart}
-                setChartType={setRepeatCustomerChart}
-                graphColor={repeatCustomerColor}
-                setGraphColor={setRepeatCustomerColor}
-                onClose={() => setShowRepeatSettings(false)}
-              />
-            )}
-            <div className={cn("transition-all duration-300", showRepeatSettings ? "blur-sm" : "")}>
-              <div className="flex justify-between items-center mb-4">
+          <div className={getCardClass("relative group")}>
+              <div className={cn("transition-all duration-300")}>
+                <div className="flex justify-between items-center mb-4">
                 <h3 className="font-bold text-slate-800 dark:text-white">Repeat Customer Rate</h3>
               </div>
               
@@ -335,69 +359,93 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
                      <div className="w-[200px] h-[160px] relative flex justify-center">
                        <ResponsiveContainer width="100%" height="100%">
                         {repeatCustomerChart === 'radial' ? (
-                         <RadialBarChart 
-                            innerRadius="80%" 
-                            outerRadius="100%" 
-                            data={repeatCustomerRate} 
-                            startAngle={180} 
-                            endAngle={0}
-                         >
-                           <RadialBar
-                             background
-                             dataKey="value"
-                             cornerRadius={30}
-                             fill={repeatCustomerColor}
-                           />
-                         </RadialBarChart>
+                         <PieChart>
+                            <Pie
+                              data={[{ value: 100 }]}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={65}
+                              outerRadius={80}
+                              dataKey="value"
+                              fill="#e2e8f0"
+                              stroke="none"
+                            />
+                            <Pie
+                              data={[{ value: repeatCustomerRate[0]?.value || 0 }]}
+                              cx="50%"
+                              cy="50%"
+                              startAngle={90}
+                              endAngle={90 - (repeatCustomerRate[0]?.value || 0) * 3.6}
+                              innerRadius={65}
+                              outerRadius={80}
+                              dataKey="value"
+                              fill={repeatCustomerColor}
+                              stroke="none"
+                              cornerRadius={10}
+                            />
+                         </PieChart>
                         ) : repeatCustomerChart === 'pie' ? (
                           <PieChart>
                             <Pie
                               data={[
-                                { value: repeatCustomerRate[0]?.value || 0 },
-                                { value: 100 - (repeatCustomerRate[0]?.value || 0) }
+                                { name: 'Returning', value: 35, fill: '#3b82f6' },
+                                { name: 'New', value: 25, fill: '#f59e0b' },
+                                { name: 'Referral', value: 20, fill: '#10b981' },
+                                { name: 'Guest', value: 20, fill: '#8b5cf6' }
                               ]}
                               cx="50%"
                               cy="70%"
                               startAngle={180}
                               endAngle={0}
-                              innerRadius={60}
+                              innerRadius={0}
                               outerRadius={80}
-                              paddingAngle={5}
+                              paddingAngle={2}
                               dataKey="value"
+                              isAnimationActive={true}
                             >
-                              <Cell fill={repeatCustomerColor} />
-                              <Cell fill="#e2e8f0" />
+                              {/* Cells are handled by data fill */}
                             </Pie>
+                            <Tooltip content={<CustomPieTooltip />} />
+                            <text x="50%" y="85%" textAnchor="middle" fill="#94a3b8" fontSize={12}>
+                              Breakdown
+                            </text>
                           </PieChart>
                         ) : (
-                          // Gauge Style (Simple Pie variant)
+                          // Gauge Style
                           <PieChart>
                             <Pie
                               data={[
-                                { value: repeatCustomerRate[0]?.value || 0 },
-                                { value: 100 - (repeatCustomerRate[0]?.value || 0) }
+                                { name: 'Low', value: 33, fill: '#ef4444' }, // Low
+                                { name: 'Mid', value: 33, fill: '#eab308' }, // Mid
+                                { name: 'High', value: 34, fill: '#22c55e' }  // High
                               ]}
                               cx="50%"
                               cy="70%"
                               startAngle={180}
                               endAngle={0}
-                              innerRadius={60}
+                              innerRadius={50}
                               outerRadius={80}
-                              paddingAngle={0}
+                              paddingAngle={5}
                               dataKey="value"
                               stroke="none"
+                              isAnimationActive={true}
                             >
-                              <Cell fill={repeatCustomerColor} />
-                              <Cell fill="#e2e8f0" />
+                              {/* Cells handled by data fill */}
                             </Pie>
+                            <Tooltip content={<CustomPieTooltip />} />
+                            {renderNeedle(repeatCustomerRate[0]?.value || 0, 100, 112, 50, 80, repeatCustomerColor)}
+                            <text x="20%" y="90%" textAnchor="middle" fill="#94a3b8" fontSize={10}>Low</text>
+                            <text x="80%" y="90%" textAnchor="middle" fill="#94a3b8" fontSize={10}>High</text>
                           </PieChart>
                         )}
                        </ResponsiveContainer>
-                       {/* Center Text */}
-                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-2 text-center">
-                         <div className="text-3xl font-bold text-slate-800 dark:text-white" style={{ color: repeatCustomerColor }}>68%</div>
-                         <div className="text-xs text-slate-400 mt-1">On track for 80% target</div>
-                       </div>
+                       {/* Center Text (Hide for Pie/Gauge) */}
+                       {repeatCustomerChart === 'radial' && (
+                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                           <div className="text-3xl font-bold text-slate-800 dark:text-white" style={{ color: repeatCustomerColor }}>68%</div>
+                           <div className="text-xs text-slate-400 mt-1">On track</div>
+                         </div>
+                       )}
                      </div>
                      <button className="mt-2 px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors">
                        Show details
@@ -407,7 +455,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
                    <NoData message="No customer data" />
                  )}
               </div>
-            </div>
+              </div>
           </div>
 
           {/* AI Assistant */}
