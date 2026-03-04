@@ -34,6 +34,8 @@ export type CardStyle = 'default' | 'flat' | 'bordered' | 'glass' | 'neo';
 
 export type TableStyle = 'default' | 'modern' | 'compact' | 'bordered';
 
+export type LocationViewMode = 'split' | 'map' | 'list';
+
 export type ChartType = 'area' | 'bar' | 'line' | 'composed';
 
 export interface CardConfig {
@@ -92,4 +94,8 @@ export interface AppContextType {
   setOrdersPerPage: (num: number) => void;
   cardConfigs: Record<string, CardConfig>;
   updateCardConfig: (id: string, config: Partial<CardConfig>) => void;
+  locationViewMode: LocationViewMode;
+  setLocationViewMode: (mode: LocationViewMode) => void;
+  locationVisual: CardStyle;
+  setLocationVisual: (style: CardStyle) => void;
 }

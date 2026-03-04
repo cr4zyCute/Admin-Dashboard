@@ -80,8 +80,6 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
     >
       {showSettings && enableCustomization && (
         <TableSettingsOverlay 
-          itemsPerPage={ordersPerPage}
-          setItemsPerPage={setOrdersPerPage}
           tableStyle={orderTableStyle}
           setTableStyle={setOrderTableStyle}
           onClose={() => setShowSettings(false)}

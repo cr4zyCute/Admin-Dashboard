@@ -12,11 +12,12 @@ import {
 import { useAppContext } from '../../../context/AppContext';
 import { cn } from '../../../lib/utils';
 
-import { 
-  pageViews as mockPageViews, 
-  visitors as mockVisitors, 
-  clicks as mockClicks, 
-  orders as mockOrders, 
+import MetricCard from './MetricCard'; 
+  import { 
+    pageViews as mockPageViews, 
+    visitors as mockVisitors, 
+    clicks as mockClicks, 
+    orders as mockOrders, 
   totalProfit as mockTotalProfit, 
   totalProfitChange as mockTotalProfitChange, 
   weeklyData as mockWeeklyData, 
@@ -41,13 +42,17 @@ import {
 } from '../../../data/mockData';
 
 // Shared Components
-import MetricCard from './MetricCard';
+import { 
+  CustomizationOverlay,
+  RepeatCustomerSettingsOverlay 
+} from './Overlays';
+import { useState } from 'react';
 import TotalProfitCard from './TotalProfitCard';
 import MostActiveCard from './MostActiveCard';
 import ProductsTable from './ProductsTable';
 import OrdersTable from './OrdersTable';
 import RevenueLocationCard from './RevenueLocationCard';
-import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
+import { RadialBarChart, RadialBar, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 // NoData Component
 const NoData = ({ message }: { message?: string }) => (
@@ -65,7 +70,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
     dataState, 
     cardStyle, 
     chartType, 
-    randomSeed
+    randomSeed,
+    productTableStyle
   } = useAppContext();
   
   // Random Data Generation
@@ -105,12 +111,19 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
     };
   }, [dataState, randomSeed]);
 
+  const [repeatCustomerChart, setRepeatCustomerChart] = useState<'radial' | 'pie' | 'gauge'>('radial');
+  const [repeatCustomerColor, setRepeatCustomerColor] = useState('#10b981'); // Default Emerald
+  const [showRepeatSettings, setShowRepeatSettings] = useState(false);
+
   // Card Style Helper
-  const getCardClass = (additionalClasses = "") => {
+  const getCardClass = (additionalClasses = "", style = cardStyle) => {
     const base = "p-6 transition-all duration-300";
     let styleClass = "";
     
-    switch (cardStyle) {
+    // Use custom style if provided, otherwise default to global cardStyle
+    const currentStyle = style === 'default' && cardStyle !== 'default' ? cardStyle : style;
+    
+    switch (currentStyle) {
       case 'flat':
         styleClass = "bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700";
         break;
@@ -279,54 +292,121 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"
       >
         
-        {/* Best Selling Products Table (2/3 width) */}
-        <ProductsTable products={products} enableCustomization={enableCustomization} />
+        {/* Left Column Stack (2/3 width) */}
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          {/* Best Selling Products Table */}
+          <ProductsTable products={products} enableCustomization={enableCustomization} />
+
+          {/* Recent Orders Table (Only if Compact) */}
+          {productTableStyle === 'compact' && (
+            <OrdersTable orders={recentOrders} enableCustomization={enableCustomization} />
+          )}
+        </div>
 
         {/* Right Column Stack (1/3 width) */}
         <div className="lg:col-span-1 flex flex-col gap-6 h-fit">
           
           {/* Repeat Customer Rate */}
-          <div className={getCardClass()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-slate-800 dark:text-white">Repeat Customer Rate</h3>
-            </div>
-            
-            <div className="flex flex-col items-center justify-center relative">
-               {repeatCustomerRate && repeatCustomerRate.length > 0 ? (
-                 <>
-                   <div className="w-[200px] h-[160px] relative flex justify-center">
-                     <ResponsiveContainer width="100%" height="100%">
-                       <RadialBarChart 
-                          innerRadius="80%" 
-                          outerRadius="100%" 
-                          data={repeatCustomerRate} 
-                          startAngle={180} 
-                          endAngle={0}
-                       >
-                         <RadialBar
-                           background
-                           dataKey="value"
-                           cornerRadius={30}
-                           fill="#10b981"
-                         />
-                       </RadialBarChart>
-                     </ResponsiveContainer>
-                     {/* Center Text */}
-                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-2 text-center">
-                       <div className="text-3xl font-bold text-slate-800 dark:text-white">68%</div>
-                       <div className="text-xs text-slate-400 mt-1">On track for 80% target</div>
+          <div 
+            className={getCardClass("relative group")}
+            onMouseEnter={() => enableCustomization && setShowRepeatSettings(true)}
+            onMouseLeave={() => setShowRepeatSettings(false)}
+          >
+            {showRepeatSettings && enableCustomization && (
+              <RepeatCustomerSettingsOverlay 
+                chartType={repeatCustomerChart}
+                setChartType={setRepeatCustomerChart}
+                graphColor={repeatCustomerColor}
+                setGraphColor={setRepeatCustomerColor}
+                onClose={() => setShowRepeatSettings(false)}
+              />
+            )}
+            <div className={cn("transition-all duration-300", showRepeatSettings ? "blur-sm" : "")}>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-slate-800 dark:text-white">Repeat Customer Rate</h3>
+              </div>
+              
+              <div className="flex flex-col items-center justify-center relative">
+                 {repeatCustomerRate && repeatCustomerRate.length > 0 ? (
+                   <>
+                     <div className="w-[200px] h-[160px] relative flex justify-center">
+                       <ResponsiveContainer width="100%" height="100%">
+                        {repeatCustomerChart === 'radial' ? (
+                         <RadialBarChart 
+                            innerRadius="80%" 
+                            outerRadius="100%" 
+                            data={repeatCustomerRate} 
+                            startAngle={180} 
+                            endAngle={0}
+                         >
+                           <RadialBar
+                             background
+                             dataKey="value"
+                             cornerRadius={30}
+                             fill={repeatCustomerColor}
+                           />
+                         </RadialBarChart>
+                        ) : repeatCustomerChart === 'pie' ? (
+                          <PieChart>
+                            <Pie
+                              data={[
+                                { value: repeatCustomerRate[0]?.value || 0 },
+                                { value: 100 - (repeatCustomerRate[0]?.value || 0) }
+                              ]}
+                              cx="50%"
+                              cy="70%"
+                              startAngle={180}
+                              endAngle={0}
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={5}
+                              dataKey="value"
+                            >
+                              <Cell fill={repeatCustomerColor} />
+                              <Cell fill="#e2e8f0" />
+                            </Pie>
+                          </PieChart>
+                        ) : (
+                          // Gauge Style (Simple Pie variant)
+                          <PieChart>
+                            <Pie
+                              data={[
+                                { value: repeatCustomerRate[0]?.value || 0 },
+                                { value: 100 - (repeatCustomerRate[0]?.value || 0) }
+                              ]}
+                              cx="50%"
+                              cy="70%"
+                              startAngle={180}
+                              endAngle={0}
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={0}
+                              dataKey="value"
+                              stroke="none"
+                            >
+                              <Cell fill={repeatCustomerColor} />
+                              <Cell fill="#e2e8f0" />
+                            </Pie>
+                          </PieChart>
+                        )}
+                       </ResponsiveContainer>
+                       {/* Center Text */}
+                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-2 text-center">
+                         <div className="text-3xl font-bold text-slate-800 dark:text-white" style={{ color: repeatCustomerColor }}>68%</div>
+                         <div className="text-xs text-slate-400 mt-1">On track for 80% target</div>
+                       </div>
                      </div>
-                   </div>
-                   <button className="mt-2 px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors">
-                     Show details
-                   </button>
-                 </>
-               ) : (
-                 <NoData message="No customer data" />
-               )}
+                     <button className="mt-2 px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors">
+                       Show details
+                     </button>
+                   </>
+                 ) : (
+                   <NoData message="No customer data" />
+                 )}
+              </div>
             </div>
           </div>
 
@@ -374,23 +454,24 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
             dataState={dataState} 
             revenueLocationCard={revenueLocationCardData} 
             locations={locations} 
+            enableCustomization={enableCustomization}
           />
 
         </div>
       </motion.div>
-      {/* 4. New Bottom Section Grid (Orders) */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-        className="grid grid-cols-1 gap-6"
-      >
-        
-        {/* Recent Orders Table (Full Width) */}
-        <OrdersTable orders={recentOrders} enableCustomization={enableCustomization} />
 
-      </motion.div>
+      {/* 4. Full Width Recent Orders (Only if NOT Compact) */}
+      {productTableStyle !== 'compact' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="grid grid-cols-1 gap-6"
+        >
+          <OrdersTable orders={recentOrders} enableCustomization={enableCustomization} />
+        </motion.div>
+      )}
     </div>
   );
 };

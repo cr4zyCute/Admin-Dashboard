@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme, CardStyle, ChartType, TableStyle } from '../types';
+import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme, CardStyle, ChartType, TableStyle, LocationViewMode } from '../types';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -48,12 +48,22 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const [productsPerPage, setProductsPerPage] = useState(() => {
     const saved = localStorage.getItem('productsPerPage');
-    return saved ? parseInt(saved, 10) : 5;
+    return saved ? parseInt(saved, 10) : 10;
   });
 
   const [ordersPerPage, setOrdersPerPage] = useState(() => {
     const saved = localStorage.getItem('ordersPerPage');
-    return saved ? parseInt(saved, 10) : 5;
+    return saved ? parseInt(saved, 10) : 10;
+  });
+
+  const [locationViewMode, setLocationViewMode] = useState<LocationViewMode>(() => {
+    const saved = localStorage.getItem('locationViewMode');
+    return (saved as LocationViewMode) || 'split';
+  });
+
+  const [locationVisual, setLocationVisual] = useState<CardStyle>(() => {
+    const saved = localStorage.getItem('locationVisual');
+    return (saved as CardStyle) || 'default';
   });
 
   // Card Configs
@@ -131,6 +141,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.setItem('ordersPerPage', ordersPerPage.toString());
   }, [ordersPerPage]);
 
+  useEffect(() => {
+    localStorage.setItem('locationViewMode', locationViewMode);
+  }, [locationViewMode]);
+
+  useEffect(() => {
+    localStorage.setItem('locationVisual', locationVisual);
+  }, [locationVisual]);
+
   // Cross-Tab Synchronization
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -144,6 +162,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       if (e.key === 'orderTableStyle' && e.newValue) setOrderTableStyle(e.newValue as TableStyle);
       if (e.key === 'productsPerPage' && e.newValue) setProductsPerPage(parseInt(e.newValue, 10));
       if (e.key === 'ordersPerPage' && e.newValue) setOrdersPerPage(parseInt(e.newValue, 10));
+      if (e.key === 'locationViewMode' && e.newValue) setLocationViewMode(e.newValue as LocationViewMode);
+      if (e.key === 'locationVisual' && e.newValue) setLocationVisual(e.newValue as CardStyle);
       if (e.key === 'cardConfigs' && e.newValue) setCardConfigs(JSON.parse(e.newValue));
     };
 
@@ -261,6 +281,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setOrdersPerPage,
         cardConfigs,
         updateCardConfig,
+        locationViewMode,
+        setLocationViewMode,
+        locationVisual,
+        setLocationVisual,
       }}
     >
       {children}

@@ -225,8 +225,6 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products, enableCustomiza
 
       {showSettings && enableCustomization && (
         <TableSettingsOverlay 
-          itemsPerPage={productsPerPage}
-          setItemsPerPage={setProductsPerPage}
           tableStyle={productTableStyle}
           setTableStyle={setProductTableStyle}
           onClose={() => setShowSettings(false)}
