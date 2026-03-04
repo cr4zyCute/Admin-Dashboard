@@ -36,10 +36,39 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return (saved as ChartType) || 'area';
   });
 
-  const [productTableStyle, setProductTableStyle] = useState<TableStyle>('default');
-  const [orderTableStyle, setOrderTableStyle] = useState<TableStyle>('default');
-  const [productsPerPage, setProductsPerPage] = useState(5);
-  const [ordersPerPage, setOrdersPerPage] = useState(5);
+  const [productTableStyle, setProductTableStyle] = useState<TableStyle>(() => {
+    const saved = localStorage.getItem('productTableStyle');
+    return (saved as TableStyle) || 'default';
+  });
+
+  const [orderTableStyle, setOrderTableStyle] = useState<TableStyle>(() => {
+    const saved = localStorage.getItem('orderTableStyle');
+    return (saved as TableStyle) || 'default';
+  });
+
+  const [productsPerPage, setProductsPerPage] = useState(() => {
+    const saved = localStorage.getItem('productsPerPage');
+    return saved ? parseInt(saved, 10) : 5;
+  });
+
+  const [ordersPerPage, setOrdersPerPage] = useState(() => {
+    const saved = localStorage.getItem('ordersPerPage');
+    return saved ? parseInt(saved, 10) : 5;
+  });
+
+  // Card Configs
+  const [cardConfigs, setCardConfigs] = useState<Record<string, { chartType?: ChartType; chartColor?: string }>>(() => {
+    const saved = localStorage.getItem('cardConfigs');
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const updateCardConfig = (id: string, config: Partial<{ chartType?: ChartType; chartColor?: string }>) => {
+    setCardConfigs(prev => {
+      const updated = { ...prev, [id]: { ...prev[id], ...config } };
+      localStorage.setItem('cardConfigs', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   // Apply Theme Mode
   useEffect(() => {
@@ -83,6 +112,44 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     localStorage.setItem('chartType', chartType);
   }, [chartType]);
+
+  // Persist Product Table Settings
+  useEffect(() => {
+    localStorage.setItem('productTableStyle', productTableStyle);
+  }, [productTableStyle]);
+
+  useEffect(() => {
+    localStorage.setItem('productsPerPage', productsPerPage.toString());
+  }, [productsPerPage]);
+
+  // Persist Order Table Settings
+  useEffect(() => {
+    localStorage.setItem('orderTableStyle', orderTableStyle);
+  }, [orderTableStyle]);
+
+  useEffect(() => {
+    localStorage.setItem('ordersPerPage', ordersPerPage.toString());
+  }, [ordersPerPage]);
+
+  // Cross-Tab Synchronization
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'themeMode' && e.newValue) setThemeMode(e.newValue as ThemeMode);
+      if (e.key === 'colorTheme' && e.newValue) setColorTheme(e.newValue as ColorTheme);
+      if (e.key === 'layoutTheme' && e.newValue) setLayoutTheme(e.newValue as LayoutTheme);
+      if (e.key === 'cardStyle' && e.newValue) setCardStyle(e.newValue as CardStyle);
+      if (e.key === 'chartType' && e.newValue) setChartType(e.newValue as ChartType);
+      
+      if (e.key === 'productTableStyle' && e.newValue) setProductTableStyle(e.newValue as TableStyle);
+      if (e.key === 'orderTableStyle' && e.newValue) setOrderTableStyle(e.newValue as TableStyle);
+      if (e.key === 'productsPerPage' && e.newValue) setProductsPerPage(parseInt(e.newValue, 10));
+      if (e.key === 'ordersPerPage' && e.newValue) setOrdersPerPage(parseInt(e.newValue, 10));
+      if (e.key === 'cardConfigs' && e.newValue) setCardConfigs(JSON.parse(e.newValue));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const [user] = useState<User | null>({
     name: 'David Dev',
@@ -192,6 +259,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setProductsPerPage,
         ordersPerPage,
         setOrdersPerPage,
+        cardConfigs,
+        updateCardConfig,
       }}
     >
       {children}

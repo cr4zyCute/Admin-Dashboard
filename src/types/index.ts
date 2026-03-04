@@ -36,6 +36,11 @@ export type TableStyle = 'default' | 'striped' | 'compact' | 'bordered';
 
 export type ChartType = 'area' | 'bar' | 'line' | 'composed';
 
+export interface CardConfig {
+  chartType?: ChartType;
+  chartColor?: string;
+}
+
 // Menu Interface
 export interface MenuItem {
   id: string;
@@ -85,4 +90,6 @@ export interface AppContextType {
   setProductsPerPage: (num: number) => void;
   ordersPerPage: number;
   setOrdersPerPage: (num: number) => void;
+  cardConfigs: Record<string, CardConfig>;
+  updateCardConfig: (id: string, config: Partial<CardConfig>) => void;
 }
