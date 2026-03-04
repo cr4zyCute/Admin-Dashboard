@@ -147,52 +147,146 @@ const MetricCard: React.FC<MetricCardProps> = ({
   dataKey,
   chartType
 }) => {
+  const [localCardStyle, setLocalCardStyle] = useState<string | null>(null);
+  const [localChartType, setLocalChartType] = useState<ChartType | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const { cardStyle: globalCardStyle, chartType: globalChartType } = useAppContext();
+
+  // Use local state if set, otherwise fallback to global/props
+  const activeCardStyle = localCardStyle || 'default'; // This is just for class derivation, global is handled by context but here we want local override visual
+  const activeChartType = localChartType || chartType;
+
+  // We need to re-derive card class based on local style if present
+  const getLocalCardClass = () => {
+    const base = "p-6 transition-all duration-300";
+    let styleClass = "";
+    const styleToUse = localCardStyle || globalCardStyle; // Prioritize local, then global
+    
+    switch (styleToUse) {
+      case 'flat':
+        styleClass = "bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700";
+        break;
+      case 'bordered':
+        styleClass = "bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700";
+        break;
+      case 'glass':
+        styleClass = "bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg";
+        break;
+      case 'neo':
+        styleClass = "bg-slate-100 dark:bg-slate-800 rounded-2xl shadow-[8px_8px_16px_#d1d5db,-8px_-8px_16px_#ffffff] dark:shadow-[8px_8px_16px_#0f172a,-8px_-8px_16px_#1e293b] border-none";
+        break;
+      default:
+        styleClass = "bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700";
+    }
+    return cn(base, styleClass, "relative group/card overflow-hidden");
+  };
+
   return (
-    <div className={cardClass}>
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="font-bold text-slate-700 dark:text-slate-200">{title}</h3>
-        <div className="flex items-center gap-2">
-          <div className={`p-2 rounded-lg ${iconColorClass}`}>
-            {icon}
+    <div 
+      className={getLocalCardClass()}
+      onMouseEnter={() => setShowSettings(true)}
+      onMouseLeave={() => setShowSettings(false)}
+    >
+      {/* Content Wrapper with Blur Effect */}
+      <div className={cn("transition-all duration-300 h-full flex flex-col", showSettings ? "blur-sm" : "")}>
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="font-bold text-slate-700 dark:text-slate-200">{title}</h3>
+          <div className="flex items-center gap-2">
+            <div className={`p-2 rounded-lg ${iconColorClass}`}>
+              {icon}
+            </div>
           </div>
         </div>
+        
+        <div className="flex items-baseline gap-2 mb-2">
+          <CountUp end={value} className="text-3xl font-bold text-slate-800 dark:text-white" />
+          <span className={`flex items-center text-xs font-bold px-1.5 py-0.5 rounded ${trend === 'up' ? 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10' : 'text-red-500 bg-red-50 dark:bg-red-500/10'}`}>
+            <TrendingUp className={`w-3 h-3 mr-1 ${trend === 'down' ? 'rotate-180' : ''}`} /> {change}%
+          </span>
+        </div>
+        
+        <div className="h-10 w-full mb-2 flex-1 min-h-[40px]">
+          {data && data.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              {activeChartType === 'bar' ? (
+                <BarChart data={data}>
+                  <Bar dataKey={dataKey} fill={chartColor} radius={[2, 2, 2, 2]} />
+                </BarChart>
+              ) : activeChartType === 'line' ? (
+                <LineChart data={data}>
+                  <Line type="monotone" dataKey={dataKey} stroke={chartColor} strokeWidth={2} dot={false} />
+                </LineChart>
+              ) : (
+                <AreaChart data={data}>
+                  <defs>
+                    <linearGradient id={`gradient-${title.replace(/\s+/g, '-')}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={chartColor} stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey={dataKey} stroke={chartColor} strokeWidth={2} fillOpacity={1} fill={`url(#gradient-${title.replace(/\s+/g, '-')})`} />
+                </AreaChart>
+              )}
+            </ResponsiveContainer>
+          ) : (
+            <NoData size="small" />
+          )}
+        </div>
+        <p className="text-xs text-slate-400 mt-auto">{subText}</p>
       </div>
-      
-      <div className="flex items-baseline gap-2 mb-2">
-        <CountUp end={value} className="text-3xl font-bold text-slate-800 dark:text-white" />
-        <span className={`flex items-center text-xs font-bold px-1.5 py-0.5 rounded ${trend === 'up' ? 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10' : 'text-red-500 bg-red-50 dark:bg-red-500/10'}`}>
-          <TrendingUp className={`w-3 h-3 mr-1 ${trend === 'down' ? 'rotate-180' : ''}`} /> {change}%
-        </span>
-      </div>
-      
-      <div className="h-10 w-full mb-2">
-        {data && data.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            {chartType === 'bar' ? (
-              <BarChart data={data}>
-                <Bar dataKey={dataKey} fill={chartColor} radius={[2, 2, 2, 2]} />
-              </BarChart>
-            ) : chartType === 'line' ? (
-              <LineChart data={data}>
-                <Line type="monotone" dataKey={dataKey} stroke={chartColor} strokeWidth={2} dot={false} />
-              </LineChart>
-            ) : (
-              <AreaChart data={data}>
-                <defs>
-                  <linearGradient id={`gradient-${title.replace(/\s+/g, '-')}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={chartColor} stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <Area type="monotone" dataKey={dataKey} stroke={chartColor} strokeWidth={2} fillOpacity={1} fill={`url(#gradient-${title.replace(/\s+/g, '-')})`} />
-              </AreaChart>
-            )}
-          </ResponsiveContainer>
-        ) : (
-          <NoData size="small" />
-        )}
-      </div>
-      <p className="text-xs text-slate-400">{subText}</p>
+
+      {/* Customization Overlay - Centered */}
+      {showSettings && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+        >
+          <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md pointer-events-auto">
+            <div className="flex flex-col gap-3">
+              {/* Chart Type Selection */}
+              <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                {['area', 'bar', 'line'].map((type) => (
+                  <button 
+                    key={type}
+                    onClick={() => setLocalChartType(type as ChartType)}
+                    className={cn(
+                      "p-1.5 rounded-md transition-all",
+                      activeChartType === type 
+                        ? "bg-white dark:bg-slate-700 shadow-sm text-primary-600 dark:text-primary-400" 
+                        : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    )}
+                    title={`${type.charAt(0).toUpperCase() + type.slice(1)} Chart`}
+                  >
+                    {type === 'area' && <Activity className="w-4 h-4" />}
+                    {type === 'bar' && <BarChart2 className="w-4 h-4" />}
+                    {type === 'line' && <LineChartIcon className="w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+
+              {/* Card Style Selection (Color/Theme) */}
+              <div className="flex gap-2 justify-center">
+                 <button 
+                   onClick={() => setLocalCardStyle('default')}
+                   className={cn("w-6 h-6 rounded-full bg-white border border-slate-200 shadow-sm", (localCardStyle === 'default' || (!localCardStyle && globalCardStyle === 'default')) ? "ring-2 ring-primary-500 ring-offset-2" : "")}
+                   title="Default White"
+                 />
+                 <button 
+                   onClick={() => setLocalCardStyle('flat')}
+                   className={cn("w-6 h-6 rounded-full bg-slate-50 border border-slate-200", (localCardStyle === 'flat' || (!localCardStyle && globalCardStyle === 'flat')) ? "ring-2 ring-primary-500 ring-offset-2" : "")}
+                   title="Flat Gray"
+                 />
+                 <button 
+                   onClick={() => setLocalCardStyle('neo')}
+                   className={cn("w-6 h-6 rounded-full bg-slate-100 shadow-inner", (localCardStyle === 'neo' || (!localCardStyle && globalCardStyle === 'neo')) ? "ring-2 ring-primary-500 ring-offset-2" : "")}
+                   title="Neumorphism"
+                 />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };

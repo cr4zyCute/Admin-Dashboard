@@ -105,6 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, activeRoute, isMobile, o
               
               <div className="space-y-0.5 px-3">
                 {section.items.map((item) => {
+                  // Hide "Home" link if not in customization mode
+                  if (item.id === 'home' && !isCustomizationMode) return null;
+
                   const isActive = activeRoute === item.route || activeRoute.startsWith(item.route + '/');
                   const hasSubItems = item.subItems && item.subItems.length > 0;
                   const isExpanded = expandedMenus.includes(item.id);

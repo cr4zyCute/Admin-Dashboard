@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import MainLayout from './components/layout/MainLayout';
-import Dashboard from './pages/dashboard/Overview';
 
 // Dashboard pages
 import Analytics from './pages/dashboard/Analytics';
@@ -96,8 +95,8 @@ function App() {
       <Router>
         <Routes>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Navigate to="/customization" replace />} />
+            <Route path="/dashboard" element={<Navigate to="/dashboard/analytics" replace />} />
             
             {/* Customization Routes */}
             <Route path="/customization" element={<CustomHome />} />

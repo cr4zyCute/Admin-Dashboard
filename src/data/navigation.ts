@@ -54,7 +54,7 @@ export const MENU_ITEMS: MenuSection[] = [
         id: 'dashboard', 
         label: 'Dashboards', 
         icon: LayoutDashboard, 
-        route: '/dashboard',
+        route: '/dashboard/analytics',
         subItems: [
           { id: 'analytics', label: 'Analytics', icon: PieChart, route: '/dashboard/analytics' },
           { id: 'ecommerce-dash', label: 'Ecommerce', icon: ShoppingCart, route: '/dashboard/ecommerce' },
