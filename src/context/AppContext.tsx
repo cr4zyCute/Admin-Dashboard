@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme, CardStyle, ChartType } from '../types';
+import { AppContextType, Notification, User, ThemeMode, ColorTheme, LayoutTheme, CardStyle, ChartType, TableStyle } from '../types';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -7,6 +7,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeRoute, setActiveRoute] = useState('/dashboard');
   const [dataState, setDataState] = useState<'default' | 'alternate' | 'empty'>('default');
+  const [randomSeed, setRandomSeed] = useState(0);
   const [isThemeSettingsOpen, setIsThemeSettingsOpen] = useState(false);
   
   // Theme State
@@ -34,6 +35,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const saved = localStorage.getItem('chartType');
     return (saved as ChartType) || 'area';
   });
+
+  const [productTableStyle, setProductTableStyle] = useState<TableStyle>('default');
+  const [orderTableStyle, setOrderTableStyle] = useState<TableStyle>('default');
+  const [productsPerPage, setProductsPerPage] = useState(5);
+  const [ordersPerPage, setOrdersPerPage] = useState(5);
 
   // Apply Theme Mode
   useEffect(() => {
@@ -132,7 +138,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const toggleData = () => {
     setDataState(prev => {
       if (prev === 'default') return 'empty';
-      if (prev === 'empty') return 'alternate';
+      if (prev === 'empty') {
+        setRandomSeed(s => s + 1);
+        return 'alternate';
+      }
       return 'default';
     });
   };
@@ -161,6 +170,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         markNotificationRead,
         markAllNotificationsRead,
         dataState,
+        randomSeed,
         toggleData,
         themeMode,
         setThemeMode,
@@ -174,6 +184,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setChartType,
         isThemeSettingsOpen,
         toggleThemeSettings,
+        productTableStyle,
+        setProductTableStyle,
+        orderTableStyle,
+        setOrderTableStyle,
+        productsPerPage,
+        setProductsPerPage,
+        ordersPerPage,
+        setOrdersPerPage,
       }}
     >
       {children}

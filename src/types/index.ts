@@ -32,7 +32,9 @@ export type LayoutTheme =
 
 export type CardStyle = 'default' | 'flat' | 'bordered' | 'glass' | 'neo';
 
-export type ChartType = 'area' | 'bar' | 'line';
+export type TableStyle = 'default' | 'striped' | 'compact' | 'bordered';
+
+export type ChartType = 'area' | 'bar' | 'line' | 'composed';
 
 // Menu Interface
 export interface MenuItem {
@@ -61,6 +63,7 @@ export interface AppContextType {
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
   dataState: 'default' | 'alternate' | 'empty';
+  randomSeed: number;
   toggleData: () => void;
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
@@ -74,4 +77,12 @@ export interface AppContextType {
   setChartType: (type: ChartType) => void;
   isThemeSettingsOpen: boolean;
   toggleThemeSettings: () => void;
+  productTableStyle: TableStyle;
+  setProductTableStyle: (style: TableStyle) => void;
+  orderTableStyle: TableStyle;
+  setOrderTableStyle: (style: TableStyle) => void;
+  productsPerPage: number;
+  setProductsPerPage: (num: number) => void;
+  ordersPerPage: number;
+  setOrdersPerPage: (num: number) => void;
 }
