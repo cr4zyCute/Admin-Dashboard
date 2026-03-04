@@ -286,7 +286,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
         <ProductsTable products={products} enableCustomization={enableCustomization} />
 
         {/* Right Column Stack (1/3 width) */}
-        <div className="lg:col-span-1 flex flex-col gap-6">
+        <div className="lg:col-span-1 flex flex-col gap-6 h-fit">
           
           {/* Repeat Customer Rate */}
           <div className={getCardClass()}>
@@ -369,26 +369,26 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
              </div>
           </div>
 
+          {/* Revenue By Locations */}
+          <RevenueLocationCard 
+            dataState={dataState} 
+            revenueLocationCard={revenueLocationCardData} 
+            locations={locations} 
+          />
+
         </div>
       </motion.div>
-      {/* 4. New Bottom Section Grid (Orders, Location) */}
+      {/* 4. New Bottom Section Grid (Orders) */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 gap-6"
       >
         
-        {/* Recent Orders Table (2 cols) */}
+        {/* Recent Orders Table (Full Width) */}
         <OrdersTable orders={recentOrders} enableCustomization={enableCustomization} />
-
-        {/* Column 2: Revenue By Locations */}
-        <RevenueLocationCard 
-          dataState={dataState} 
-          revenueLocationCard={revenueLocationCardData} 
-          locations={locations} 
-        />
 
       </motion.div>
     </div>

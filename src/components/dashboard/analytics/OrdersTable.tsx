@@ -65,13 +65,30 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
   };
 
   const getCardClass = (additionalClasses = "") => {
-    const base = "p-6 transition-all duration-300 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700";
+    const base = cn(
+      "transition-all duration-300 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 relative group",
+      orderTableStyle === 'compact' ? "p-4" : "p-6"
+    );
     return cn(base, additionalClasses);
   };
 
   return (
-    <div className={getCardClass("lg:col-span-2 flex flex-col relative")}>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <div 
+      className={getCardClass("lg:col-span-2 flex flex-col relative h-fit")}
+      onMouseEnter={() => enableCustomization && setShowSettings(true)}
+      onMouseLeave={() => setShowSettings(false)}
+    >
+      {showSettings && enableCustomization && (
+        <TableSettingsOverlay 
+          itemsPerPage={ordersPerPage}
+          setItemsPerPage={setOrdersPerPage}
+          tableStyle={orderTableStyle}
+          setTableStyle={setOrderTableStyle}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+      <div className={cn("transition-all duration-300 h-full flex flex-col", showSettings ? "blur-sm" : "")}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h3 className="font-bold text-slate-800 dark:text-white">Recent Orders</h3>
           <p className="text-xs text-slate-400 mt-1">({totalItems} Transactions)</p>
@@ -90,34 +107,6 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
           </div>
 
           <div className="flex gap-2">
-            {enableCustomization && (
-              <div className="relative">
-                <button 
-                  onClick={() => setShowSettings(!showSettings)}
-                  className={cn(
-                    "p-2 rounded-lg transition-colors border h-full",
-                    showSettings 
-                      ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20" 
-                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700"
-                  )}
-                >
-                  <SlidersHorizontal className="w-4 h-4" />
-                </button>
-                
-                <AnimatePresence>
-                  {showSettings && (
-                    <TableSettingsOverlay 
-                      itemsPerPage={ordersPerPage}
-                      setItemsPerPage={setOrdersPerPage}
-                      tableStyle={orderTableStyle}
-                      setTableStyle={setOrderTableStyle}
-                      onClose={() => setShowSettings(false)}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-
             <button className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors bg-white dark:bg-slate-800">
               <Upload className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Export</span>
             </button>
@@ -129,7 +118,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
          {currentOrders && currentOrders.length > 0 ? (
            <table className={cn(
              "w-full text-left border-collapse min-w-[500px]",
-             orderTableStyle === 'bordered' ? "border border-slate-200 dark:border-slate-700" : ""
+             orderTableStyle === 'bordered' ? "border-2 border-slate-300 dark:border-slate-500" : ""
            )}>
              <thead>
                <tr className="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
@@ -149,7 +138,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
                        col.align === 'right' ? "text-right" : "text-left",
                        col.key === 'id' ? "pr-2" : "",
                        col.key === 'status' ? "pl-2" : "",
-                       orderTableStyle === 'bordered' ? "border-x border-slate-100 dark:border-slate-700 first:border-l-0 last:border-r-0" : ""
+                       orderTableStyle === 'bordered' ? "border-x-2 border-slate-200 dark:border-slate-600 first:border-l-0 last:border-r-0" : ""
                      )}
                      onClick={() => handleSort(col.key)}
                    >
@@ -172,20 +161,22 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
                  <tr 
                    key={order.id} 
                    className={cn(
-                     "group transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0",
-                     orderTableStyle === 'striped' ? "even:bg-slate-50 dark:even:bg-slate-800/30 hover:bg-blue-50/30 dark:hover:bg-blue-900/10" : "hover:bg-slate-50 dark:hover:bg-slate-700/50",
+                     "group transition-all duration-200 border-b border-slate-50 dark:border-slate-800/50 last:border-0",
+                     orderTableStyle === 'modern' 
+                       ? "hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm hover:scale-[1.01] hover:z-10 border-l-4 border-l-transparent hover:border-l-blue-500" 
+                       : "hover:bg-slate-50 dark:hover:bg-slate-700/50",
                      orderTableStyle === 'compact' ? "py-2" : "py-3"
                    )}
                  >
                    <td className={cn(
                      "pr-2 font-medium text-slate-500",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-r border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-r-2 border-slate-200 dark:border-slate-600" : ""
                    )}>{order.id}</td>
                    <td className={cn(
                      "px-2",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-x border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-x-2 border-slate-200 dark:border-slate-600" : ""
                    )}>
                      <div>
                        <p className="font-bold text-slate-700 dark:text-slate-200">{order.customer}</p>
@@ -195,22 +186,22 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
                    <td className={cn(
                      "px-2 text-slate-500",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-x border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-x-2 border-slate-200 dark:border-slate-600" : ""
                    )}>{order.date}</td>
                    <td className={cn(
                      "px-2 font-medium text-slate-700 dark:text-slate-200",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-x border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-x-2 border-slate-200 dark:border-slate-600" : ""
                    )}>{order.amount}</td>
                    <td className={cn(
                      "px-2 text-slate-500",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-x border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-x-2 border-slate-200 dark:border-slate-600" : ""
                    )}>{order.payment}</td>
                    <td className={cn(
                      "pl-2 text-right",
                      orderTableStyle === 'compact' ? "py-2" : "py-3",
-                     orderTableStyle === 'bordered' ? "border-l border-slate-50 dark:border-slate-800" : ""
+                     orderTableStyle === 'bordered' ? "border-l-2 border-slate-200 dark:border-slate-600" : ""
                    )}>
                      <span className={cn(
                        "px-2 py-0.5 rounded text-xs font-medium",
@@ -230,7 +221,10 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
          )}
       </div>
 
-      <div className="flex justify-between items-center mt-4 pt-2 border-t border-slate-100 dark:border-slate-700">
+      <div className={cn(
+        "flex justify-between items-center border-t border-slate-100 dark:border-slate-700",
+        orderTableStyle === 'compact' ? "mt-4 pt-2" : "mt-6 pt-2"
+      )}>
         <span className="text-xs text-slate-400">
           Showing {currentOrders.length > 0 ? (page - 1) * ordersPerPage + 1 : 0} to {Math.min(page * ordersPerPage, totalItems)} of {totalItems} orders
         </span>
@@ -239,6 +233,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
+      </div>
       </div>
     </div>
   );

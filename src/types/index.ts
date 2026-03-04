@@ -32,7 +32,7 @@ export type LayoutTheme =
 
 export type CardStyle = 'default' | 'flat' | 'bordered' | 'glass' | 'neo';
 
-export type TableStyle = 'default' | 'striped' | 'compact' | 'bordered';
+export type TableStyle = 'default' | 'modern' | 'compact' | 'bordered';
 
 export type ChartType = 'area' | 'bar' | 'line' | 'composed';
 

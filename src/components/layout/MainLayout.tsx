@@ -25,15 +25,18 @@ const MainLayout: React.FC = () => {
 
   // Handle responsive behavior
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
+    const checkMobile = () => {
+      // Use matchMedia to align with CSS media queries and handle scrollbars correctly
+      const isMobileView = window.matchMedia('(max-width: 1023px)').matches;
+      setIsMobile(isMobileView);
     };
     
     // Initial check
-    handleResize();
+    checkMobile();
     
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Listen for resize events
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const isCustomizationMode = location.pathname.startsWith('/customization');
