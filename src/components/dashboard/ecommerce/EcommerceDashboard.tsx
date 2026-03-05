@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { 
-  ShoppingCart, 
-  DollarSign, 
-  TrendingUp, 
-  Package, 
-  MoreHorizontal,
-  ChevronRight
-} from 'lucide-react';
+    ShoppingCart, 
+    DollarSign, 
+    TrendingUp, 
+    Package, 
+    MoreHorizontal,
+    MoreVertical,
+    ChevronRight,
+    Eye,
+    Edit,
+    FileText,
+    Trash2
+  } from 'lucide-react';
 import MetricCard from '../MetricCard';
 import { cn } from '../../../lib/utils';
 import { 
@@ -65,6 +70,16 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
 
   const recentOrdersStyle = globalOrdersStyle;
   const [showOrdersSettings, setShowOrdersSettings] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const toggleDropdown = (id: string) => {
+    setActiveDropdown(prev => prev === id ? null : id);
+  };
+
+  const handleAction = (action: string, orderId: string) => {
+    console.log(`Action ${action} triggered for order ${orderId}`);
+    setActiveDropdown(null);
+  };
 
   // Update handlers
   const handleSalesTypeChange = (type: ChartType) => {
@@ -148,7 +163,7 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
       case 'compact':
         return cn(base, "bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-none");
       case 'bordered':
-        return cn(base, "bg-white dark:bg-slate-900 rounded-xl border-2 border-slate-200 dark:border-slate-700");
+        return cn(base, "bg-white dark:bg-slate-900 rounded-xl border-2 border-black dark:border-slate-600 overflow-hidden");
       default:
         return getCardClass("overflow-hidden !p-0");
     }
@@ -399,26 +414,72 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
                 View All <ChevronRight className="w-4 h-4" />
             </button>
             </div>
-            <div className="overflow-x-auto">
-            <table className="w-full text-left">
-                <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
-                    <th className="px-6 py-4 font-semibold">Order ID</th>
-                    <th className="px-6 py-4 font-semibold">Customer</th>
-                    <th className="px-6 py-4 font-semibold">Product</th>
-                    <th className="px-4 py-4 font-semibold">Amount</th>
-                    <th className="px-6 py-4 font-semibold">Status</th>
-                    <th className="px-6 py-4 font-semibold text-right">Action</th>
+            <div className="overflow-visible">
+            <table className={cn("w-full text-left", recentOrdersStyle === 'bordered' ? "border-collapse" : "")}>
+                <thead className={cn(
+                    recentOrdersStyle === 'modern' ? "bg-transparent border-b-2 border-slate-100 dark:border-slate-800" :
+                    recentOrdersStyle === 'compact' ? "bg-slate-50 dark:bg-slate-800/50 text-xs" :
+                    recentOrdersStyle === 'bordered' ? "bg-slate-200 dark:bg-slate-800" :
+                    "bg-slate-50 dark:bg-slate-800/50"
+                )}>
+                <tr className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider">
+                    <th className={cn("font-semibold", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Order ID</th>
+                    <th className={cn("font-semibold", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Customer</th>
+                    <th className={cn("font-semibold", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Product</th>
+                    <th className={cn("font-semibold", 
+                        recentOrdersStyle === 'compact' ? "px-2 py-2" : "px-4 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Amount</th>
+                    <th className={cn("font-semibold", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Status</th>
+                    <th className={cn("font-semibold text-right", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>Action</th>
                 </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody className={cn(
+                    recentOrdersStyle === 'modern' ? "divide-y-0" : 
+                    recentOrdersStyle === 'bordered' ? "" :
+                    "divide-y divide-slate-100 dark:divide-slate-800"
+                )}>
                 {recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 text-sm font-bold text-blue-600 dark:text-blue-400">{order.id}</td>
-                    <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 font-medium">{order.customer}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{order.product}</td>
-                    <td className="px-4 py-4 text-sm font-bold text-slate-800 dark:text-white">{order.amount}</td>
-                    <td className="px-6 py-4">
+                    <tr key={order.id} className={cn(
+                        "transition-colors",
+                        recentOrdersStyle === 'modern' ? "hover:bg-slate-50 dark:hover:bg-slate-800/30 border-b border-dashed border-slate-100 dark:border-slate-800" :
+                        "hover:bg-slate-50 dark:hover:bg-slate-800/30"
+                    )}>
+                    <td className={cn("text-sm font-bold text-blue-600 dark:text-blue-400", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>{order.id}</td>
+                    <td className={cn("text-sm text-slate-700 dark:text-slate-300 font-medium", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>{order.customer}</td>
+                    <td className={cn("text-sm text-slate-600 dark:text-slate-400", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>{order.product}</td>
+                    <td className={cn("text-sm font-bold text-slate-800 dark:text-white", 
+                        recentOrdersStyle === 'compact' ? "px-2 py-2" : "px-4 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>{order.amount}</td>
+                    <td className={cn(
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>
                         <span className={cn(
                         "px-2.5 py-1 rounded-full text-xs font-bold ring-1 ring-inset",
                         order.status === 'Delivered' ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400" :
@@ -429,10 +490,57 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
                         {order.status}
                         </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                        <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                        <MoreHorizontal className="w-4 h-4 text-slate-400" />
+                    <td className={cn("text-right relative", 
+                        recentOrdersStyle === 'compact' ? "px-4 py-2" : "px-6 py-4",
+                        recentOrdersStyle === 'bordered' && "border border-black dark:border-slate-600"
+                    )}>
+                        <button 
+                          onClick={() => toggleDropdown(order.id)}
+                          className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                        <MoreVertical className="w-4 h-4 text-slate-400" />
                         </button>
+
+                        {/* Action Dropdown */}
+                        {activeDropdown === order.id && (
+                          <div className={cn(
+                            "absolute right-0 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-slate-700 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200",
+                            // Smart positioning: if it's one of the last 2 items, show above (bottom-full), else show below (mt-2)
+                            recentOrders.indexOf(order) >= recentOrders.length - 2 ? "bottom-full mb-2" : "mt-2"
+                          )}>
+                            <div className="p-1">
+                              <button 
+                                onClick={() => handleAction('view', order.id)}
+                                className="w-full text-left px-3 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg flex items-center gap-3 transition-colors group"
+                              >
+                                <Eye className="w-4 h-4 text-slate-400 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400 transition-colors" />
+                                <span className="font-medium">View Details</span>
+                              </button>
+                              <button 
+                                onClick={() => handleAction('edit', order.id)}
+                                className="w-full text-left px-3 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg flex items-center gap-3 transition-colors group"
+                              >
+                                <Edit className="w-4 h-4 text-slate-400 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400 transition-colors" />
+                                <span className="font-medium">Edit Order</span>
+                              </button>
+                              <button 
+                                onClick={() => handleAction('invoice', order.id)}
+                                className="w-full text-left px-3 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg flex items-center gap-3 transition-colors group"
+                              >
+                                <FileText className="w-4 h-4 text-slate-400 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400 transition-colors" />
+                                <span className="font-medium">Download Invoice</span>
+                              </button>
+                              <div className="h-px bg-slate-100 dark:bg-slate-700 my-1 mx-1"></div>
+                              <button 
+                                onClick={() => handleAction('delete', order.id)}
+                                className="w-full text-left px-3 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg flex items-center gap-3 transition-colors group"
+                              >
+                                <Trash2 className="w-4 h-4 text-red-400 group-hover:text-red-600 dark:group-hover:text-red-300 transition-colors" />
+                                <span className="font-medium">Delete Order</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
                     </td>
                     </tr>
                 ))}
