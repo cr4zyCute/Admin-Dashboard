@@ -43,7 +43,8 @@ import MetricCard from './MetricCard';
 
 // Shared Components
 import { 
-  CustomizationOverlay
+  CustomizationOverlay,
+  RepeatCustomerSettingsOverlay
 } from './Overlays';
 import { useState } from 'react';
 import TotalProfitCard from './TotalProfitCard';
@@ -71,11 +72,36 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
     chartType, 
     randomSeed,
     productTableStyle,
-    repeatCustomerChart,
-    setRepeatCustomerChart,
-    repeatCustomerColor,
-    setRepeatCustomerColor
+    repeatCustomerChart: globalChart,
+    setRepeatCustomerChart: setGlobalChart,
+    repeatCustomerColor: globalColor,
+    setRepeatCustomerColor: setGlobalColor
   } = useAppContext();
+
+  // Local state for immediate feedback, synced with global
+  const [repeatCustomerChart, setRepeatCustomerChart] = useState(globalChart);
+  const [repeatCustomerColor, setRepeatCustomerColor] = useState(globalColor);
+
+  // Sync local state when global changes (e.g. from Theme Settings)
+  React.useEffect(() => {
+    setRepeatCustomerChart(globalChart);
+  }, [globalChart]);
+
+  React.useEffect(() => {
+    setRepeatCustomerColor(globalColor);
+  }, [globalColor]);
+
+  // Wrapper to update both
+  const handleChartChange = (type: 'radial' | 'pie' | 'gauge') => {
+    setRepeatCustomerChart(type);
+    setGlobalChart(type);
+  };
+
+  const handleColorChange = (color: string) => {
+    setRepeatCustomerColor(color);
+    setGlobalColor(color);
+  };
+  const [showRepeatSettings, setShowRepeatSettings] = useState(false);
   
   // Random Data Generation
   const randomData = useMemo(() => {
@@ -347,9 +373,22 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ enableCustomiza
         <div className="lg:col-span-1 flex flex-col gap-6 h-fit">
           
           {/* Repeat Customer Rate */}
-          <div className={getCardClass("relative group")}>
-              <div className={cn("transition-all duration-300")}>
-                <div className="flex justify-between items-center mb-4">
+          <div 
+            className={getCardClass("relative group")}
+            onMouseEnter={() => enableCustomization && setShowRepeatSettings(true)}
+            onMouseLeave={() => setShowRepeatSettings(false)}
+          >
+            {showRepeatSettings && enableCustomization && (
+              <RepeatCustomerSettingsOverlay 
+                chartType={repeatCustomerChart}
+                setChartType={handleChartChange}
+                graphColor={repeatCustomerColor}
+                setGraphColor={handleColorChange}
+                onClose={() => setShowRepeatSettings(false)}
+              />
+            )}
+            <div className={cn("transition-all duration-300", showRepeatSettings ? "blur-sm" : "")}>
+              <div className="flex justify-between items-center mb-4">
                 <h3 className="font-bold text-slate-800 dark:text-white">Repeat Customer Rate</h3>
               </div>
               
