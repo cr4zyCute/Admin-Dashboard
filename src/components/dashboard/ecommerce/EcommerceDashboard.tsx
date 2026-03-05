@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { 
     ShoppingCart, 
     DollarSign, 
@@ -7,6 +8,7 @@ import {
     MoreHorizontal,
     MoreVertical,
     ChevronRight,
+    ChevronDown,
     Eye,
     Edit,
     FileText,
@@ -43,6 +45,8 @@ interface EcommerceDashboardProps {
 const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomization = false }) => {
   const { 
     cardStyle,
+    dataState,
+    randomSeed,
     ecommerceSalesChartType: globalSalesType,
     setEcommerceSalesChartType: setGlobalSalesType,
     ecommerceSalesChartColor: globalSalesColor,
@@ -81,6 +85,31 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
     setActiveDropdown(null);
   };
 
+  const [showSalesPeriodDropdown, setShowSalesPeriodDropdown] = useState(false);
+  const [salesPeriod, setSalesPeriod] = useState('Last 30 Days');
+
+  const handleSalesPeriodChange = (period: string) => {
+    setSalesPeriod(period);
+    setShowSalesPeriodDropdown(false);
+  };
+
+  // Click outside to close dropdown
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeDropdown && !(event.target as Element).closest('.relative')) {
+        setActiveDropdown(null);
+      }
+      if (showSalesPeriodDropdown && !(event.target as Element).closest('.sales-period-dropdown')) {
+        setShowSalesPeriodDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [activeDropdown]);
+
   // Update handlers
   const handleSalesTypeChange = (type: ChartType) => {
     setGlobalSalesType(type);
@@ -106,7 +135,7 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
     setGlobalOrdersStyle(style);
   };
 
-  const salesData = [
+  const mockSalesData = [
     { name: 'Jan', sales: 4000, revenue: 2400 },
     { name: 'Feb', sales: 3000, revenue: 1398 },
     { name: 'Mar', sales: 5000, revenue: 9800 },
@@ -116,19 +145,80 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
     { name: 'Jul', sales: 3490, revenue: 4300 },
   ];
 
-  const categoryData = [
+  const mockCategoryData = [
     { name: 'Electronics', value: 400, mobile: 200, desktop: 150, app: 50, color: '#3b82f6' },
     { name: 'Fashion', value: 300, mobile: 180, desktop: 80, app: 40, color: '#10b981' },
     { name: 'Home', value: 300, mobile: 100, desktop: 150, app: 50, color: '#f59e0b' },
     { name: 'Beauty', value: 200, mobile: 120, desktop: 60, app: 20, color: '#ef4444' },
   ];
 
-  const recentOrders = [
+  const mockRecentOrders = [
     { id: '#ORD-7542', customer: 'Emma Watson', product: 'iPhone 15 Pro', amount: '$999.00', status: 'Delivered', date: 'Oct 24, 2023' },
     { id: '#ORD-7543', customer: 'John Doe', product: 'MacBook Air M2', amount: '$1,199.00', status: 'Processing', date: 'Oct 23, 2023' },
     { id: '#ORD-7544', customer: 'Sarah Smith', product: 'iPad Pro', amount: '$799.00', status: 'Shipped', date: 'Oct 22, 2023' },
     { id: '#ORD-7545', customer: 'Mike Johnson', product: 'Apple Watch', amount: '$399.00', status: 'Cancelled', date: 'Oct 21, 2023' },
   ];
+
+  // Empty States
+  const salesDataEmpty = mockSalesData.map(d => ({ ...d, sales: 0, revenue: 0 }));
+  const categoryDataEmpty = mockCategoryData.map(d => ({ ...d, value: 0, mobile: 0, desktop: 0, app: 0 }));
+  const recentOrdersEmpty: any[] = [];
+
+  // Random Data Generation
+  const randomData = useMemo(() => {
+    if (dataState !== 'alternate') return null;
+    
+    const getRandom = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const getRandomTrend = () => Math.random() > 0.5 ? 'up' : 'down';
+
+    return {
+        metrics: {
+            revenue: { value: `$${getRandom(100, 200)},${getRandom(100, 999)}`, change: getRandom(1, 20), trend: getRandomTrend() },
+            orders: { value: `${getRandom(1, 10)},${getRandom(100, 999)}`, change: getRandom(1, 20), trend: getRandomTrend() },
+            avgOrder: { value: `$${getRandom(20, 100)}.${getRandom(10, 99)}`, change: getRandom(1, 20), trend: getRandomTrend() },
+            products: { value: `${getRandom(1, 5)},${getRandom(100, 999)}`, change: getRandom(1, 20), trend: getRandomTrend() },
+        },
+        salesData: mockSalesData.map(d => ({ 
+            ...d, 
+            sales: getRandom(1000, 6000), 
+            revenue: getRandom(1000, 10000) 
+        })),
+        categoryData: mockCategoryData.map(d => {
+            const val = getRandom(100, 500);
+            return { 
+                ...d, 
+                value: val, 
+                mobile: Math.floor(val * 0.5), 
+                desktop: Math.floor(val * 0.3), 
+                app: Math.floor(val * 0.2) 
+            };
+        }),
+        recentOrders: mockRecentOrders.map(d => ({
+            ...d,
+            amount: `$${getRandom(100, 2000)}.00`,
+            status: ['Delivered', 'Processing', 'Shipped', 'Cancelled'][getRandom(0, 3)]
+        }))
+    };
+  }, [dataState, randomSeed]);
+
+  // Helper to select data based on state
+  const selectData = <T,>(defaultData: T, randomDataVal: T | undefined, emptyData: T): T => {
+    if (dataState === 'default') return defaultData;
+    if (dataState === 'alternate' && randomDataVal) return randomDataVal;
+    return emptyData;
+  };
+
+  // Selected Data
+  const metrics = {
+    revenue: selectData({ value: "$128,430", change: 12.5, trend: 'up' }, randomData?.metrics.revenue as any, { value: "$0", change: 0, trend: 'up' }),
+    orders: selectData({ value: "4,250", change: 8.2, trend: 'up' }, randomData?.metrics.orders as any, { value: "0", change: 0, trend: 'up' }),
+    avgOrder: selectData({ value: "$30.20", change: 2.4, trend: 'down' }, randomData?.metrics.avgOrder as any, { value: "$0.00", change: 0, trend: 'down' }),
+    products: selectData({ value: "1,240", change: 5.1, trend: 'up' }, randomData?.metrics.products as any, { value: "0", change: 0, trend: 'up' }),
+  };
+
+  const salesData = selectData(mockSalesData, randomData?.salesData, salesDataEmpty);
+  const categoryData = selectData(mockCategoryData, randomData?.categoryData, categoryDataEmpty);
+  const recentOrders = selectData(mockRecentOrders, randomData?.recentOrders, recentOrdersEmpty);
 
   // Helper for card styles (similar to AnalyticsDashboard)
   const getCardClass = (additionalClasses = "") => {
@@ -170,9 +260,14 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Ecommerce Dashboard</h1>
         </div>
@@ -184,14 +279,20 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
             Create Order
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         <MetricCard
           title="Total Revenue"
-          value="$128,430"
-          change={{ percentage: 12.5, trend: 'up' }}
+          value={metrics.revenue.value}
+          change={{ percentage: metrics.revenue.change, trend: metrics.revenue.trend as any }}
           icon={<DollarSign className="w-5 h-5" />}
           bgColor="bg-emerald-50 dark:bg-emerald-500/10"
           iconColor="text-emerald-600 dark:text-emerald-400"
@@ -199,8 +300,8 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
         />
         <MetricCard
           title="Total Orders"
-          value="4,250"
-          change={{ percentage: 8.2, trend: 'up' }}
+          value={metrics.orders.value}
+          change={{ percentage: metrics.orders.change, trend: metrics.orders.trend as any }}
           icon={<ShoppingCart className="w-5 h-5" />}
           bgColor="bg-blue-50 dark:bg-blue-500/10"
           iconColor="text-blue-600 dark:text-blue-400"
@@ -208,8 +309,8 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
         />
         <MetricCard
           title="Average Order"
-          value="$30.20"
-          change={{ percentage: 2.4, trend: 'down' }}
+          value={metrics.avgOrder.value}
+          change={{ percentage: metrics.avgOrder.change, trend: metrics.avgOrder.trend as any }}
           icon={<TrendingUp className="w-5 h-5" />}
           bgColor="bg-violet-50 dark:bg-violet-500/10"
           iconColor="text-violet-600 dark:text-violet-400"
@@ -217,17 +318,23 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
         />
         <MetricCard
           title="Total Products"
-          value="1,240"
-          change={{ percentage: 5.1, trend: 'up' }}
+          value={metrics.products.value}
+          change={{ percentage: metrics.products.change, trend: metrics.products.trend as any }}
           icon={<Package className="w-5 h-5" />}
           bgColor="bg-amber-50 dark:bg-amber-500/10"
           iconColor="text-amber-600 dark:text-amber-400"
           className={getCardClass()}
         />
-      </div>
+      </motion.div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 xl:grid-cols-3 gap-6"
+      >
         {/* Sales Overview Area Chart */}
         <div 
             className={getCardClass("xl:col-span-2")}
@@ -245,11 +352,37 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
           <div className={cn("transition-all duration-300", showSalesSettings ? "blur-sm" : "")}>
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-slate-800 dark:text-white">Sales Overview</h3>
-                <select className="bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-xs font-semibold px-3 py-1.5 focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                <option>Last 7 Days</option>
-                <option>Last 30 Days</option>
-                <option>Last 12 Months</option>
-                </select>
+                <div className="relative sales-period-dropdown">
+                  <button 
+                    onClick={() => setShowSalesPeriodDropdown(!showSalesPeriodDropdown)}
+                    className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-blue-500/20"
+                  >
+                    <span className="text-slate-700 dark:text-slate-300">{salesPeriod}</span>
+                    <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 transition-transform duration-200", showSalesPeriodDropdown && "rotate-180")} />
+                  </button>
+                  
+                  {showSalesPeriodDropdown && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                      <div className="p-1">
+                        {['Last 7 Days', 'Last 30 Days', 'Last 12 Months'].map((period) => (
+                          <button
+                            key={period}
+                            onClick={() => handleSalesPeriodChange(period)}
+                            className={cn(
+                              "w-full text-left px-3 py-2 text-xs font-medium rounded-lg transition-colors flex items-center justify-between",
+                              salesPeriod === period 
+                                ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400" 
+                                : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200"
+                            )}
+                          >
+                            {period}
+                            {salesPeriod === period && <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
             </div>
             <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -344,6 +477,9 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
                             paddingAngle={5}
                             dataKey="value"
                             label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                            isAnimationActive={true}
+                            animationDuration={1500}
+                            animationEasing="ease-out"
                         >
                             {categoryData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -380,22 +516,33 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
                 </ResponsiveContainer>
             </div>
             <div className="mt-4 space-y-3">
-                {categoryData.map((item) => (
-                <div key={item.name} className="flex items-center justify-between text-sm">
+                {categoryData.map((item, index) => (
+                <motion.div 
+                    key={item.name} 
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.5 + (index * 0.1) }}
+                    className="flex items-center justify-between text-sm"
+                >
                     <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-slate-600 dark:text-slate-400">{item.name}</span>
                     </div>
                     <span className="font-bold text-slate-800 dark:text-white">{item.value}%</span>
-                </div>
+                </motion.div>
                 ))}
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Recent Orders Table */}
-      <div 
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.3 }}
         className={recentOrdersStyle === 'default' ? getCardClass("overflow-hidden !p-0") : getTableClass()}
         onMouseEnter={() => enableCustomization && setShowOrdersSettings(true)}
         onMouseLeave={() => setShowOrdersSettings(false)}
@@ -548,7 +695,7 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
             </table>
             </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
