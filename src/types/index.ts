@@ -36,7 +36,7 @@ export type TableStyle = 'default' | 'modern' | 'compact' | 'bordered';
 
 export type LocationViewMode = 'split' | 'map' | 'list';
 
-export type ChartType = 'area' | 'bar' | 'line' | 'composed';
+export type ChartType = 'area' | 'bar' | 'line' | 'composed' | 'pie' | 'stacked';
 
 export interface CardConfig {
   chartType?: ChartType;
@@ -102,4 +102,16 @@ export interface AppContextType {
   setRepeatCustomerChart: (type: 'radial' | 'pie' | 'gauge') => void;
   repeatCustomerColor: string;
   setRepeatCustomerColor: (color: string) => void;
+  ecommerceSalesChartType: ChartType;
+  setEcommerceSalesChartType: (type: ChartType) => void;
+  ecommerceSalesChartColor: string;
+  setEcommerceSalesChartColor: (color: string) => void;
+  ecommerceCategoryChartType: ChartType;
+  setEcommerceCategoryChartType: (type: ChartType) => void;
+  ecommerceCategoryChartColor: string;
+  setEcommerceCategoryChartColor: (color: string) => void;
+  ecommerceStackedColors: { mobile: string; desktop: string; app: string };
+  setEcommerceStackedColors: (colors: { mobile: string; desktop: string; app: string }) => void;
+  ecommerceRecentOrdersStyle: TableStyle;
+  setEcommerceRecentOrdersStyle: (style: TableStyle) => void;
 }

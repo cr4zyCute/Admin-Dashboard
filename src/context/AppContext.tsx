@@ -76,6 +76,36 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return saved || '#10b981';
   });
 
+  const [ecommerceSalesChartType, setEcommerceSalesChartType] = useState<ChartType>(() => {
+    const saved = localStorage.getItem('ecommerceSalesChartType');
+    return (saved as ChartType) || 'area';
+  });
+
+  const [ecommerceSalesChartColor, setEcommerceSalesChartColor] = useState(() => {
+    const saved = localStorage.getItem('ecommerceSalesChartColor');
+    return saved || '#3b82f6';
+  });
+
+  const [ecommerceCategoryChartType, setEcommerceCategoryChartType] = useState<ChartType>(() => {
+    const saved = localStorage.getItem('ecommerceCategoryChartType');
+    return (saved as ChartType) || 'bar';
+  });
+
+  const [ecommerceCategoryChartColor, setEcommerceCategoryChartColor] = useState(() => {
+    const saved = localStorage.getItem('ecommerceCategoryChartColor');
+    return saved || '#3b82f6';
+  });
+
+  const [ecommerceStackedColors, setEcommerceStackedColors] = useState<{ mobile: string; desktop: string; app: string }>(() => {
+    const saved = localStorage.getItem('ecommerceStackedColors');
+    return saved ? JSON.parse(saved) : { mobile: '#3b82f6', desktop: '#8b5cf6', app: '#f59e0b' };
+  });
+
+  const [ecommerceRecentOrdersStyle, setEcommerceRecentOrdersStyle] = useState<TableStyle>(() => {
+    const saved = localStorage.getItem('ecommerceRecentOrdersStyle');
+    return (saved as TableStyle) || 'default';
+  });
+
   // Card Configs
   const [cardConfigs, setCardConfigs] = useState<Record<string, { chartType?: ChartType; chartColor?: string }>>(() => {
     const saved = localStorage.getItem('cardConfigs');
@@ -167,6 +197,30 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     localStorage.setItem('repeatCustomerColor', repeatCustomerColor);
   }, [repeatCustomerColor]);
 
+  useEffect(() => {
+    localStorage.setItem('ecommerceSalesChartType', ecommerceSalesChartType);
+  }, [ecommerceSalesChartType]);
+
+  useEffect(() => {
+    localStorage.setItem('ecommerceSalesChartColor', ecommerceSalesChartColor);
+  }, [ecommerceSalesChartColor]);
+
+  useEffect(() => {
+    localStorage.setItem('ecommerceCategoryChartType', ecommerceCategoryChartType);
+  }, [ecommerceCategoryChartType]);
+
+  useEffect(() => {
+    localStorage.setItem('ecommerceCategoryChartColor', ecommerceCategoryChartColor);
+  }, [ecommerceCategoryChartColor]);
+
+  useEffect(() => {
+    localStorage.setItem('ecommerceStackedColors', JSON.stringify(ecommerceStackedColors));
+  }, [ecommerceStackedColors]);
+
+  useEffect(() => {
+    localStorage.setItem('ecommerceRecentOrdersStyle', ecommerceRecentOrdersStyle);
+  }, [ecommerceRecentOrdersStyle]);
+
   // Cross-Tab Synchronization
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -184,6 +238,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       if (e.key === 'locationVisual' && e.newValue) setLocationVisual(e.newValue as CardStyle);
       if (e.key === 'repeatCustomerChart' && e.newValue) setRepeatCustomerChart(e.newValue as any);
       if (e.key === 'repeatCustomerColor' && e.newValue) setRepeatCustomerColor(e.newValue);
+      if (e.key === 'ecommerceSalesChartType' && e.newValue) setEcommerceSalesChartType(e.newValue as ChartType);
+      if (e.key === 'ecommerceSalesChartColor' && e.newValue) setEcommerceSalesChartColor(e.newValue);
+      if (e.key === 'ecommerceCategoryChartType' && e.newValue) setEcommerceCategoryChartType(e.newValue as ChartType);
+      if (e.key === 'ecommerceCategoryChartColor' && e.newValue) setEcommerceCategoryChartColor(e.newValue);
+      if (e.key === 'ecommerceStackedColors' && e.newValue) setEcommerceStackedColors(JSON.parse(e.newValue));
+      if (e.key === 'ecommerceRecentOrdersStyle' && e.newValue) setEcommerceRecentOrdersStyle(e.newValue as TableStyle);
       if (e.key === 'cardConfigs' && e.newValue) setCardConfigs(JSON.parse(e.newValue));
     };
 
@@ -309,6 +369,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setRepeatCustomerChart,
         repeatCustomerColor,
         setRepeatCustomerColor,
+        ecommerceSalesChartType,
+        setEcommerceSalesChartType,
+        ecommerceSalesChartColor,
+        setEcommerceSalesChartColor,
+        ecommerceCategoryChartType,
+        setEcommerceCategoryChartType,
+        ecommerceCategoryChartColor,
+        setEcommerceCategoryChartColor,
+        ecommerceStackedColors,
+        setEcommerceStackedColors,
+        ecommerceRecentOrdersStyle,
+        setEcommerceRecentOrdersStyle,
       }}
     >
       {children}

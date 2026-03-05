@@ -12,6 +12,7 @@ interface MetricCardProps {
   icon?: React.ReactNode;
   iconColor?: string; // e.g., 'text-blue-500', 'text-green-500'
   bgColor?: string; // e.g., 'bg-blue-50'
+  className?: string;
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ 
@@ -20,10 +21,14 @@ const MetricCard: React.FC<MetricCardProps> = ({
   change, 
   icon, 
   iconColor = 'text-blue-500',
-  bgColor = 'bg-blue-50'
+  bgColor = 'bg-blue-50',
+  className
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col justify-between h-full transition-transform hover:-translate-y-1 duration-300">
+    <div className={cn(
+      "bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col justify-between h-full transition-transform hover:-translate-y-1 duration-300",
+      className
+    )}>
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{title}</h3>

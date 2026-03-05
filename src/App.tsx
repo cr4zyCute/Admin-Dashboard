@@ -86,6 +86,9 @@ import SpecialMenu from './pages/examples/SpecialMenu';
 
 // Customization Pages (Aliased)
 import CustomAnalytics from './customization/dashboard/Analytics';
+import CustomEcommerce from './customization/dashboard/Ecommerce';
+import CustomProject from './customization/dashboard/Project';
+import CustomCRM from './customization/dashboard/CRM';
 import CustomDashboard from './customization/dashboard/Overview';
 import CustomHome from './customization/Home';
 
@@ -102,6 +105,9 @@ function App() {
             <Route path="/customization" element={<CustomHome />} />
             <Route path="/customization/dashboard" element={<CustomDashboard />} />
             <Route path="/customization/dashboard/analytics" element={<CustomAnalytics />} />
+            <Route path="/customization/dashboard/ecommerce" element={<CustomEcommerce />} />
+            <Route path="/customization/dashboard/project" element={<CustomProject />} />
+            <Route path="/customization/dashboard/crm" element={<CustomCRM />} />
 
             {/* Dashboard Routes */}
             <Route path="/dashboard/analytics" element={<Analytics />} />
