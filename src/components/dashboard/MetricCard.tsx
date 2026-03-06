@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import CountUp from '../common/CountUp';
 
 interface MetricCardProps {
   title: string;
@@ -32,7 +33,13 @@ const MetricCard: React.FC<MetricCardProps> = ({
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{title}</h3>
-          <div className="text-2xl font-bold text-slate-800">{value}</div>
+          <div className="text-2xl font-bold text-slate-800 dark:text-white">
+            <CountUp 
+              end={value} 
+              prefix={typeof value === 'string' && value.startsWith('$') ? '$' : ''}
+              duration={2000}
+            />
+          </div>
         </div>
         {icon && (
           <div className={cn("p-2 rounded-lg", bgColor)}>
