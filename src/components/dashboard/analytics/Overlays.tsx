@@ -8,6 +8,8 @@ interface TableSettingsProps {
   tableStyle: TableStyle;
   setTableStyle: (style: TableStyle) => void;
   onClose: () => void;
+  perPage?: number;
+  setPerPage?: (num: number) => void;
 }
 
 export const CustomizationOverlay: React.FC<{
@@ -109,7 +111,9 @@ export const CustomizationOverlay: React.FC<{
 export const TableSettingsOverlay: React.FC<TableSettingsProps> = ({ 
   tableStyle, 
   setTableStyle, 
-  onClose 
+  onClose,
+  perPage,
+  setPerPage 
 }) => {
   return (
     <motion.div 
@@ -147,6 +151,29 @@ export const TableSettingsOverlay: React.FC<TableSettingsProps> = ({
               ))}
             </div>
           </div>
+          
+          {setPerPage && typeof perPage === 'number' && (
+            <div>
+              <label className="text-xs text-slate-400 mb-1.5 block">Rows per page</label>
+              <div className="grid grid-cols-4 gap-2">
+                {[5, 10, 20, 50].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => setPerPage(num)}
+                    className={cn(
+                      "px-2 py-1.5 text-xs font-medium rounded-lg border transition-colors flex items-center justify-between",
+                      perPage === num
+                        ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20"
+                        : "text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+                    )}
+                  >
+                    {num}
+                    {perPage === num && <Check className="w-3 h-3" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

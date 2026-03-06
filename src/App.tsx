@@ -91,6 +91,8 @@ import CustomProject from './customization/dashboard/Project';
 import CustomCRM from './customization/dashboard/CRM';
 import CustomDashboard from './customization/dashboard/Overview';
 import CustomHome from './customization/Home';
+import CustomProducts from './customization/apps/ecommerce/Products';
+import CustomOrders from './customization/apps/ecommerce/Orders';
 
 function App() {
   return (
@@ -98,7 +100,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Navigate to="/customization" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Navigate to="/dashboard/analytics" replace />} />
             
             {/* Customization Routes */}
@@ -108,6 +110,8 @@ function App() {
             <Route path="/customization/dashboard/ecommerce" element={<CustomEcommerce />} />
             <Route path="/customization/dashboard/project" element={<CustomProject />} />
             <Route path="/customization/dashboard/crm" element={<CustomCRM />} />
+            <Route path="/customization/apps/ecommerce/products" element={<CustomProducts />} />
+            <Route path="/customization/apps/ecommerce/orders" element={<CustomOrders />} />
 
             {/* Dashboard Routes */}
             <Route path="/dashboard/analytics" element={<Analytics />} />

@@ -1,11 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
-    ShoppingCart, 
-    DollarSign, 
-    TrendingUp, 
-    Package, 
-    MoreHorizontal,
     MoreVertical,
     ChevronRight,
     ChevronDown,
@@ -14,7 +9,6 @@ import {
     FileText,
     Trash2
   } from 'lucide-react';
-import MetricCard from '../MetricCard';
 import { cn } from '../../../lib/utils';
 import { 
     AreaChart, 
@@ -37,6 +31,13 @@ import {
 import { useAppContext } from '../../../context/AppContext';
 import { CustomizationOverlay, TableSettingsOverlay } from '../analytics/Overlays';
 import { ChartType, TableStyle } from '../../../types';
+
+// New Widgets
+import TotalOrdersCard from './widgets/TotalOrdersCard';
+import TotalVisitorsCard from './widgets/TotalVisitorsCard';
+import TotalSubscribersCard from './widgets/TotalSubscribersCard';
+import UserGeographyCard from './widgets/UserGeographyCard';
+import TrafficSourcesCard from './widgets/TrafficSourcesCard';
 
 interface EcommerceDashboardProps {
   enableCustomization?: boolean;
@@ -209,12 +210,12 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
   };
 
   // Selected Data
-  const metrics = {
-    revenue: selectData({ value: "$128,430", change: 12.5, trend: 'up' }, randomData?.metrics.revenue as any, { value: "$0", change: 0, trend: 'up' }),
-    orders: selectData({ value: "4,250", change: 8.2, trend: 'up' }, randomData?.metrics.orders as any, { value: "0", change: 0, trend: 'up' }),
-    avgOrder: selectData({ value: "$30.20", change: 2.4, trend: 'down' }, randomData?.metrics.avgOrder as any, { value: "$0.00", change: 0, trend: 'down' }),
-    products: selectData({ value: "1,240", change: 5.1, trend: 'up' }, randomData?.metrics.products as any, { value: "0", change: 0, trend: 'up' }),
-  };
+  // const metrics = {
+  //   revenue: selectData({ value: "$128,430", change: 12.5, trend: 'up' }, randomData?.metrics.revenue as any, { value: "$0", change: 0, trend: 'up' }),
+  //   orders: selectData({ value: "4,250", change: 8.2, trend: 'up' }, randomData?.metrics.orders as any, { value: "0", change: 0, trend: 'up' }),
+  //   avgOrder: selectData({ value: "$30.20", change: 2.4, trend: 'down' }, randomData?.metrics.avgOrder as any, { value: "$0.00", change: 0, trend: 'down' }),
+  //   products: selectData({ value: "1,240", change: 5.1, trend: 'up' }, randomData?.metrics.products as any, { value: "0", change: 0, trend: 'up' }),
+  // };
 
   const salesData = selectData(mockSalesData, randomData?.salesData, salesDataEmpty);
   const categoryData = selectData(mockCategoryData, randomData?.categoryData, categoryDataEmpty);
@@ -281,50 +282,33 @@ const EcommerceDashboard: React.FC<EcommerceDashboardProps> = ({ enableCustomiza
         </div>
       </motion.div>
 
-      {/* Metrics Grid */}
+      {/* Top Widgets */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        <MetricCard
-          title="Total Revenue"
-          value={metrics.revenue.value}
-          change={{ percentage: metrics.revenue.change, trend: metrics.revenue.trend as any }}
-          icon={<DollarSign className="w-5 h-5" />}
-          bgColor="bg-emerald-50 dark:bg-emerald-500/10"
-          iconColor="text-emerald-600 dark:text-emerald-400"
-          className={getCardClass()}
-        />
-        <MetricCard
-          title="Total Orders"
-          value={metrics.orders.value}
-          change={{ percentage: metrics.orders.change, trend: metrics.orders.trend as any }}
-          icon={<ShoppingCart className="w-5 h-5" />}
-          bgColor="bg-blue-50 dark:bg-blue-500/10"
-          iconColor="text-blue-600 dark:text-blue-400"
-          className={getCardClass()}
-        />
-        <MetricCard
-          title="Average Order"
-          value={metrics.avgOrder.value}
-          change={{ percentage: metrics.avgOrder.change, trend: metrics.avgOrder.trend as any }}
-          icon={<TrendingUp className="w-5 h-5" />}
-          bgColor="bg-violet-50 dark:bg-violet-500/10"
-          iconColor="text-violet-600 dark:text-violet-400"
-          className={getCardClass()}
-        />
-        <MetricCard
-          title="Total Products"
-          value={metrics.products.value}
-          change={{ percentage: metrics.products.change, trend: metrics.products.trend as any }}
-          icon={<Package className="w-5 h-5" />}
-          bgColor="bg-amber-50 dark:bg-amber-500/10"
-          iconColor="text-amber-600 dark:text-amber-400"
-          className={getCardClass()}
-        />
+        <TotalOrdersCard enableCustomization={enableCustomization} />
+        <TotalVisitorsCard enableCustomization={enableCustomization} />
+        <TotalSubscribersCard enableCustomization={enableCustomization} />
+      </motion.div>
+
+      {/* Middle Widgets */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
+        <div className="lg:col-span-2 h-full">
+           <UserGeographyCard enableCustomization={enableCustomization} />
+        </div>
+        <div className="lg:col-span-1 h-full">
+           <TrafficSourcesCard enableCustomization={enableCustomization} />
+        </div>
       </motion.div>
 
       {/* Charts Grid */}

@@ -83,6 +83,8 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders, enableCustomization =
           tableStyle={orderTableStyle}
           setTableStyle={setOrderTableStyle}
           onClose={() => setShowSettings(false)}
+          perPage={ordersPerPage}
+          setPerPage={setOrdersPerPage}
         />
       )}
       <div className={cn("transition-all duration-300 h-full flex flex-col", showSettings ? "blur-sm" : "")}>
