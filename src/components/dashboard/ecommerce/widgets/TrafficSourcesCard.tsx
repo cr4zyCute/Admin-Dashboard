@@ -12,7 +12,7 @@ const TrafficSourcesCard: React.FC<TrafficSourcesCardProps> = ({ enableCustomiza
   const [showSettings, setShowSettings] = useState(false);
   
   const getCardClass = () => {
-    const base = "p-6 transition-all duration-300 relative group h-full flex flex-col";
+    const base = "p-5 transition-all duration-300 relative group h-full flex flex-col";
     let styleClass = "";
     
     switch (cardStyle) {
@@ -55,7 +55,7 @@ const TrafficSourcesCard: React.FC<TrafficSourcesCardProps> = ({ enableCustomiza
     >
       <div className={cn("flex flex-col h-full transition-all duration-300 relative", showSettings ? "blur-sm" : "")}>
         {/* Header - Compact */}
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-slate-800 dark:text-white text-sm">Top Traffic Sources</h3>
             <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
@@ -65,19 +65,19 @@ const TrafficSourcesCard: React.FC<TrafficSourcesCardProps> = ({ enableCustomiza
           </button>
         </div>
 
-        {/* Content Grid - Reduced height items */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+        {/* Content Grid - Expanded width items */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 px-1">
           {sources.map((source) => (
-            <div key={source.name} className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors w-full">
-              <div className="flex items-center gap-2">
-                <div className={cn("w-6 h-6 rounded flex items-center justify-center p-1 shadow-sm bg-white dark:bg-slate-700", source.color)}>
+            <div key={source.name} className={cn("flex items-center justify-between p-3.5 rounded-lg transition-colors w-full", source.color)}>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 flex items-center justify-center">
                   <img src={source.logo} alt={source.name} className="w-full h-full object-contain" onError={(e) => {
                     (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${source.name}&background=random`;
                   }} />
                 </div>
-                <span className="font-medium text-slate-700 dark:text-slate-300 text-xs truncate max-w-[80px]">{source.name}</span>
+                <span className="font-medium text-slate-700 dark:text-slate-800 text-sm truncate">{source.name}</span>
               </div>
-              <span className="text-[10px] font-bold text-slate-400 whitespace-nowrap">{source.value}</span>
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-600 whitespace-nowrap">{source.value}</span>
             </div>
           ))}
         </div>

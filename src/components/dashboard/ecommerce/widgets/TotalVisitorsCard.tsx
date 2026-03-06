@@ -2,13 +2,23 @@ import React, { useState } from 'react';
 import { Eye, ChevronDown, Smartphone, Monitor } from 'lucide-react';
 import { useAppContext } from '../../../../context/AppContext';
 import { cn } from '../../../../lib/utils';
+import { CustomizationOverlay } from '../../analytics/Overlays';
 
 interface TotalVisitorsCardProps {
   enableCustomization?: boolean;
 }
 
 const TotalVisitorsCard: React.FC<TotalVisitorsCardProps> = ({ enableCustomization = false }) => {
-  const { cardStyle } = useAppContext();
+  const { cardStyle, cardConfigs, updateCardConfig } = useAppContext();
+  const cardId = 'totalVisitorsCard';
+  
+  // Customization state from context
+  const showMetrics = cardConfigs[cardId]?.showMetrics !== false; // Default true
+  const chartColor = cardConfigs[cardId]?.chartColor || '#6366f1'; // Default indigo
+  
+  const toggleMetrics = () => updateCardConfig(cardId, { showMetrics: !showMetrics });
+  const setChartColor = (color: string) => updateCardConfig(cardId, { chartColor: color });
+  
   const [showSettings, setShowSettings] = useState(false);
   
   const getCardClass = () => {
@@ -50,8 +60,8 @@ const TotalVisitorsCard: React.FC<TotalVisitorsCardProps> = ({ enableCustomizati
         </div>
 
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
-            <Eye className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${chartColor}20` }}>
+            <Eye className="w-5 h-5" style={{ color: chartColor }} />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -79,7 +89,7 @@ const TotalVisitorsCard: React.FC<TotalVisitorsCardProps> = ({ enableCustomizati
         </div>
 
         <div className="flex h-2.5 w-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 mb-2">
-           <div className="h-full bg-indigo-500" style={{ width: '69.4%' }}></div>
+           <div className="h-full" style={{ width: '69.4%', backgroundColor: chartColor }}></div>
            <div className="h-full bg-cyan-400" style={{ width: '30.6%' }}></div>
         </div>
         
@@ -89,6 +99,7 @@ const TotalVisitorsCard: React.FC<TotalVisitorsCardProps> = ({ enableCustomizati
         </div>
 
         {/* Stats Table */}
+        {showMetrics && (
         <div className="w-full">
            <div className="grid grid-cols-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">
              <div className="col-span-1">GOAL</div>
@@ -120,8 +131,19 @@ const TotalVisitorsCard: React.FC<TotalVisitorsCardProps> = ({ enableCustomizati
              </div>
            </div>
         </div>
+        )}
 
       </div>
+      
+      {/* Customization Overlay */}
+      {showSettings && (
+        <CustomizationOverlay 
+          activeChartColor={chartColor}
+          setLocalChartColor={setChartColor}
+          onToggleMetrics={toggleMetrics}
+          showMetrics={showMetrics}
+        />
+      )}
     </div>
   );
 };

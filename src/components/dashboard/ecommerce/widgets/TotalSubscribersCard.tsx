@@ -2,13 +2,23 @@ import React, { useState } from 'react';
 import { Mail, ChevronDown, Award } from 'lucide-react';
 import { useAppContext } from '../../../../context/AppContext';
 import { cn } from '../../../../lib/utils';
+import { CustomizationOverlay } from '../../analytics/Overlays';
 
 interface TotalSubscribersCardProps {
   enableCustomization?: boolean;
 }
 
 const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCustomization = false }) => {
-  const { cardStyle } = useAppContext();
+  const { cardStyle, cardConfigs, updateCardConfig } = useAppContext();
+  const cardId = 'totalSubscribersCard';
+  
+  // Customization state from context
+  const showMilestone = cardConfigs[cardId]?.showMilestone !== false; // Default true
+  const chartColor = cardConfigs[cardId]?.chartColor || '#06b6d4'; // Default cyan
+  
+  const toggleMilestone = () => updateCardConfig(cardId, { showMilestone: !showMilestone });
+  const setChartColor = (color: string) => updateCardConfig(cardId, { chartColor: color });
+  
   const [showSettings, setShowSettings] = useState(false);
   
   const getCardClass = () => {
@@ -50,8 +60,8 @@ const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCusto
         </div>
 
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-full bg-cyan-50 dark:bg-cyan-500/10 flex items-center justify-center">
-            <Mail className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${chartColor}20` }}>
+            <Mail className="w-5 h-5" style={{ color: chartColor }} />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -72,7 +82,7 @@ const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCusto
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5">
-              <div className="bg-indigo-500 h-1.5 rounded-full" style={{ width: '27.41%' }}></div>
+              <div className="h-1.5 rounded-full" style={{ width: '27.41%', backgroundColor: chartColor }}></div>
             </div>
           </div>
 
@@ -86,7 +96,7 @@ const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCusto
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5">
-              <div className="bg-cyan-400 h-1.5 rounded-full" style={{ width: '46.13%' }}></div>
+              <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: '46.13%' }}></div>
             </div>
           </div>
 
@@ -106,6 +116,7 @@ const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCusto
         </div>
 
         {/* Milestone Card */}
+        {showMilestone && (
         <div className="mt-auto bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 rounded-xl p-4 flex items-center gap-4">
            <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center flex-shrink-0">
              <Award className="w-5 h-5 text-amber-600 dark:text-amber-400" />
@@ -119,8 +130,20 @@ const TotalSubscribersCard: React.FC<TotalSubscribersCardProps> = ({ enableCusto
              <div className="text-[10px] text-slate-400 uppercase">SUBSCRIBERS</div>
            </div>
         </div>
+        )}
 
       </div>
+      
+      {/* Customization Overlay */}
+      {showSettings && (
+        <CustomizationOverlay 
+          activeChartColor={chartColor}
+          setLocalChartColor={setChartColor}
+          onToggleMetrics={toggleMilestone}
+          showMetrics={showMilestone}
+          metricLabel="Show Milestone"
+        />
+      )}
     </div>
   );
 };

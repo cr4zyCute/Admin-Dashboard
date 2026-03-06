@@ -41,6 +41,8 @@ export type ChartType = 'area' | 'bar' | 'line' | 'composed' | 'pie' | 'stacked'
 export interface CardConfig {
   chartType?: ChartType;
   chartColor?: string;
+  showMetrics?: boolean;
+  showMilestone?: boolean;
 }
 
 // Menu Interface

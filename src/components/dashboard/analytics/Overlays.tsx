@@ -13,100 +13,144 @@ interface TableSettingsProps {
 }
 
 export const CustomizationOverlay: React.FC<{
-  activeChartType: ChartType | null;
+  activeChartType?: ChartType | null;
   activeChartColor: string | null;
-  setLocalChartType: (type: ChartType) => void;
+  setLocalChartType?: (type: ChartType) => void;
   setLocalChartColor: (color: string) => void;
   allowedChartTypes?: ChartType[];
   stackedColors?: { mobile: string; desktop: string; app: string };
   setStackedColors?: (colors: { mobile: string; desktop: string; app: string }) => void;
-}> = ({ activeChartType, activeChartColor, setLocalChartType, setLocalChartColor, allowedChartTypes, stackedColors, setStackedColors }) => (
-  <motion.div 
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
-  >
-    <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md pointer-events-auto">
-      <div className="flex flex-col gap-3">
-        {/* Chart Type Selection */}
-        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
-          {(allowedChartTypes || ['area', 'bar', 'line', 'composed']).map((type) => (
-            <button 
-              key={type}
-              onClick={() => setLocalChartType(type as ChartType)}
-              className={cn(
-                "p-1.5 rounded-md transition-all",
-                activeChartType === type 
-                  ? "bg-white dark:bg-slate-700 shadow-sm text-primary-600 dark:text-primary-400" 
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-              )}
-              title={`${type.charAt(0).toUpperCase() + type.slice(1)} Chart`}
-            >
-              {type === 'area' && <Activity className="w-4 h-4" />}
-              {type === 'bar' && <BarChart2 className="w-4 h-4" />}
-              {type === 'line' && <LineChartIcon className="w-4 h-4" />}
-              {type === 'pie' && <PieChartIcon className="w-4 h-4" />}
-              {type === 'stacked' && <StretchHorizontal className="w-4 h-4" />}
-              {type === 'composed' && (
-                 <div className="flex items-end gap-0.5">
-                   <div className="w-1 h-2 bg-current rounded-sm"></div>
-                   <div className="w-1 h-3 bg-current rounded-sm"></div>
-                 </div>
-              )}
-            </button>
-          ))}
-        </div>
+  onToggleMetrics?: () => void;
+  showMetrics?: boolean;
+  metricLabel?: string;
+  onColorChange?: (color: string) => void;
+  chartColor?: string;
+}> = ({ 
+  activeChartType, 
+  activeChartColor, 
+  setLocalChartType, 
+  setLocalChartColor, 
+  allowedChartTypes, 
+  stackedColors, 
+  setStackedColors,
+  onToggleMetrics,
+  showMetrics,
+  metricLabel = "Show Metrics",
+  onColorChange,
+  chartColor
+}) => {
+  // Normalize color handlers
+  const handleColorChange = onColorChange || setLocalChartColor;
+  const currentColor = chartColor || activeChartColor;
 
-        {/* Chart Color Selection */}
-        {activeChartType === 'stacked' && stackedColors && setStackedColors ? (
-          <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg min-w-[120px]">
-            {(['mobile', 'desktop', 'app'] as const).map((key) => (
-              <div key={key} className="flex items-center justify-between gap-2">
-                <span className="text-[10px] uppercase font-bold text-slate-500">{key}</span>
-                <div className="flex gap-1">
-                  {[
-                    '#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444'
-                  ].map((color) => (
-                    <button
-                      key={color}
-                      onClick={() => setStackedColors({ ...stackedColors, [key]: color })}
-                      className={cn(
-                        "w-3 h-3 rounded-full transition-all",
-                        stackedColors[key] === color ? "ring-1 ring-offset-1 ring-slate-400 scale-110" : "hover:scale-110"
-                      )}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+    >
+      <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md pointer-events-auto">
+        <div className="flex flex-col gap-3">
+          {/* Chart Type Selection */}
+          {setLocalChartType && (
+            <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+              {(allowedChartTypes || ['area', 'bar', 'line', 'composed']).map((type) => (
+                <button 
+                  key={type}
+                  onClick={() => setLocalChartType(type as ChartType)}
+                  className={cn(
+                    "p-1.5 rounded-md transition-all",
+                    activeChartType === type 
+                      ? "bg-white dark:bg-slate-700 shadow-sm text-primary-600 dark:text-primary-400" 
+                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  )}
+                  title={`${type.charAt(0).toUpperCase() + type.slice(1)} Chart`}
+                >
+                  {type === 'area' && <Activity className="w-4 h-4" />}
+                  {type === 'bar' && <BarChart2 className="w-4 h-4" />}
+                  {type === 'line' && <LineChartIcon className="w-4 h-4" />}
+                  {type === 'pie' && <PieChartIcon className="w-4 h-4" />}
+                  {type === 'stacked' && <StretchHorizontal className="w-4 h-4" />}
+                  {type === 'composed' && (
+                     <div className="flex items-end gap-0.5">
+                       <div className="w-1 h-2 bg-current rounded-sm"></div>
+                       <div className="w-1 h-3 bg-current rounded-sm"></div>
+                     </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Toggle Metrics/Milestones */}
+          {onToggleMetrics && (
+            <button 
+              onClick={onToggleMetrics}
+              className={cn(
+                "flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg transition-colors border",
+                showMetrics 
+                  ? "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20" 
+                  : "text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+              )}
+            >
+              {metricLabel}
+              {showMetrics && <Check className="w-3 h-3" />}
+            </button>
+          )}
+
+          {/* Chart Color Selection */}
+          {activeChartType === 'stacked' && stackedColors && setStackedColors ? (
+            <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg min-w-[120px]">
+              {(['mobile', 'desktop', 'app'] as const).map((key) => (
+                <div key={key} className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] uppercase font-bold text-slate-500">{key}</span>
+                  <div className="flex gap-1">
+                    {[
+                      '#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444'
+                    ].map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setStackedColors({ ...stackedColors, [key]: color })}
+                        className={cn(
+                          "w-3 h-3 rounded-full transition-all",
+                          stackedColors[key] === color ? "ring-1 ring-offset-1 ring-slate-400 scale-110" : "hover:scale-110"
+                        )}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex gap-1.5 justify-center bg-slate-100 dark:bg-slate-800 p-1.5 rounded-lg">
-            {[
-              { color: '#3b82f6', label: 'Blue' },   // Blue
-              { color: '#10b981', label: 'Emerald' }, // Emerald
-              { color: '#8b5cf6', label: 'Violet' },  // Violet
-              { color: '#f59e0b', label: 'Amber' },   // Amber
-              { color: '#ef4444', label: 'Rose' },    // Rose
-            ].map((item) => (
-              <button
-                key={item.color}
-                onClick={() => setLocalChartColor(item.color)}
-                className={cn(
-                  "w-5 h-5 rounded-full transition-all",
-                  activeChartColor === item.color ? "ring-2 ring-offset-1 ring-slate-400 scale-110" : "hover:scale-110"
-                )}
-                style={{ backgroundColor: item.color }}
-                title={item.label}
-              />
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          ) : (
+            <div className="flex gap-1.5 justify-center bg-slate-100 dark:bg-slate-800 p-1.5 rounded-lg">
+              {[
+                { color: '#3b82f6', label: 'Blue' },   // Blue
+                { color: '#10b981', label: 'Emerald' }, // Emerald
+                { color: '#8b5cf6', label: 'Violet' },  // Violet
+                { color: '#f59e0b', label: 'Amber' },   // Amber
+                { color: '#ef4444', label: 'Rose' },    // Rose
+                { color: '#06b6d4', label: 'Cyan' },    // Cyan
+                { color: '#6366f1', label: 'Indigo' },  // Indigo
+              ].map((item) => (
+                <button
+                  key={item.color}
+                  onClick={() => handleColorChange(item.color)}
+                  className={cn(
+                    "w-5 h-5 rounded-full transition-all",
+                    currentColor === item.color ? "ring-2 ring-offset-1 ring-slate-400 scale-110" : "hover:scale-110"
+                  )}
+                  style={{ backgroundColor: item.color }}
+                  title={item.label}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 export const TableSettingsOverlay: React.FC<TableSettingsProps> = ({ 
   tableStyle, 

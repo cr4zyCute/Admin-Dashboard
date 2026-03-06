@@ -32,7 +32,7 @@ const UserGeographyCard: React.FC<UserGeographyCardProps> = ({ enableCustomizati
   };
   
   const getCardClass = () => {
-    const base = "p-6 transition-all duration-300 relative group h-full flex flex-col";
+    const base = "p-5 transition-all duration-300 relative group h-full flex flex-col";
     let styleClass = "";
     
     switch (cardStyle) {
@@ -62,7 +62,7 @@ const UserGeographyCard: React.FC<UserGeographyCardProps> = ({ enableCustomizati
   ];
 
   // Countries to highlight (names must match topojson properties)
-  const highlightedCountries = ["United States of America", "India", "Brazil", "Canada", "Russia"];
+  const highlightedCountries = ["United States of America", "India", "Brazil", "Canada", "Russian Federation"];
 
   return (
     <div 
@@ -81,19 +81,23 @@ const UserGeographyCard: React.FC<UserGeographyCardProps> = ({ enableCustomizati
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 items-center">
+        <div className="flex flex-col lg:flex-row gap-4 flex-1 items-center h-[340px] overflow-hidden">
            {/* Map Area */}
-           <div className="flex-1 relative w-full bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center p-2 min-h-[250px]">
+           <div className="flex-1 relative w-full h-full bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center p-1">
              {/* Map Content Wrapper */}
-             <div className="relative w-full h-full" data-tooltip-id="geo-tooltip">
-                <ComposableMap projection="geoMercator" projectionConfig={{ scale: 120, center: [0, 30] }}>
+             <div className="relative w-full h-full flex items-center justify-center" data-tooltip-id="geo-tooltip">
+                <ComposableMap 
+                  projection="geoMercator" 
+                  projectionConfig={{ scale: 140, center: [0, 20] }} // Reduced scale to ensure fit
+                  style={{ width: "100%", height: "100%" }} // Force full size fit
+                >
                   <ZoomableGroup zoom={position.zoom} center={position.coordinates} onMoveEnd={handleMoveEnd} maxZoom={4}>
                     <Geographies geography={geoUrl}>
                       {({ geographies }) =>
-                        geographies.map((geo) => {
-                          const isHighlighted = highlightedCountries.includes(geo.properties.name) || 
-                                                (geo.properties.name === "United States of America" && highlightedCountries.includes("United States")) ||
-                                                (geo.properties.name === "Russian Federation" && highlightedCountries.includes("Russia"));
+                        geographies
+                          .filter(geo => geo.properties.name !== "Antarctica")
+                          .map((geo) => {
+                          const isHighlighted = highlightedCountries.includes(geo.properties.name);
                           return (
                             <Geography
                               key={geo.rsmKey}
@@ -128,10 +132,10 @@ const UserGeographyCard: React.FC<UserGeographyCardProps> = ({ enableCustomizati
              </div>
            </div>
 
-           {/* Country List */}
-           <div className="w-full lg:w-[180px] space-y-3 flex flex-col justify-center">
+           {/* Country List - Add scroll if needed */}
+           <div className="w-full lg:w-[180px] h-full overflow-y-auto space-y-3 flex flex-col justify-center pr-1 custom-scrollbar">
              {countries.map((country) => (
-               <div key={country.name}>
+               <div key={country.name} className="flex-shrink-0">
                  <div className="flex justify-between items-center mb-0.5">
                    <div className="flex items-center gap-2">
                      <span className="text-base w-5 flex justify-center">{country.flag}</span>

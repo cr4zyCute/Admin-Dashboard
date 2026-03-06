@@ -112,7 +112,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return saved ? JSON.parse(saved) : {};
   });
 
-  const updateCardConfig = (id: string, config: Partial<{ chartType?: ChartType; chartColor?: string }>) => {
+  const updateCardConfig = (id: string, config: Partial<{ chartType?: ChartType; chartColor?: string; showMetrics?: boolean; showMilestone?: boolean }>) => {
     setCardConfigs(prev => {
       const updated = { ...prev, [id]: { ...prev[id], ...config } };
       localStorage.setItem('cardConfigs', JSON.stringify(updated));
